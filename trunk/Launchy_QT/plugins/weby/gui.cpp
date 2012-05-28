@@ -32,6 +32,7 @@ Gui::Gui(QWidget* parent, QSettings* settings)
 		return;
 	booksFirefox->setChecked(settings->value("weby/firefox", true).toBool());
 	booksIE->setChecked(settings->value("weby/ie", true).toBool());
+	booksChrome->setChecked(settings->value("weby/chrome", true).toBool());
 
 	// Stretch the last column of the table
 	table->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch); //  column 1
@@ -71,6 +72,7 @@ void Gui::writeOptions()
 		return;
 	settings->setValue("weby/firefox", booksFirefox->isChecked());
 	settings->setValue("weby/ie", booksIE->isChecked());
+	settings->setValue("weby/chrome", booksChrome->isChecked());
 
 	settings->beginWriteArray("weby/sites");
 	for(int i = 0; i < table->rowCount(); ++i) {

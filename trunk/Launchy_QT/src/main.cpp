@@ -150,7 +150,7 @@ LaunchyWidget::LaunchyWidget(CommandFlags command) :
     alternatives->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	alternatives->setTextElideMode(Qt::ElideLeft);
 	alternatives->setUniformItemSizes(true);
-    alternatives->setSpacing(3);
+    alternatives->setSpacing(ALTERNATIVE_VIEW_SPACING);
 
 	listDelegate = new IconDelegate(this);
 	defaultListDelegate = alternatives->itemDelegate();
@@ -399,7 +399,7 @@ void LaunchyWidget::updateAlternatives(bool resetSelection)
 	if (alternativesRect.isNull())
 		alternativesRect = alternatives->geometry();
 	QRect rect = alternativesRect;
-	rect.setHeight(min * alternatives->sizeHintForRow(0));
+    rect.setHeight(min * ( alternatives->sizeHintForRow(0) + ALTERNATIVE_VIEW_SPACING*2 ) + 6);
 	rect.translate(pos());
 
 	// Is there room for the dropdown box?

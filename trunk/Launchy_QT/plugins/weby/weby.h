@@ -92,7 +92,9 @@ public:
 	WebySite getDefault();
 	void init();
 	QString getFirefoxPath();
+	QString getChromePath();
 	void indexFirefox(QString path, QList<CatItem>* items);
+	void indexChrome(QString path, QList<CatItem>* items);
 	QString getIcon();
 #ifdef Q_WS_WIN
 	void indexIE(QString path, QList<CatItem>* items);

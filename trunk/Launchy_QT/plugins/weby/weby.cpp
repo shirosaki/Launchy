@@ -386,6 +386,27 @@ QString WebyPlugin::getFirefoxPath()
 }
 
 
+QString WebyPlugin::getChromePath()
+{
+	QString path;
+	QString osPath;
+
+#ifdef Q_WS_WIN
+	osPath = GetShellDirectory(CSIDL_LOCAL_APPDATA) + "/Google/Chrome";
+#endif
+
+#ifdef Q_WS_X11
+	// todo - what's the proper path?
+#endif
+
+#ifdef Q_WS_MAC
+	// todo - what's the proper path?
+#endif
+	path = osPath + "/User Data/Default/Bookmarks";
+	return path;
+}
+
+
 QString WebyPlugin::getIcon()
 {
 	return libPath + "/icons/weby.png";
@@ -435,6 +456,35 @@ void WebyPlugin::indexFirefox(QString path, QList<CatItem>* items)
 }
 
 
+void WebyPlugin::indexChrome(QString path, QList<CatItem>* items)
+{
+	QFile inputFile(path);
+	if(!inputFile.open(QIODevice::ReadOnly | QIODevice::Text))
+		return;
+
+	QRegExp nameRx("\"name\": \"([^\"]+)\"");
+	QRegExp urlRx("\"url\": \"([^\"]+)\"");
+	QString line, name, url;
+	while(true)
+	{
+		line = inputFile.readLine();
+		if(line == 0)
+			break;
+		if(nameRx.indexIn(line) != -1)
+		{
+			name = nameRx.cap(1);
+			continue;
+		}
+		if(urlRx.indexIn(line) != -1)
+		{
+			url = urlRx.cap(1);
+			if(name != 0 && url != 0 && !url.isEmpty() && !name.isEmpty())
+				items->push_back(CatItem(url, name, 0, getIcon()));
+		}
+	}
+	inputFile.close();
+}
+
 WebySite WebyPlugin::getDefault()
 {
 	foreach(WebySite site, sites)
@@ -468,6 +518,11 @@ void WebyPlugin::getCatalog(QList<CatItem>* items)
 	{
 		QString path = getFirefoxPath();
 		indexFirefox(path, items);
+	}
+	if ((*settings)->value("weby/chrome", true).toBool())
+	{
+		QString path = getChromePath();
+		indexChrome(path, items);
 	}
 }
 

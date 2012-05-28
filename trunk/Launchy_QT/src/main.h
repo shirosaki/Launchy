@@ -176,6 +176,8 @@ private:
 	QHttp *http;
 	QBuffer *verBuffer;
 	QBuffer *counterBuffer;
+
+    static const int ALTERNATIVE_VIEW_SPACING = 3;
 };
 
 

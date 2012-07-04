@@ -113,4 +113,38 @@ bool EnumerateNetworkServers(QStringList& items, DWORD serverType, const wchar_t
 	return result == NERR_Success;
 }
 
+bool IsX64() 
+{
+	HKEY arch_info;
+	bool is_x64 = false;
+	LONG ret    = 0;
+
+	ret = ::RegOpenKeyExA(
+		HKEY_LOCAL_MACHINE,
+		"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
+		0,
+		KEY_READ | KEY_WOW64_64KEY,
+		&arch_info);
+
+	if ( ret == ERROR_SUCCESS ) {
+			char val[256];
+			DWORD len = 256;
+
+			if ( ::RegGetValueA(
+				arch_info,
+				0,
+				"BuildLabEx",
+				RRF_RT_REG_SZ,
+				0,
+				val,
+				&len) == ERROR_SUCCESS ) {
+
+					is_x64 = strstr(val, "amd64") != 0;
+			}
+
+			::RegCloseKey(arch_info);
+			return is_x64;
+	}
+	return false;
+}
 

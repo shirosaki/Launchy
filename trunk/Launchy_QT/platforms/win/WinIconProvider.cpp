@@ -53,7 +53,7 @@ HRESULT (WINAPI* fnSHCreateItemFromParsingName)(PCWSTR, IBindCtx *, REFIID, void
 
 
 WinIconProvider::WinIconProvider() :
-	preferredSize(32)
+	preferredSize( IsX64() ? 256 : 32 )
 {
 	// Load Vista/7 specific API pointers
 	HMODULE hLib = GetModuleHandleW(L"shell32");
@@ -125,8 +125,14 @@ QIcon WinIconProvider::icon(const QFileInfo& info) const
 	}
 	else
 	{
-		// This 64 bit mapping needs to go away if we produce a 64 bit build of launchy
-		QString filePath = wicon_aliasTo64(QDir::toNativeSeparators(info.filePath()));
+		QString filePath;
+		if ( IsX64() ) {
+			filePath = QDir::toNativeSeparators(info.filePath());
+		}
+		else {
+			// This 64 bit mapping needs to go away if we produce a 64 bit build of launchy
+			filePath = wicon_aliasTo64(QDir::toNativeSeparators(info.filePath()));
+		}
 
 		// Get the icon index using SHGetFileInfo
 		SHFILEINFO sfi = {0};
@@ -194,23 +200,25 @@ QIcon WinIconProvider::icon(const QFileInfo& info) const
 
 bool WinIconProvider::addIconFromImageList(int imageListIndex, int iconIndex, QIcon& icon) const
 {
-	HICON hIcon = 0;
+	hicn = 0;
 	IImageList* imageList;
 	HRESULT hResult = SHGetImageList(imageListIndex, IID_IImageList, (void**)&imageList);
 	if (hResult == S_OK)
 	{
-		hResult = ((IImageList*)imageList)->GetIcon(iconIndex, ILD_TRANSPARENT, &hIcon);
+		hResult = ((IImageList*)imageList)->GetIcon(iconIndex, ILD_TRANSPARENT, &hicn);
 		imageList->Release();
 	}
-	if (hResult == S_OK && hIcon)
+	if (hResult == S_OK && hicn)
 	{
-		icon.addPixmap(QPixmap::fromWinHICON(hIcon));
-		DestroyIcon(hIcon);
+		// Move QPixmap convertion to GUI thread
+		picn = &icon;		
+		QApplication::postEvent((QObject*)this, new QEvent((QEvent::Type)(QEvent::User+1)));
+		wait_conversion.wait(&mutex);
+		DestroyIcon(hicn);
 	}
 
 	return SUCCEEDED(hResult);
 }
-
 
 // On Vista or 7 we could use SHIL_JUMBO to get a 256x256 icon,
 // but we'll use SHCreateItemFromParsingName as it'll give an identical
@@ -221,6 +229,8 @@ bool WinIconProvider::addIconFromShellFactory(QString filePath, QIcon& icon) con
 
 	if (fnSHCreateItemFromParsingName)
 	{
+		this->picn     = &icon;
+		
 		IShellItem* psi = NULL;
 		hr = fnSHCreateItemFromParsingName(filePath.utf16(), 0, IID_IShellItem, (void**)&psi);
 		if (hr == S_OK)
@@ -229,14 +239,16 @@ bool WinIconProvider::addIconFromShellFactory(QString filePath, QIcon& icon) con
 			hr = psi->QueryInterface(IID_IShellItemImageFactory, (void**)&psiif);
 			if (hr == S_OK)
 			{
-				HBITMAP iconBitmap = NULL;
+				hbmp = NULL;
+
 				SIZE iconSize = {preferredSize, preferredSize};
-				hr = psiif->GetImage(iconSize, SIIGBF_RESIZETOFIT | SIIGBF_ICONONLY, &iconBitmap);
+				hr = psiif->GetImage(iconSize, SIIGBF_RESIZETOFIT | SIIGBF_ICONONLY, &hbmp);
 				if (hr == S_OK)
 				{
-					QPixmap iconPixmap = QPixmap::fromWinHBITMAP(iconBitmap, QPixmap::PremultipliedAlpha);
-					icon.addPixmap(iconPixmap);
-					DeleteObject(iconBitmap);
+					// Move QPixmap convertion to GUI thread
+					QApplication::postEvent((QObject*)this, new QEvent(QEvent::User));
+					wait_conversion.wait(&mutex);
+					DeleteObject(hbmp);					
 				}
 
 				psiif->Release();
@@ -246,4 +258,16 @@ bool WinIconProvider::addIconFromShellFactory(QString filePath, QIcon& icon) con
 	}
 
 	return hr == S_OK;
+}
+
+bool WinIconProvider::event(QEvent* ev)
+{
+	if ( ev->type() == QEvent::User ) {
+		picn->addPixmap(QPixmap::fromWinHBITMAP(hbmp, QPixmap::PremultipliedAlpha));
+	} else if ( ev->type() == QEvent::User+1 ) {
+		picn->addPixmap(QPixmap::fromWinHICON(hicn));
+	}
+
+	wait_conversion.wakeOne();
+	return true;
 }

@@ -20,9 +20,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef __WINICONPROVIDER_H
 #define __WINICONPROVIDER_H
 
+#include <QPixmap>
+#include <QMutex>
+#include <QWaitCondition>
 
-class WinIconProvider : QFileIconProvider
+class QEvent;
+
+class WinIconProvider : QFileIconProvider, QObject
 {
+	//Q_OBJECT
 public:
 	WinIconProvider();
 	~WinIconProvider();
@@ -33,9 +39,19 @@ public:
 private:
 	bool addIconFromImageList(int imageListIndex, int iconIndex, QIcon& icon) const;
 	bool addIconFromShellFactory(QString filePath, QIcon& icon) const;
-
 	int preferredSize;
+
+	mutable QMutex mutex;
+	mutable QWaitCondition wait_conversion;
+
+	mutable QIcon*  picn;
+	mutable HBITMAP hbmp;
+	mutable HICON   hicn;
+	
+protected:
+	bool event(QEvent* ev);
 };
 
 
 #endif
+

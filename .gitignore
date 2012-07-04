@@ -28,6 +28,8 @@ local.properties
 # PDT-specific
 .buildpath
 
+# Translations
+*.qm
 
 #################
 ## Visual Studio
@@ -51,6 +53,7 @@ local.properties
 *.obj
 *.pch
 *.pdb
+*.idb
 *.pgc
 *.pgd
 *.rsp
@@ -161,3 +164,11 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+
+#######
+LAUNCHY
+#######
+
+precompiled.h.cpp
+Makefile
+ui_dlg.h

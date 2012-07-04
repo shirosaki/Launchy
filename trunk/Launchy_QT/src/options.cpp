@@ -43,7 +43,7 @@ OptionsDialog::OptionsDialog(QWidget * parent) :
 	tabWidget->setCurrentIndex(currentTab);
 
 #ifdef Q_WS_WIN
-	about_homepage->setText(about_homepage->text() + \
+    aboutText->setText(aboutText->text() + \
 		"<p><br>If you would like to uninstall Launchy, please close Launchy and run \"Uninstall Launchy\" from the start menu.</br></p>");
 #endif
 	// Load General Options
@@ -239,6 +239,26 @@ OptionsDialog::OptionsDialog(QWidget * parent) :
 	catDirectories->installEventFilter(this);
 
 	needRescan = false;
+
+    // SIGNAL MAP
+    tabMapper.setMapping(btGen,     0);
+    tabMapper.setMapping(btSkins,   1);
+    tabMapper.setMapping(btCatalog, 2);
+    tabMapper.setMapping(btPlugins, 3);
+    tabMapper.setMapping(btAbout,   4);
+
+
+    connect(btGen,     SIGNAL(clicked()), &tabMapper, SLOT(map()));
+    connect(btSkins,   SIGNAL(clicked()), &tabMapper, SLOT(map()));
+    connect(btCatalog, SIGNAL(clicked()), &tabMapper, SLOT(map()));
+    connect(btPlugins, SIGNAL(clicked()), &tabMapper, SLOT(map()));
+    connect(btAbout,   SIGNAL(clicked()), &tabMapper, SLOT(map()));
+    connect(&tabMapper, SIGNAL(mapped(int)), this, SLOT(changeSettingsPage(int)));
+
+    // TODO: check for update,
+    // won't be visible until check for update procedure works as intended
+    genUpdateCheck->setVisible(false);
+
 }
 
 
@@ -266,6 +286,11 @@ void OptionsDialog::setVisible(bool visible)
 	}
 }
 
+
+void OptionsDialog::changeSettingsPage(int pagen)
+{
+    tabWidget->setCurrentIndex(pagen);
+}
 
 void OptionsDialog::accept()
 {

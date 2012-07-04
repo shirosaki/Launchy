@@ -140,16 +140,21 @@ QList<Directory> PlatformWin::getDefaultCatalogDirectories()
 {
 	QList<Directory> list;
 	Directory tmp;
+    tmp.types << "*.lnk" << "*.appref-ms";
 
-	tmp.name = GetShellDirectory(CSIDL_COMMON_STARTMENU);
-	tmp.types << "*.lnk";
+    tmp.name = GetShellDirectory(CSIDL_COMMON_STARTMENU);
 	list.append(tmp);
 	
-	tmp.name = GetShellDirectory(CSIDL_STARTMENU);
+    tmp.name = GetShellDirectory(CSIDL_STARTMENU);
 	list.append(tmp);
-	tmp.name = "Utilities\\";
+
+    tmp.name = "Utilities\\";
 	tmp.indexDirs = false;
 	list.append(tmp);
+
+    tmp.name = GetShellDirectory(CSIDL_COMMON_DESKTOPDIRECTORY);
+    list.append(tmp);
+
 
 	Directory tmp2;
 	tmp2.name = "%appdata%\\Microsoft\\Internet Explorer\\Quick Launch";

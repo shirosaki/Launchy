@@ -42,6 +42,7 @@ local.properties
 *.suo
 *.user
 *.sln.docstates
+*.filters
 
 # Build results
 [Dd]ebug/
@@ -171,4 +172,9 @@ LAUNCHY
 
 precompiled.h.cpp
 Makefile
-ui_dlg.h
+
+#######
+QT GENERATED CODE
+#######
+
+ui_*.h

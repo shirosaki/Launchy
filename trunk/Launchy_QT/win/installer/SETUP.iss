@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName      "Launchy"
-#define MyAppVerName   "Launchy 2.7.0"
+#define MyAppVerName   "Launchy 2.7.1"
 #define MyAppPublisher "OpenNingia"
 #define MyAppURL       "http://openningia.github.com/Launchy/"
 #define MyAppExeName   "Launchy.exe"
@@ -55,7 +55,8 @@ Source: ..\..\release\{#MyAppExeName}; DestDir: {app}; Flags: ignoreversion
 Source: LaunchyPortable.ini; DestDir: {app}; DestName: Launchy.ini; Flags: onlyifdoesntexist; Check: IsPortable
 
 ; Redist
-Source: ..\vcredist_x86_90.exe; DestDir: {app}\vcredist\; Flags: ignoreversion
+Source: ..\vcredist_x86_90_sp1.exe; DestDir: {app}\vcredist\; Flags: ignoreversion
+Source: ..\vcredist_x86_90_sp1_su.exe; DestDir: {app}\vcredist\; Flags: ignoreversion
 
 ; Translations
 Source: ..\..\translations\launchy_es.qm; DestDir: {app}\tr\; Flags: ignoreversion
@@ -179,7 +180,8 @@ Name: {userdesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Parameters: /
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Parameters: /show; Filename: {app}\{#MyAppExeName}; WorkingDir: {app}; Tasks: quicklaunchicon
 
 [Run]
-Filename: {app}\vcredist\vcredist_x86_90.exe; Parameters: "/q:a /c:""VCREDI~3.EXE /q:a /c:""""msiexec /i vcredist.msi /qn"""" """;
+Filename: {app}\vcredist\vcredist_x86_90_sp1.exe; Parameters: "/q:a /c:""VCREDI~3.EXE /q:a /c:""""msiexec /i vcredist.msi /qn"""" """;
+Filename: {app}\vcredist\vcredist_x86_90_sp1_su.exe; Parameters: "/q:a /c:""VCREDI~3.EXE /q:a /c:""""msiexec /i vcredist.msi /qn"""" """;
 Filename: {app}\{#MyAppExeName}; Parameters: /show; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent runasoriginaluser
 
 [UninstallDelete]

@@ -25,6 +25,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "plugin_handler.h"
 #include "FileBrowserDelegate.h"
 
+#define DEF_CONDENSED_VIEW_MODE 2
+
 
 QByteArray OptionsDialog::windowGeometry;
 int OptionsDialog::currentTab;
@@ -63,8 +65,6 @@ OptionsDialog::OptionsDialog(QWidget * parent) :
 	genUpdateCheck->setChecked(gSettings->value("GenOps/updatecheck", true).toBool());
 	genShowHidden->setChecked(gSettings->value("GenOps/showHiddenFiles", false).toBool());
 	genShowNetwork->setChecked(gSettings->value("GenOps/showNetwork", true).toBool());
-        genCondensed->setCurrentIndex(gSettings->value("GenOps/condensedView", 2).toInt());
-	genAutoSuggestDelay->setValue(gSettings->value("GenOps/autoSuggestDelay", 1000).toInt());
 	int updateInterval = gSettings->value("GenOps/updatetimer", 10).toInt();
 	connect(genUpdateCatalog, SIGNAL(stateChanged(int)), this, SLOT(autoUpdateCheckChanged(int)));
 	genUpdateMinutes->setValue(updateInterval);
@@ -318,8 +318,6 @@ void OptionsDialog::accept()
 	gSettings->setValue("GenOps/dragmode", genShiftDrag->isChecked() ? 1 : 0);
 	gSettings->setValue("GenOps/showHiddenFiles", genShowHidden->isChecked());
 	gSettings->setValue("GenOps/showNetwork", genShowNetwork->isChecked());
-	gSettings->setValue("GenOps/condensedView", genCondensed->currentIndex());
-	gSettings->setValue("GenOps/autoSuggestDelay", genAutoSuggestDelay->value());
 	gSettings->setValue("GenOps/updatetimer", genUpdateCatalog->isChecked() ? genUpdateMinutes->value() : 0);
 	gSettings->setValue("GenOps/numviewable", genMaxViewable->value());
 	gSettings->setValue("GenOps/numresults", genNumResults->value());
@@ -334,7 +332,7 @@ void OptionsDialog::accept()
 	// Apply General Options
 	settings.setPortable(genPortable->isChecked());
 	gMainWidget->startUpdateTimer();
-	gMainWidget->setSuggestionListMode(genCondensed->currentIndex());
+    gMainWidget->setSuggestionListMode(DEF_CONDENSED_VIEW_MODE);
 	gMainWidget->loadOptions();
 
 	// Apply Directory Options

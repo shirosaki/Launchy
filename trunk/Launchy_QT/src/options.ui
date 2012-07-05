@@ -10,23 +10,222 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>678</width>
-    <height>500</height>
+    <width>760</width>
+    <height>506</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Launchy options</string>
   </property>
-  <layout class="QVBoxLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
    <item>
-    <widget class="QTabWidget" name="tabWidget">
-     <property name="currentIndex">
-      <number>4</number>
+    <widget class="QFrame" name="topFrame">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>81</height>
+      </size>
      </property>
-     <widget class="QWidget" name="General">
-      <attribute name="title">
-       <string>General</string>
-      </attribute>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>81</height>
+      </size>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QFrame {
+	background: white;
+}</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <property name="margin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QToolButton" name="btGen">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>General</string>
+        </property>
+        <property name="icon">
+         <iconset resource="launchy.qrc">
+          <normaloff>:/settings/Resources/general.png</normaloff>:/settings/Resources/general.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>48</width>
+          <height>48</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+        <property name="autoRaise">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="btSkins">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Skins</string>
+        </property>
+        <property name="icon">
+         <iconset resource="launchy.qrc">
+          <normaloff>:/settings/Resources/skins.png</normaloff>:/settings/Resources/skins.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>48</width>
+          <height>48</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+        <property name="autoRaise">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="btCatalog">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Catalog</string>
+        </property>
+        <property name="icon">
+         <iconset resource="launchy.qrc">
+          <normaloff>:/settings/Resources/catalog.png</normaloff>:/settings/Resources/catalog.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>48</width>
+          <height>48</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+        <property name="autoRaise">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="btPlugins">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Plugins</string>
+        </property>
+        <property name="icon">
+         <iconset resource="launchy.qrc">
+          <normaloff>:/settings/Resources/plugins2.png</normaloff>:/settings/Resources/plugins2.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>48</width>
+          <height>48</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+        <property name="autoRaise">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="btAbout">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>About Launchy</string>
+        </property>
+        <property name="icon">
+         <iconset resource="launchy.qrc">
+          <normaloff>:/settings/Resources/about.png</normaloff>:/settings/Resources/about.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>48</width>
+          <height>48</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+        <property name="autoRaise">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>420</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QStackedWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="stackedWidgetPage1" native="true">
       <layout class="QVBoxLayout">
        <item>
         <layout class="QHBoxLayout">
@@ -85,9 +284,6 @@
                   <property name="text">
                    <string>Always center Launchy</string>
                   </property>
-                  <property name="buddy">
-                   <cstring>genHCenter</cstring>
-                  </property>
                  </widget>
                 </item>
                 <item>
@@ -131,10 +327,7 @@
                 <item>
                  <widget class="QLabel" name="label">
                   <property name="text">
-                   <string>&amp;Hotkey:</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>genModifierBox</cstring>
+                   <string>Hotkey:</string>
                   </property>
                  </widget>
                 </item>
@@ -252,18 +445,12 @@
                 <property name="text">
                  <string>Auto open delay</string>
                 </property>
-                <property name="buddy">
-                 <cstring>genAutoSuggestDelay</cstring>
-                </property>
                </widget>
               </item>
               <item row="2" column="0">
                <widget class="QLabel" name="label_9">
                 <property name="text">
                  <string>Simultaneously visible suggestions</string>
-                </property>
-                <property name="buddy">
-                 <cstring>genMaxViewable</cstring>
                 </property>
                </widget>
               </item>
@@ -272,18 +459,12 @@
                 <property name="text">
                  <string>Maximum number of suggestions</string>
                 </property>
-                <property name="buddy">
-                 <cstring>genNumResults</cstring>
-                </property>
                </widget>
               </item>
               <item row="4" column="0">
                <widget class="QLabel" name="label_7">
                 <property name="text">
                  <string>Maximum number of history items</string>
-                </property>
-                <property name="buddy">
-                 <cstring>genNumHistory</cstring>
                 </property>
                </widget>
               </item>
@@ -320,9 +501,6 @@
                <widget class="QLabel" name="label_12">
                 <property name="text">
                  <string>Suggestions display</string>
-                </property>
-                <property name="buddy">
-                 <cstring>genCondensed</cstring>
                 </property>
                </widget>
               </item>
@@ -372,9 +550,6 @@
                   <property name="text">
                    <string>Opaqueness</string>
                   </property>
-                  <property name="buddy">
-                   <cstring>genOpaqueness</cstring>
-                  </property>
                  </widget>
                 </item>
                 <item row="0" column="1">
@@ -391,9 +566,6 @@
                  <widget class="QLabel" name="label_3">
                   <property name="text">
                    <string>Fade in time</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>genFadeIn</cstring>
                   </property>
                  </widget>
                 </item>
@@ -414,9 +586,6 @@
                  <widget class="QLabel" name="label_4">
                   <property name="text">
                    <string>Fade out time</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>genFadeOut</cstring>
                   </property>
                  </widget>
                 </item>
@@ -463,9 +632,6 @@
                   <property name="text">
                    <string>Hostname</string>
                   </property>
-                  <property name="buddy">
-                   <cstring>genProxyHostname</cstring>
-                  </property>
                  </widget>
                 </item>
                 <item row="0" column="1">
@@ -475,9 +641,6 @@
                  <widget class="QLabel" name="label_25">
                   <property name="text">
                    <string>Port</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>genProxyPort</cstring>
                   </property>
                  </widget>
                 </item>
@@ -571,6 +734,9 @@
             </item>
             <item>
              <widget class="QCheckBox" name="genUpdateCheck">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Check for new versions of Launchy on startup</string>
               </property>
@@ -603,10 +769,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Skins">
-      <attribute name="title">
-       <string>Skins</string>
-      </attribute>
+     <widget class="QWidget" name="stackedWidgetPage2" native="true">
       <layout class="QVBoxLayout">
        <item>
         <layout class="QHBoxLayout">
@@ -710,10 +873,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Catalog">
-      <attribute name="title">
-       <string>Catalog</string>
-      </attribute>
+     <widget class="QWidget" name="stackedWidgetPage3" native="true">
       <layout class="QVBoxLayout">
        <item>
         <layout class="QHBoxLayout">
@@ -875,9 +1035,6 @@
                 <property name="text">
                  <string>Depth:</string>
                 </property>
-                <property name="buddy">
-                 <cstring>catDepth</cstring>
-                </property>
                </widget>
               </item>
               <item>
@@ -945,10 +1102,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Plugins">
-      <attribute name="title">
-       <string>Plugins</string>
-      </attribute>
+     <widget class="QWidget" name="stackedWidgetPage4" native="true">
       <layout class="QVBoxLayout">
        <item>
         <layout class="QHBoxLayout">
@@ -1002,10 +1156,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="About">
-      <attribute name="title">
-       <string>About Launchy</string>
-      </attribute>
+     <widget class="QWidget" name="stackedWidgetPage5" native="true">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <layout class="QGridLayout" name="gridLayout_2" columnstretch="0">
@@ -1020,6 +1171,12 @@
          </property>
          <item row="0" column="0">
           <widget class="QLabel" name="icon">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="frameShadow">
             <enum>QFrame::Plain</enum>
            </property>
@@ -1060,6 +1217,12 @@
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="aboutText">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>481</width>
@@ -1075,83 +1238,19 @@
             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Verdana'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;I greatly enjoy developing Launchy, and I hope that you enjoy using it. It's free to use, but if you think Launchy is a worthwhile application, I would appreciate your &lt;/span&gt;&lt;a href=&quot;http://www.launchy.net/#donate&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;donation.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-           <property name="openExternalLinks">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="about_homepage">
-           <property name="minimumSize">
-            <size>
-             <width>321</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Verdana</family>
-            </font>
-           </property>
-           <property name="text">
-            <string>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Verdana'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;Launchy's official homepage is &lt;a href=&quot;http://www.launchy.net/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.launchy.net/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::RichText</enum>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-           <property name="openExternalLinks">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="aboutText_2">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>100</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Verdana</family>
-            </font>
-           </property>
-           <property name="text">
-            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Verdana'; font-size:8pt;&quot;&gt;Credits&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Verdana'; font-size:8pt;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Verdana'; font-size:8pt;&quot;&gt;Creator and Developer:  Josh Karlin&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Verdana'; font-size:8pt;&quot;&gt;Developer: Simon Capewell&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Verdana'; font-size:8pt;&quot;&gt;Others: &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Verdana'; font-size:8pt;&quot;&gt;Daniele Simonetti&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;About this version:&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;This is a fork of Launchy by OpenNingia.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;This software is free as speech and also free as beer.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;If you like this software and wants to contribuite,&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;please head to &lt;/span&gt;&lt;a href=&quot;https://github.com/OpenNingia/Launchy&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/OpenNingia/Launchy&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt; fork and code!&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Verdana'; font-size:8pt; font-weight:600; color:#2d2d2d;&quot;&gt;Credits&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Verdana'; font-size:8pt; color:#a3a3a3;&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Verdana'; font-size:8pt; color:#a3a3a3;&quot;&gt;Creator and Developer:  Josh Karlin&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Verdana'; font-size:8pt; color:#a3a3a3;&quot;&gt;Developer: Simon Capewell&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Verdana'; font-size:8pt; color:#a3a3a3;&quot;&gt;Developer: Daniele Simonetti&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -1160,22 +1259,6 @@ p, li { white-space: pre-wrap; }
             <bool>true</bool>
            </property>
           </widget>
-         </item>
-         <item row="5" column="0">
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Expanding</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </item>

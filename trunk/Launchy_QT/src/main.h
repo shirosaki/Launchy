@@ -116,7 +116,6 @@ private:
 	void hideLaunchy(bool noFade = false);
 	void updateVersion(int oldVersion);
 	void checkForUpdate();
-	void shouldDonate();
 	void updateAlternatives(bool resetSelection = true);
 	void showAlternatives();
 	void hideAlternatives();

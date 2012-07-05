@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "FileBrowserDelegate.h"
 #include "Directory.h"
 
+#include <QSignalMapper>
 
 class OptionsDialog : public QDialog, private Ui::OptionsDlg
 {
@@ -59,6 +60,9 @@ public slots:
 	void pluginChanged(int row);
 	void pluginItemChanged(QListWidgetItem* state);
 
+private slots:
+    void changeSettingsPage(int pagen);
+
 private:
 	void addDirectory(const QString& directory, bool edit = false);
 	void loadPluginDialog(QListWidgetItem* item);
@@ -76,6 +80,7 @@ private:
 	QList<QPair<QString, uint> > pluginNames;
 	QVBoxLayout* pluginLayout;
 	QString lastDir;
+    QSignalMapper tabMapper;
 
 	static QByteArray windowGeometry;
 	static int currentTab;

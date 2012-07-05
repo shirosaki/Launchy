@@ -17,6 +17,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifdef WIN32
+#   define _BIND_TO_CURRENT_CRT_VERSION 1
+#endif
 
 #include "precompiled.h"
 
@@ -1023,7 +1026,9 @@ void LaunchyWidget::catalogBuilt()
 
 void LaunchyWidget::checkForUpdate()
 {
-	http = new QHttp(this);
+    // TODO: manage updates
+    /*
+    http = new QHttp(this);
 	verBuffer = new QBuffer(this);
 	counterBuffer = new QBuffer(this);
 	verBuffer->open(QIODevice::ReadWrite);
@@ -1032,6 +1037,7 @@ void LaunchyWidget::checkForUpdate()
 	connect(http, SIGNAL(done( bool)), this, SLOT(httpGetFinished(bool)));
 	http->setHost("www.launchy.net");
 	http->get("http://www.launchy.net/version2.html", verBuffer);
+    */
 }
 
 
@@ -1085,7 +1091,6 @@ void LaunchyWidget::updateVersion(int oldVersion)
 
 	if (oldVersion < LAUNCHY_VERSION)
 	{
-		gSettings->setValue("donateTime", QDateTime::currentDateTime().addDays(21));
 		gSettings->setValue("version", LAUNCHY_VERSION);
 	}
 }
@@ -1491,24 +1496,6 @@ void LaunchyWidget::showOptionsDialog()
 }
 
 
-void LaunchyWidget::shouldDonate()
-{
-	QDateTime time = QDateTime::currentDateTime();
-	QDateTime donateTime = gSettings->value("donateTime",time.addDays(21)).toDateTime();
-	if (donateTime.isNull()) return;
-	gSettings->setValue("donateTime", donateTime);
-
-	if (donateTime <= time)
-	{
-#ifdef Q_WS_WIN
-		runProgram("http://www.launchy.net/donate.html", "");
-#endif
-		QDateTime def;
-		gSettings->setValue("donateTime", def);
-	}
-}
-
-
 void LaunchyWidget::setFadeLevel(double level)
 {
 	level = qMin(level, 1.0);
@@ -1533,7 +1520,6 @@ void LaunchyWidget::setFadeLevel(double level)
 
 void LaunchyWidget::showLaunchy(bool noFade)
 {
-	shouldDonate();
 	hideAlternatives();
 
 	loadPosition(pos());
@@ -1757,7 +1743,7 @@ int main(int argc, char *argv[])
 	qApp->setStyleSheet("file:///:/resources/basicskin.qss");
 
 #ifdef Q_WS_WIN
-	LaunchyWidget* widget = createLaunchyWidget(command);
+    LaunchyWidget* widget = createLaunchyWidget(command);
 #else
 	LaunchyWidget* widget = new LaunchyWidget(command);
 #endif

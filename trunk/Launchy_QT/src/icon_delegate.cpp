@@ -41,8 +41,8 @@ void IconDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 	}
 
 	QRect iconRect = option.rect;
-	iconRect.setWidth(32);
-	iconRect.setHeight(32);
+    iconRect.setWidth(128);
+    iconRect.setHeight(128);
 
 	int fontHeight = painter->fontMetrics().height();
 	QRect shortRect = option.rect;

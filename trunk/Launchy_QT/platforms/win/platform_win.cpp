@@ -86,7 +86,7 @@ LaunchyWidget* createLaunchyWidget(CommandFlags command)
 
 PlatformWin::PlatformWin(int& argc, char** argv) :
 	PlatformBase(argc, argv),
-	minidumper(_T("Launchy"))
+    minidumper(_T(LAUNCHY_APP_NAME))
 {
 	instance = new LimitSingleInstance(_T("Local\\{ASDSAD0-DCC6-49b5-9C61-ASDSADIIIJJL}"));
 
@@ -119,7 +119,7 @@ void PlatformWin::setPreferredIconSize(int size)
 QHash<QString, QList<QString> > PlatformWin::getDirectories()
 {
     QHash<QString, QList<QString> > out;
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Launchy", "Launchy");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, LAUNCHY_APP_NAME, LAUNCHY_APP_NAME);
     QString iniFilename = settings.fileName();
 	QFileInfo info(iniFilename);
 	QString userDataPath = info.absolutePath();

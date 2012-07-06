@@ -23,8 +23,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "SettingsManager.h"
 #include <QSettings> // need this for os x
-#define LAUNCHY_VERSION 271
-#define LAUNCHY_VERSION_STRING "2.7.1"
+#define LAUNCHY_VERSION 290
+#define LAUNCHY_VERSION_STRING "2.9.0"
+#define LAUNCHY_APP_NAME "Launchy3"
 
 #define HASH_LAUNCHY 0
 #define HASH_HISTORY 1

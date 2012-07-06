@@ -71,7 +71,7 @@ LaunchyWidget::LaunchyWidget(CommandFlags command) :
 	condensedTempIcon(NULL)
 {
 	setObjectName("launchy");
-	setWindowTitle(tr("Launchy"));
+    setWindowTitle(LAUNCHY_APP_NAME);
 #ifdef Q_WS_WIN
 	setWindowIcon(QIcon(":/resources/launchy128.png"));
 #endif
@@ -187,7 +187,7 @@ LaunchyWidget::LaunchyWidget(CommandFlags command) :
 	QKeySequence hotkey = getHotkey();
 	if (!setHotkey(hotkey))
 	{
-		QMessageBox::warning(this, tr("Launchy"), tr("The hotkey %1 is already in use, please select another.").arg(hotkey.toString()));
+        QMessageBox::warning(this, LAUNCHY_APP_NAME, tr("The hotkey %1 is already in use, please select another.").arg(hotkey.toString()));
 		command = ShowLaunchy | ShowOptions;
 	}
 
@@ -1732,8 +1732,8 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-	QCoreApplication::setApplicationName("Launchy");
-	QCoreApplication::setOrganizationDomain("Launchy");
+    QCoreApplication::setApplicationName(LAUNCHY_APP_NAME);
+    QCoreApplication::setOrganizationDomain(LAUNCHY_APP_NAME);
 
 	QString locale = QLocale::system().name();
 	QTranslator translator;

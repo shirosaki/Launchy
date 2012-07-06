@@ -87,7 +87,7 @@ void controlyPlugin::getApps(QList<CatItem>* items) {
 	if (pCplFinder) {
 		delete pCplFinder;
 		pCplFinder = NULL;
-	}
+    }
 }
 #endif
 
@@ -96,8 +96,8 @@ void controlyPlugin::getCatalog(QList<CatItem>* items)
 {
 	getApps(items);
 
-	CatItem tmp = CatItem("Launchy.controly", "Launchy", HASH_controly, getIcon());
-	tmp.usage = 5000;
+    CatItem tmp = CatItem("Launchy.controly", "Launchy", HASH_controly, getIcon());
+    tmp.usage = 5000;
 	items->push_back(tmp);
 }
 

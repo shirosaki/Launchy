@@ -1,7 +1,7 @@
 TEMPLATE = app
-unix:!macx:TARGET = launchy
-win32:TARGET = Launchy
-macx:TARGET = Launchy
+unix:!macx:TARGET = launchy3
+win32:TARGET = Launchy3
+macx:TARGET = Launchy3
 CONFIG += debug_and_release
 PRECOMPILED_HEADER = precompiled.h
 
@@ -165,15 +165,7 @@ macx {
         translations \
         dmg
 }
-#TRANSLATIONS = ../translations/launchy_fr.ts \
-#    ../translations/launchy_nl.ts \
-#    ../translations/launchy_zh.ts \
-#    ../translations/launchy_es.ts \
-#    ../translations/launchy_de.ts \
-#    ../translations/launchy_ja.ts \
-#    ../translations/launchy_zh_TW.ts \
-#    ../translations/launchy_rus.ts \
-#    ../translations/launchy_it_IT.ts \
+
 OBJECTS_DIR = build
 MOC_DIR = build
 RESOURCES += launchy.qrc

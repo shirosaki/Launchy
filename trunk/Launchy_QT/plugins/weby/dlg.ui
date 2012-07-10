@@ -6,37 +6,40 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>464</width>
-    <height>271</height>
+    <width>638</width>
+    <height>445</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Weby - Launch your favorite websites</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
     <widget class="QCheckBox" name="booksFirefox">
      <property name="text">
       <string>Firefox Bookmarks</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="1" column="0">
     <widget class="QCheckBox" name="booksIE">
      <property name="text">
       <string>Internet Explorer Bookmarks (Windows only)</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="2" column="0">
     <widget class="QCheckBox" name="booksChrome">
      <property name="text">
       <string>Google Chrome Bookmarks</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="3" column="0">
     <layout class="QHBoxLayout">
+     <property name="margin">
+      <number>9</number>
+     </property>
      <item>
       <widget class="QLabel" name="label_2">
        <property name="maximumSize">
@@ -79,7 +82,7 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="4" column="0">
     <widget class="DropTableWidget" name="table">
      <property name="columnCount">
       <number>2</number>
@@ -96,7 +99,7 @@
      </column>
     </widget>
    </item>
-   <item>
+   <item row="5" column="0">
     <layout class="QHBoxLayout">
      <item>
       <spacer>

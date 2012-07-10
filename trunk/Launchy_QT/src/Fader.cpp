@@ -67,7 +67,7 @@ void Fader::fadeIn(bool quick)
 
 void Fader::fadeOut(bool quick)
 {
-	int time = gSettings->value("GenOps/fadeout", 0).toInt();
+    int time = gSettings->value("GenOps/fadeout", 20).toInt();
 	double opaqueness = gSettings->value("GenOps/opaqueness", 100).toInt() / 100.0;
 
 	mutex.lock();

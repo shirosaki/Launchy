@@ -5,11 +5,12 @@
         <file>resources/basicskin.qss</file>
     </qresource>
     <qresource prefix="/settings">
-        <file>Resources/about.png</file>
-        <file>Resources/catalog.png</file>
-        <file>Resources/general.png</file>
-        <file>Resources/plugins1.png</file>
-        <file>Resources/plugins2.png</file>
-        <file>Resources/skins.png</file>
+        <file>resources/about.png</file>
+        <file>resources/catalog.png</file>
+        <file>resources/general.png</file>
+        <file>resources/plugins1.png</file>
+        <file>resources/plugins2.png</file>
+        <file>resources/skins.png</file>
+        <file>resources/advanced.png</file>
     </qresource>
 </RCC>

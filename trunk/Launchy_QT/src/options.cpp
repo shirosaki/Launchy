@@ -73,8 +73,8 @@ OptionsDialog::OptionsDialog(QWidget * parent) :
 	genNumResults->setValue(gSettings->value("GenOps/numresults", 10).toInt());
 	genNumHistory->setValue(gSettings->value("GenOps/maxitemsinhistory", 20).toInt());
 	genOpaqueness->setValue(gSettings->value("GenOps/opaqueness", 100).toInt());
-	genFadeIn->setValue(gSettings->value("GenOps/fadein", 0).toInt());
-	genFadeOut->setValue(gSettings->value("GenOps/fadeout", 20).toInt());
+    //genFadeIn->setValue(gSettings->value("GenOps/fadein", 0).toInt());
+    //genFadeOut->setValue(gSettings->value("GenOps/fadeout", 20).toInt());
 	connect(genOpaqueness, SIGNAL(sliderMoved(int)), gMainWidget, SLOT(setOpaqueness(int)));
 
 #ifdef Q_WS_MAC
@@ -189,7 +189,7 @@ OptionsDialog::OptionsDialog(QWidget * parent) :
 	connect(catCheckBinaries, SIGNAL(stateChanged(int)), this, SLOT(catTypesExeChanged(int)));
 	connect(catDepth, SIGNAL(valueChanged(int)),this, SLOT(catDepthChanged(int)));
 	connect(catRescan, SIGNAL(clicked(bool)), this, SLOT(catRescanClicked(bool)));
-	catProgress->setVisible(false);
+    //catProgress->setVisible(false);
 
 	memDirs = SettingsManager::readCatalogDirectories();
 	for (int i = 0; i < memDirs.count(); ++i)
@@ -245,15 +245,17 @@ OptionsDialog::OptionsDialog(QWidget * parent) :
     tabMapper.setMapping(btSkins,   1);
     tabMapper.setMapping(btCatalog, 2);
     tabMapper.setMapping(btPlugins, 3);
-    tabMapper.setMapping(btAbout,   4);
+    tabMapper.setMapping(btAdvanced,4);
+    tabMapper.setMapping(btAbout,   5);
 
 
     connect(btGen,     SIGNAL(clicked()), &tabMapper, SLOT(map()));
     connect(btSkins,   SIGNAL(clicked()), &tabMapper, SLOT(map()));
     connect(btCatalog, SIGNAL(clicked()), &tabMapper, SLOT(map()));
     connect(btPlugins, SIGNAL(clicked()), &tabMapper, SLOT(map()));
+    connect(btAdvanced,SIGNAL(clicked()), &tabMapper, SLOT(map()));
     connect(btAbout,   SIGNAL(clicked()), &tabMapper, SLOT(map()));
-    connect(&tabMapper, SIGNAL(mapped(int)), this, SLOT(changeSettingsPage(int)));
+    connect(&tabMapper,SIGNAL(mapped(int)), this, SLOT(changeSettingsPage(int)));
 
     // TODO: check for update,
     // won't be visible until check for update procedure works as intended
@@ -323,8 +325,8 @@ void OptionsDialog::accept()
 	gSettings->setValue("GenOps/numresults", genNumResults->value());
 	gSettings->setValue("GenOps/maxitemsinhistory", genNumHistory->value());
 	gSettings->setValue("GenOps/opaqueness", genOpaqueness->value());
-	gSettings->setValue("GenOps/fadein", genFadeIn->value());
-	gSettings->setValue("GenOps/fadeout", genFadeOut->value());
+    //gSettings->setValue("GenOps/fadein", genFadeIn->value());
+    //gSettings->setValue("GenOps/fadeout", genFadeOut->value());
 
 	gSettings->setValue("WebProxy/hostAddress", genProxyHostname->text());
 	gSettings->setValue("WebProxy/port", genProxyPort->text());
@@ -488,7 +490,7 @@ void OptionsDialog::skinChanged(const QString& newSkin)
 
 void OptionsDialog::pluginChanged(int row)
 {
-	plugBox->setTitle(tr("Plugin options"));
+    plugGbox->setTitle(tr("Plugin options"));
 
 	if (plugBox->layout() != NULL)
 		for (int i = 1; i < plugBox->layout()->count(); i++) 
@@ -520,7 +522,7 @@ void OptionsDialog::loadPluginDialog(QListWidgetItem* item)
 			plugBox->layout()->addWidget(win);
 		win->show();
 		if (win->windowTitle() != "Form")
-			plugBox->setTitle(win->windowTitle());
+            plugGbox->setTitle(win->windowTitle());
 	}
 }
 

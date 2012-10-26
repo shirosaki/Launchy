@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName      "Launchy"
-#define MyAppVerName   "Launchy 2.7.1"
+#define MyAppVerName   "Launchy 2.7.2"
 #define MyAppPublisher "OpenNingia"
 #define MyAppURL       "http://openningia.github.com/Launchy/"
 #define MyAppExeName   "Launchy.exe"

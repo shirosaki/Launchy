@@ -23,6 +23,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "globals.h"
 #include "main.h"
 
+#include <Lmwksta.h>
+#include <StrSafe.h>
 
 // Replace this process' environment with the current system environment
 void UpdateEnvironment()
@@ -113,4 +115,19 @@ bool EnumerateNetworkServers(QStringList& items, DWORD serverType, const wchar_t
 	return result == NERR_Success;
 }
 
+bool GetNetDomain(QString & domain)
+{
+	WCHAR domain_name[256];
+	WKSTA_INFO_100* info = 0;
+	
+	NET_API_STATUS result = NetWkstaGetInfo(NULL, 100, (BYTE **)&info);
+
+	if (result == NERR_Success && info &&
+		SUCCEEDED(StringCchCopy(domain_name, ARRAYSIZE(domain_name), info->wki100_langroup))) {
+		domain = QString::fromUtf16((ushort*)domain_name);
+		return true;
+	}
+
+	return false;
+}
 

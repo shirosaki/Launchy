@@ -204,7 +204,7 @@ bool PlatformWin::setHotkey(const QKeySequence& newHotkey, QObject* receiver, co
 {
 	GlobalShortcutManager::disconnect(hotkey, receiver, slot);
 	GlobalShortcutManager::connect(newHotkey, receiver, slot);
-	hotkey = newHotkey;
+	hotkey = newHotkey; 
 	return GlobalShortcutManager::isConnected(newHotkey);
 }
 
@@ -219,19 +219,11 @@ bool PlatformWin::getComputers(QStringList& computers) const
 {
 	// Get a list of domains. This should return nothing or fail when we're on a workgroup
 	QStringList domains;
-	if (EnumerateNetworkServers(domains, SV_TYPE_DOMAIN_ENUM))
+	QString my_domain;
+	
+	if ( GetNetDomain(my_domain) && !my_domain.isEmpty())
 	{
-		foreach(QString domain, domains)
-		{
-			EnumerateNetworkServers(computers, SV_TYPE_WORKSTATION | SV_TYPE_SERVER, domain.utf16());
-		}
-
-		// If names have been retrieved from more than one domain, they'll need sorting
-		if (domains.length() > 1)
-		{
-			computers.sort();
-		}
-
+		EnumerateNetworkServers(computers, SV_TYPE_WORKSTATION | SV_TYPE_SERVER, my_domain.utf16());
 		return true;
 	}
 

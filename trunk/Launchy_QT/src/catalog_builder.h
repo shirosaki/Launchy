@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 #include <QThread>
+#include <QRunnable>
 #include "catalog_types.h"
 #include "plugin_handler.h"
 
@@ -30,7 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define CATALOG_PROGRESS_MAX 100
 
 
-class CatalogBuilder : public QObject, public INotifyProgressStep
+class CatalogBuilder : public QThread, public INotifyProgressStep
 {
 	Q_OBJECT
 
@@ -38,11 +39,13 @@ public:
 	CatalogBuilder(PluginHandler* plugs);
 	Catalog* getCatalog() const { return catalog; }
 	int getProgress() const { return progress; }
-	int isRunning() const { return progress < CATALOG_PROGRESS_MAX; }
+    //int isRunning() const { return progress < CATALOG_PROGRESS_MAX; }
 	bool progressStep(int newStep);
+    void run();
 
 public slots:
 	void buildCatalog();
+    void stop();
 
 signals:
 	void catalogIncrement(int);
@@ -57,6 +60,7 @@ private:
 	int progress;
 	int currentItem;
 	int totalItems;
+    volatile bool stop_request;
 };
 
 

@@ -68,6 +68,7 @@ unix:!macx {
     DEFINES += SKINS_PATH=\\\"$$PREFIX/share/launchy/skins/\\\" \
         PLUGINS_PATH=\\\"$$PREFIX/lib/launchy/plugins/\\\" \
         PLATFORMS_PATH=\\\"$$PREFIX/lib/launchy/\\\"
+    LIBS += -lX11
     if(!debug_and_release|build_pass) {
         CONFIG(debug, debug|release):DESTDIR = ../debug/
         CONFIG(release, debug|release):DESTDIR = ../release/

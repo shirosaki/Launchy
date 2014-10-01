@@ -167,14 +167,14 @@ pip-log.txt
 .DS_Store
 
 #######
-LAUNCHY
+# LAUNCHY
 #######
 
 precompiled.h.cpp
 Makefile
 
 #######
-QT GENERATED CODE
+# QT GENERATED CODE
 #######
 
 ui_*.h

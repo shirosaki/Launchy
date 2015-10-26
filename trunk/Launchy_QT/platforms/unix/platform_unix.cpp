@@ -221,7 +221,10 @@ void PlatformUnix::alterItem(CatItem* item) {
 //    shared_ptr<UnixIconProvider> u((UnixIconProvider*) icons.get());
     
     //icon = u->getDesktopIcon(file.fileName(), icon);
-    icon = ((UnixIconProvider*)icons)->getDesktopIcon(file.fileName(), icon);
+    if (!QFile::exists(icon)) {
+        icon = ((UnixIconProvider*)icons)->getDesktopIcon(file.fileName(), icon);
+    }
+
 
     QFileInfo inf(icon);
     if (!inf.exists()) {

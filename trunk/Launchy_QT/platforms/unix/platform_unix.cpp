@@ -216,11 +216,6 @@ void PlatformUnix::alterItem(CatItem* item) {
     
     item->fullPath = exe + " " + allExe.join(" ");
 
-    // Cache the icon for this desktop file
-    //shared_ptr<UnixIconProvider> u(dynamic_pointer_cast<UnixIconProvider>(icons));
-//    shared_ptr<UnixIconProvider> u((UnixIconProvider*) icons.get());
-    
-    //icon = u->getDesktopIcon(file.fileName(), icon);
     if (!QFile::exists(icon)) {
         icon = ((UnixIconProvider*)icons)->getDesktopIcon(file.fileName(), icon);
     }

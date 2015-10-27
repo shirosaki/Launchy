@@ -14,7 +14,7 @@ UnixIconProvider::UnixIconProvider() {
 	QStringList spl = line.split("=");
 	xdgDataDirs = spl[1].split(":");	
     }
-    xdgDataDirs += "/usr/share/icons/";
+    xdgDataDirs += "/usr/share";
 }
 
 
@@ -138,8 +138,12 @@ QString UnixIconProvider::getDesktopIcon(QString desktopFile, QString IconName) 
 	themes += "/hicolor/32x32";
 	themes += "/hicolor/48x48";
 	themes += "/hicolor/64x64";
+        themes += "/hicolor/scalable";
         themes += "/oxygen/32x32";
         themes += "/gnome/32x32";
+        themes += "/gnome/scalable";
+        themes += "/";
+
 
 	
 	QStringList dirs;	

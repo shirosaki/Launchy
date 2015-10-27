@@ -161,8 +161,7 @@ QString UnixIconProvider::getDesktopIcon(QString desktopFile, QString IconName) 
 	foreach(QString dir, dirs) {
 	    QDir d(dir);
 	    QStringList sdirs;
-	    if (!dir.endsWith("pixmaps"))
-		sdirs = d.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+            sdirs = d.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
 	    sdirs += "."; 
 	    
 	    foreach (QString subdir, sdirs) {

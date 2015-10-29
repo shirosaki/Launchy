@@ -78,34 +78,6 @@ QString aliasTo64(QString path)
 
 int getDesktop() { return DESKTOP_WINDOWS; }
 
-/*
-void runProgram(QString path, QString args) {
-
-	SHELLEXECUTEINFO ShExecInfo;
-	bool elevated = (GetKeyState(VK_SHIFT) & 0x80000000) != 0 && (GetKeyState(VK_CONTROL) & 0x80000000) != 0;
-
-	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-	ShExecInfo.fMask = SEE_MASK_FLAG_NO_UI;
-	ShExecInfo.hwnd = NULL;
-	ShExecInfo.lpVerb = elevated ? L"runas" : NULL;
-	ShExecInfo.lpFile = (LPCTSTR)path.utf16();
-	if (args != "") {
-		ShExecInfo.lpParameters = (LPCTSTR)args.utf16();
-	} else {
-		ShExecInfo.lpParameters = NULL;
-	}
-	QDir dir(path);
-	QFileInfo info(path);
-	if (!info.isDir() && info.isFile())
-		dir.cdUp();	
-	QString filePath = QDir::toNativeSeparators(dir.absolutePath());
-	ShExecInfo.lpDirectory = (LPCTSTR)filePath.utf16();
-	ShExecInfo.nShow = SW_NORMAL;
-	ShExecInfo.hInstApp = NULL;
-
-	ShellExecuteEx(&ShExecInfo);	
-}
-*/
 void runProgram(QString path, QString args, bool translateSeparators) {
 
 	// This 64 bit aliasing needs to be gotten rid of if we have a 64 bit build

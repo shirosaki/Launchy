@@ -183,6 +183,7 @@ void runProgram(QString path, QString args, bool translateSeparators) {
 
     QString fullname = path.split(" ")[0];
     QFileInfo info(fullname);
+    translateSeparators = translateSeparators; // kill warning
 
     /* I would argue that launchy does not need to fully
        support the desktop entry specification yet/ever.

@@ -15,6 +15,7 @@
 #include <X11/keysym.h>
 
 #include "platform_x11_hotkey.h"
+#include <X11/XKBlib.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -148,7 +149,7 @@ private:
                                                 KeySym sym;
                                                 int symIndex = 0;
                                                 do {
-                                                        sym = XKeycodeToKeysym(appDpy, map->modifiermap[mapIndex], symIndex);
+                                                        sym = XkbKeycodeToKeysym(appDpy, map->modifiermap[mapIndex], symIndex, 0);
                                                         symIndex++;
                                                 } while ( !sym && symIndex < keysyms_per_keycode);
                                                 if (alt_mask == 0 && (sym == XK_Alt_L || sym == XK_Alt_R)) {

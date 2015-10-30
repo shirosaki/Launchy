@@ -231,12 +231,12 @@ void X11KeyTriggerManager::xkeyPressed(XEvent* event) {
 	
     unsigned int mod = event->xkey.state & (meta_mask | ShiftMask | ControlMask | alt_mask);
     
-    unsigned int keysym = XKeycodeToKeysym(dsp, event->xkey.keycode, 0);
+    KeySym keysym = XkbKeycodeToKeysym(dsp, event->xkey.keycode, 0, 0);
     
     bool found = false;
     uint n = 0;
     for (n = 0; qt_xk_table[n].key != Qt::Key_unknown; ++n) {
-	if ((unsigned int) qt_xk_table[n].xk.sym[0] == keysym) {
+	if ((unsigned int)qt_xk_table[n].xk.sym[0] == keysym) {
 	    found = true;
 	    break;
 	}

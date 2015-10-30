@@ -31,12 +31,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class CatItem {
 public:
 
-    /** How many times this item has been called by the user */
-    int usage;
-    /** This is unused, and meant for plugin writers and future extensions */
-    void* data;
-    /** The plugin id of the creator of this CatItem */
-    int id;
     /** The full path of the indexed item */
     QString fullPath;
     /** The abbreviated name of the indexed item */
@@ -45,13 +39,19 @@ public:
     QString lowName;
     /** A path to an icon for the item */
     QString icon;
+    /** How many times this item has been called by the user */
+    int usage;
+    /** This is unused, and meant for plugin writers and future extensions */
+    void* data;
+    /** The plugin id of the creator of this CatItem */
+    int id;
 
     CatItem() : usage(0), data(0), id(0) {}
 
 
 
     CatItem(QString full, bool isDir = false)
-        : usage(0), data(0), id(0), fullPath(full) {
+        : fullPath(full), usage(0), data(0), id(0) {
             int last = fullPath.lastIndexOf("/");
             if (last == -1) {
                 shortName = fullPath;
@@ -70,7 +70,7 @@ public:
 
 
     CatItem(QString full, QString shortN)
-        : usage(0), data(0), id(0), fullPath(full), shortName(shortN)
+        : fullPath(full), shortName(shortN), usage(0), data(0), id(0)
     {
         lowName = shortName.toLower();
         data = NULL;
@@ -79,7 +79,7 @@ public:
     }
 
     CatItem(QString full, QString shortN, uint i_d)
-        : usage(0), data(0), id(i_d), fullPath(full), shortName(shortN)
+        : fullPath(full), shortName(shortN), usage(0), data(0), id(i_d)
     {
         lowName = shortName.toLower();
         data = NULL;
@@ -94,7 +94,7 @@ public:
     so that there are not multiple items in the index with the same full path.
     */
     CatItem(QString full, QString shortN, uint i_d, QString iconPath)
-        : usage(0), data(0), id(i_d), fullPath(full), shortName(shortN), icon(iconPath)
+        : fullPath(full), shortName(shortN), icon(iconPath), usage(0), data(0), id(i_d)
     {
         lowName = shortName.toLower();
         data = NULL;

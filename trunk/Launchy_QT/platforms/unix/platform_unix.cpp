@@ -96,23 +96,29 @@ QList<Directory> PlatformUnix::getDefaultCatalogDirectories() {
 QHash<QString, QList<QString> > PlatformUnix::getDirectories() {
     QHash<QString, QList<QString> > out;
     QDir d;
-    d.mkdir(QDir::homePath() + "/.launchy");
+
+    QString xdg_config_home = qgetenv("XDG_CONFIG_HOME").constData();
+    if (xdg_config_home.isEmpty()) {
+        xdg_config_home = QDir::homePath() + "/.config/launchy";
+    }
+
+    d.mkdir(xdg_config_home);
     
     out["skins"] += qApp->applicationDirPath() + "/skins";
-    out["skins"] += QDir::homePath() + "/.launchy/skins";
+    out["skins"] += xdg_config_home + "/skins";
     out["skins"] += SKINS_PATH;
 
     out["plugins"] += qApp->applicationDirPath() + "/plugins";
-    out["plugins"] += QDir::homePath() + "/.launchy/plugins";
+    out["plugins"] += xdg_config_home + "/plugins";
     out["plugins"] += PLUGINS_PATH;
 
-    out["config"] += QDir::homePath() + "/.launchy";
+    out["config"] += xdg_config_home;
     out["portableConfig"] += qApp->applicationDirPath();
     
     if (QFile::exists(out["skins"].last() + "/Default"))
-	out["defSkin"] += out["skins"].last() + "/Default";
+        out["defSkin"] += out["skins"].last() + "/Default";
     else
-      out["defSkin"] += out["skins"].first() + "/Default";
+        out["defSkin"] += out["skins"].first() + "/Default";
 
     out["platforms"] += qApp->applicationDirPath();
     out["platforms"] += PLATFORMS_PATH;

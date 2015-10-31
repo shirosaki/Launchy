@@ -534,6 +534,7 @@ void OptionsDialog::pluginItemChanged(QListWidgetItem* iz)
 	if (row == -1)
 		return;
 
+	plugList->setCurrentItem(iz);
 	// Close any current plugin dialogs
 	if (curPlugin >= 0)
 	{

@@ -73,8 +73,6 @@ OptionsDialog::OptionsDialog(QWidget * parent) :
 	genNumResults->setValue(gSettings->value("GenOps/numresults", 10).toInt());
 	genNumHistory->setValue(gSettings->value("GenOps/maxitemsinhistory", 20).toInt());
 	genOpaqueness->setValue(gSettings->value("GenOps/opaqueness", 100).toInt());
-    //genFadeIn->setValue(gSettings->value("GenOps/fadein", 0).toInt());
-    //genFadeOut->setValue(gSettings->value("GenOps/fadeout", 20).toInt());
 	connect(genOpaqueness, SIGNAL(sliderMoved(int)), gMainWidget, SLOT(setOpaqueness(int)));
 
 #ifdef Q_WS_MAC
@@ -189,7 +187,6 @@ OptionsDialog::OptionsDialog(QWidget * parent) :
 	connect(catCheckBinaries, SIGNAL(stateChanged(int)), this, SLOT(catTypesExeChanged(int)));
 	connect(catDepth, SIGNAL(valueChanged(int)),this, SLOT(catDepthChanged(int)));
 	connect(catRescan, SIGNAL(clicked(bool)), this, SLOT(catRescanClicked(bool)));
-    //catProgress->setVisible(false);
 
 	memDirs = SettingsManager::readCatalogDirectories();
 	for (int i = 0; i < memDirs.count(); ++i)
@@ -326,8 +323,6 @@ void OptionsDialog::accept()
 	gSettings->setValue("GenOps/numresults", genNumResults->value());
 	gSettings->setValue("GenOps/maxitemsinhistory", genNumHistory->value());
 	gSettings->setValue("GenOps/opaqueness", genOpaqueness->value());
-    //gSettings->setValue("GenOps/fadein", genFadeIn->value());
-    //gSettings->setValue("GenOps/fadeout", genFadeOut->value());
 
 	gSettings->setValue("WebProxy/hostAddress", genProxyHostname->text());
 	gSettings->setValue("WebProxy/port", genProxyPort->text());

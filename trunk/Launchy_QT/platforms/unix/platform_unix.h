@@ -37,21 +37,6 @@ using namespace boost;
   and sends them off to the hotkey manager
 */
 
-/*
-class MyApp : public QApplication {
-    Q_OBJECT
-    public:
-        MyApp(int argc, char** argv) : QApplication(argc,argv) {}
-	bool x11EventFilter ( XEvent * event ) {
-	    if (event->type == KeyPress) {
-		emit xkeyPressed(event);
-	    }
-	return false;
-    }    
-signals:
-    void xkeyPressed(XEvent*);
-};
-*/
 class PlatformUnix :  public PlatformBase
 {
     Q_OBJECT
@@ -70,9 +55,6 @@ class PlatformUnix :  public PlatformBase
     
     void setPreferredIconSize(int size) { size = size; return; }
 
-    //virtual shared_ptr<QApplication> init(int & argc, char** argv);
-    // Mandatory functions
-    // Mandatory functions
     bool setHotkey(const QKeySequence& key, QObject* receiver, const char* slot)
     {
 
@@ -109,13 +91,6 @@ class PlatformUnix :  public PlatformBase
 	virtual QString expandEnvironmentVars(QString txt);
 
     bool supportsAlphaBorder() const;
-    /*
-    QIcon icon(const QFileInfo& info) {
-    	shared_ptr<UnixIconProvider> u(dynamic_pointer_cast<UnixIconProvider>(icons));
-  	  	return u->getIcon(info);
-//		return ((UnixIconProvider*) icons.get())->getIcon(info); 
-    }
-    */
 
     virtual void alterItem(CatItem*);
     signals:

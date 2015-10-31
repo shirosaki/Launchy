@@ -43,35 +43,11 @@ PlatformUnix::PlatformUnix(int& argc, char** argv) :
         */
     icons = new UnixIconProvider();
 
-//    init(argc,argv);
-//        alpha.reset();
-  //      icons->reset();
 }
 
-/*
-PlatformUnix::PlatformUnix() : PlatformBase() 		
-{
-	alpha.reset();
-//    alpha = NULL;
-    icons.reset();
-}
-*/
-
-/*
-shared_ptr<QApplication> PlatformUnix::init(int & argc, char** argv)
-{        
-    //    QApplication * app = new QApplication(*argc, argv);
-    shared_ptr<QApplication> app(new MyApp(argc, argv));
-    icons = new UnixIconProvider();
-
-//    icons.reset( (QFileIconProvider *) new UnixIconProvider());
-    return app;
-}
-*/
 PlatformUnix::~PlatformUnix()
 { 
     GlobalShortcutManager::clear();
-//    delete icons;
 }
 
 QList<Directory> PlatformUnix::getDefaultCatalogDirectories() {
@@ -127,25 +103,10 @@ QHash<QString, QList<QString> > PlatformUnix::getDirectories() {
 }
 
 
-/*
-bool PlatformUnix::CreateAlphaBorder(QWidget* w, QString ImageName)
-{
-//   if (alpha)
-//	delete alpha;
-  
-    if (ImageName == "")
-	ImageName = alphaFile;
-    alphaFile = ImageName;
-    alpha.reset( new AlphaBorder(w, ImageName) ); 
-    return true;
-}
-*/
 bool PlatformUnix::supportsAlphaBorder() const
 {
     return QX11Info::isCompositingManagerRunning();
 }
-
-//Q_EXPORT_PLUGIN2(platform_unix, PlatformUnix)
 
 
 void PlatformUnix::alterItem(CatItem* item) {
@@ -195,7 +156,6 @@ void PlatformUnix::alterItem(CatItem* item) {
             return;
     exe = allExe[0];
     allExe.removeFirst();
-    //    exe = exe.trimmed().split(" ")[0];
 
     
     /* if an absolute or relative path is supplied we can just skip this

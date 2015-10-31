@@ -547,14 +547,7 @@ void LaunchyWidget::launchItem(CatItem& item)
             for(int i = 1; i < inputData.count(); ++i)
                 args += inputData[i].getText() + " ";
 
-/* UPDATE
-#ifdef Q_WS_X11
-        if (!platform->Execute(item.fullPath, args))
-            runProgram(item.fullPath, args);
-#else
-*/
         runProgram(item.fullPath, args);
-//#endif
     }
 
     catalog->incrementUsage(item);
@@ -1110,18 +1103,7 @@ void LaunchyWidget::catalogBuilt()
 
 void LaunchyWidget::checkForUpdate()
 {
-    // TODO: manage updates
-    /*
-    http = new QHttp(this);
-    verBuffer = new QBuffer(this);
-    counterBuffer = new QBuffer(this);
-    verBuffer->open(QIODevice::ReadWrite);
-    counterBuffer->open(QIODevice::ReadWrite);
-
-    connect(http, SIGNAL(done( bool)), this, SLOT(httpGetFinished(bool)));
-    http->setHost("www.launchy.net");
-    http->get("http://www.launchy.net/version2.html", verBuffer);
-    */
+    // removed, should be updated with package manager and was only a todo before.
 }
 
 
@@ -1553,8 +1535,6 @@ void LaunchyWidget::buildCatalog()
     updateTimer->stop();
     saveSettings();
 
-    // Use the catalog builder to refresh the catalog in a worker thread
-    //QMetaObject::invokeMethod(gBuilder, "buildCatalog", Qt::AutoConnection);
     gBuilder->start( QThread::IdlePriority );
 
     startUpdateTimer();

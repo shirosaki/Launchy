@@ -10,19 +10,23 @@ the configured key combination is pressed (Ctrl+Space by default) or
 the tray icon is clicked.
 
 If you'd like to run a program with a second parameter then use tab. E.g. 
+```
 gedit [tab] ~/textfile.txt [tab] [return]
+```
 runs 
+```
 gedit ~/textfile.txt
+```
 
 As there seems to be not many people work on this nice program I've tried to fix
 the bugs and misssing feature request that I need. My main focus is on Launchy_QT
 for linux, especially Debian and Gentoo.
 
 This fork is from 
-https://github.com/OpenNingia/Launchy
+- https://github.com/OpenNingia/Launchy
 
 The original Homepage of the project is
-http://www.launchy.net
+- http://www.launchy.net
 
 
 Thanks to all who have developed this nice piece of software.

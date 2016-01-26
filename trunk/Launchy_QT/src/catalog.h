@@ -51,7 +51,7 @@ public:
 
 
     CatItem(QString full, bool isDir = false)
-        : usage(0), data(0), id(0), fullPath(full) {
+        : fullPath(full), usage(0), data(0), id(0) {
             int last = fullPath.lastIndexOf("/");
             if (last == -1) {
                 shortName = fullPath;
@@ -70,7 +70,7 @@ public:
 
 
     CatItem(QString full, QString shortN)
-        : usage(0), data(0), id(0), fullPath(full), shortName(shortN)
+        : fullPath(full), shortName(shortN), usage(0), data(0), id(0)
     {
         lowName = shortName.toLower();
         data = NULL;
@@ -79,7 +79,7 @@ public:
     }
 
     CatItem(QString full, QString shortN, uint i_d)
-        : usage(0), data(0), fullPath(full), shortName(shortN), id(i_d)
+        : fullPath(full), shortName(shortN), usage(0), data(0), id(i_d)
     {
         lowName = shortName.toLower();
         data = NULL;
@@ -94,7 +94,7 @@ public:
     so that there are not multiple items in the index with the same full path.
     */
     CatItem(QString full, QString shortN, uint i_d, QString iconPath)
-        : usage(0), data(0), fullPath(full), shortName(shortN), icon(iconPath), id(i_d)
+        : fullPath(full), shortName(shortN), icon(iconPath), usage(0), data(0), id(i_d)
     {
         lowName = shortName.toLower();
         data = NULL;

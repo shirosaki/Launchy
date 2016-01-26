@@ -43,35 +43,11 @@ PlatformUnix::PlatformUnix(int& argc, char** argv) :
         */
     icons = new UnixIconProvider();
 
-//    init(argc,argv);
-//        alpha.reset();
-  //      icons->reset();
 }
 
-/*
-PlatformUnix::PlatformUnix() : PlatformBase() 		
-{
-	alpha.reset();
-//    alpha = NULL;
-    icons.reset();
-}
-*/
-
-/*
-shared_ptr<QApplication> PlatformUnix::init(int & argc, char** argv)
-{        
-    //    QApplication * app = new QApplication(*argc, argv);
-    shared_ptr<QApplication> app(new MyApp(argc, argv));
-    icons = new UnixIconProvider();
-
-//    icons.reset( (QFileIconProvider *) new UnixIconProvider());
-    return app;
-}
-*/
 PlatformUnix::~PlatformUnix()
 { 
     GlobalShortcutManager::clear();
-//    delete icons;
 }
 
 QList<Directory> PlatformUnix::getDefaultCatalogDirectories() {
@@ -96,23 +72,29 @@ QList<Directory> PlatformUnix::getDefaultCatalogDirectories() {
 QHash<QString, QList<QString> > PlatformUnix::getDirectories() {
     QHash<QString, QList<QString> > out;
     QDir d;
-    d.mkdir(QDir::homePath() + "/.launchy");
+
+    QString xdg_config_home = qgetenv("XDG_CONFIG_HOME").constData();
+    if (xdg_config_home.isEmpty()) {
+        xdg_config_home = QDir::homePath() + "/.config/launchy";
+    }
+
+    d.mkdir(xdg_config_home);
     
     out["skins"] += qApp->applicationDirPath() + "/skins";
-    out["skins"] += QDir::homePath() + "/.launchy/skins";
+    out["skins"] += xdg_config_home + "/skins";
     out["skins"] += SKINS_PATH;
 
     out["plugins"] += qApp->applicationDirPath() + "/plugins";
-    out["plugins"] += QDir::homePath() + "/.launchy/plugins";
+    out["plugins"] += xdg_config_home + "/plugins";
     out["plugins"] += PLUGINS_PATH;
 
-    out["config"] += QDir::homePath() + "/.launchy";
+    out["config"] += xdg_config_home;
     out["portableConfig"] += qApp->applicationDirPath();
     
     if (QFile::exists(out["skins"].last() + "/Default"))
-	out["defSkin"] += out["skins"].last() + "/Default";
+        out["defSkin"] += out["skins"].last() + "/Default";
     else
-      out["defSkin"] += out["skins"].first() + "/Default";
+        out["defSkin"] += out["skins"].first() + "/Default";
 
     out["platforms"] += qApp->applicationDirPath();
     out["platforms"] += PLATFORMS_PATH;
@@ -121,25 +103,10 @@ QHash<QString, QList<QString> > PlatformUnix::getDirectories() {
 }
 
 
-/*
-bool PlatformUnix::CreateAlphaBorder(QWidget* w, QString ImageName)
-{
-//   if (alpha)
-//	delete alpha;
-  
-    if (ImageName == "")
-	ImageName = alphaFile;
-    alphaFile = ImageName;
-    alpha.reset( new AlphaBorder(w, ImageName) ); 
-    return true;
-}
-*/
 bool PlatformUnix::supportsAlphaBorder() const
 {
     return QX11Info::isCompositingManagerRunning();
 }
-
-//Q_EXPORT_PLUGIN2(platform_unix, PlatformUnix)
 
 
 void PlatformUnix::alterItem(CatItem* item) {
@@ -160,16 +127,13 @@ void PlatformUnix::alterItem(CatItem* item) {
     while(!file.atEnd()) {
 	QString line = QString::fromUtf8(file.readLine());
 	
-	if (line.startsWith("Name[" + locale, Qt::CaseInsensitive)) 
+	if (name == "" && line.startsWith("Name[" + locale, Qt::CaseInsensitive))
 	    name = line.split("=")[1].trimmed();
-	
-
-	else if (line.startsWith("Name=", Qt::CaseInsensitive)) 
+	else if (name == "" && line.startsWith("Name=", Qt::CaseInsensitive))
 	    name = line.split("=")[1].trimmed();
-
-	else if (line.startsWith("Icon", Qt::CaseInsensitive))
+	else if (icon == "" && line.startsWith("Icon", Qt::CaseInsensitive))
 	    icon = line.split("=")[1].trimmed();
-	else if (line.startsWith("Exec", Qt::CaseInsensitive))
+	else if (exe == "" && line.startsWith("Exec", Qt::CaseInsensitive))
 	    exe = line.split("=")[1].trimmed();	
     }
     if (name.size() >= item->shortName.size() - 8) {
@@ -192,7 +156,6 @@ void PlatformUnix::alterItem(CatItem* item) {
             return;
     exe = allExe[0];
     allExe.removeFirst();
-    //    exe = exe.trimmed().split(" ")[0];
 
     
     /* if an absolute or relative path is supplied we can just skip this
@@ -219,12 +182,10 @@ void PlatformUnix::alterItem(CatItem* item) {
     
     item->fullPath = exe + " " + allExe.join(" ");
 
-    // Cache the icon for this desktop file
-    //shared_ptr<UnixIconProvider> u(dynamic_pointer_cast<UnixIconProvider>(icons));
-//    shared_ptr<UnixIconProvider> u((UnixIconProvider*) icons.get());
-    
-    //icon = u->getDesktopIcon(file.fileName(), icon);
-    icon = ((UnixIconProvider*)icons)->getDesktopIcon(file.fileName(), icon);
+    if (!QFile::exists(icon)) {
+        icon = ((UnixIconProvider*)icons)->getDesktopIcon(file.fileName(), icon);
+    }
+
 
     QFileInfo inf(icon);
     if (!inf.exists()) {

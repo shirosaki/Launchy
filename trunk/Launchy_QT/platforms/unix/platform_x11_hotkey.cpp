@@ -56,7 +56,6 @@ private:
                 XErrorHandler savedErrorHandler = XSetErrorHandler(XGrabErrorHandler);
 
 		WId w = QX11Info::appRootWindow();
-		//		qDebug() << "X11 hotkey says root is:" << w;
 		foreach(long mask_mod, X11KeyTriggerManager::ignModifiersList()) {
                         XGrabKey(QX11Info::display(), code, mod | mask_mod, w, False, GrabModeAsync, GrabModeAsync);
                         GrabbedKey grabbedKey;
@@ -91,7 +90,6 @@ public:
         ~Impl()
         {
                 X11KeyTriggerManager::instance()->removeTrigger(this);
-		//	XUngrabKey(QX11Info::display(),AnyKey,AnyModifier,QX11Info::appRootWindow());
 		foreach(GrabbedKey key, grabbedKeys_) 
 		    XUngrabKey(QX11Info::display(), key.code, key.mod, QX11Info::appRootWindow());
 		
@@ -209,10 +207,6 @@ GlobalShortcutManager::KeyTrigger::KeyTrigger(const QKeySequence& key)
 GlobalShortcutManager::KeyTrigger::~KeyTrigger()
 {
 	d.reset();
-	/*
-        delete d;
-        d = 0;
-        */
 }
 
 bool GlobalShortcutManager::KeyTrigger::isConnected()
@@ -226,17 +220,16 @@ bool GlobalShortcutManager::KeyTrigger::isConnected()
 //typedef GlobalShortcutManager::KeyTrigger::Impl mytrigger;
 
 void X11KeyTriggerManager::xkeyPressed(XEvent* event) {
-    //    qDebug() << "Receieved key press!";
     Display* dsp = QX11Info::display();
 	
     unsigned int mod = event->xkey.state & (meta_mask | ShiftMask | ControlMask | alt_mask);
     
-    unsigned int keysym = XKeycodeToKeysym(dsp, event->xkey.keycode, 0);
+    KeySym keysym = XkbKeycodeToKeysym(dsp, event->xkey.keycode, 0, 0);
     
     bool found = false;
     uint n = 0;
     for (n = 0; qt_xk_table[n].key != Qt::Key_unknown; ++n) {
-	if ((unsigned int) qt_xk_table[n].xk.sym[0] == keysym) {
+	if ((unsigned int)qt_xk_table[n].xk.sym[0] == keysym) {
 	    found = true;
 	    break;
 	}
@@ -254,10 +247,6 @@ void X11KeyTriggerManager::xkeyPressed(XEvent* event) {
 	keyout |= Qt::CTRL;
     if (mod & alt_mask)
 	keyout |= Qt::ALT;
-
-    //    QKeySequence out(keyout);
-    //qDebug() << mod << keysym << out;
-
 
 
     foreach(X11KeyTrigger* trigger, triggers_) {

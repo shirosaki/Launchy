@@ -31,7 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <QProcessEnvironment>
 
-#ifndef VC_EXTRALEAN
+/*#ifndef VC_EXTRALEAN
 #define VC_EXTRALEAN
 #endif
 
@@ -48,7 +48,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 #include <windows.h>
-#include <shlobj.h>
+#include <shlobj.h>*/
 
 // This is also defined in WinIconProvider, remove from both locations if 64 bit build is produced
 QString aliasTo64(QString path) 

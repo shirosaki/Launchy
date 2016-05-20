@@ -36,6 +36,46 @@ public:
 		commandMessageId = RegisterWindowMessage(_T("LaunchyCommand"));
 	}
 
+#if QT_VERSION >= 0x050000
+    virtual bool nativeEvent(const QByteArray &eventType, void *message, long *result)
+    {
+        MSG* msg = static_cast<MSG*>(message);
+
+        switch (msg->message)
+        {
+        case WM_SETTINGCHANGE:
+            // Refresh Launchy's environment on settings changes
+            if (msg->lParam && _tcscmp((TCHAR*)msg->lParam, _T("Environment")) == 0)
+            {
+                UpdateEnvironment();
+            }
+            break;
+
+        case WM_ENDSESSION:
+            // Ensure settings are saved
+            saveSettings();
+            break;
+
+        // Might need to capture these two messages if Vista gives any problems with alpha borders
+        // when restoring from standby
+        case WM_POWERBROADCAST:
+            break;
+        case WM_WTSSESSION_CHANGE:
+            break;
+
+        default:
+            if (msg->message == commandMessageId)
+            {
+                // A Launchy startup command
+                executeStartupCommand(msg->wParam);
+            }
+            break;
+        }
+
+        return LaunchyWidget::nativeEvent(eventType, message, result);
+    }
+
+#else
 	virtual bool winEvent(MSG* msg, long* result)
 	{
 		switch (msg->message)
@@ -68,8 +108,10 @@ public:
 			}
 			break;
 		}
-		return LaunchyWidget::winEvent(msg, result);
+
+        return LaunchyWidget::winEvent(msg, result);
 	}
+#endif
 
 private:
 	UINT commandMessageId;
@@ -223,7 +265,7 @@ bool PlatformWin::getComputers(QStringList& computers) const
 	
 	if ( GetNetDomain(my_domain) && !my_domain.isEmpty())
 	{
-		EnumerateNetworkServers(computers, SV_TYPE_WORKSTATION | SV_TYPE_SERVER, my_domain.utf16());
+        EnumerateNetworkServers(computers, SV_TYPE_WORKSTATION | SV_TYPE_SERVER, reinterpret_cast<const wchar_t*>(my_domain.utf16()));
 		return true;
 	}
 

@@ -178,3 +178,4 @@ Makefile
 #######
 
 ui_*.h
+build-*

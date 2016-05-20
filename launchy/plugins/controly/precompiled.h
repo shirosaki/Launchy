@@ -24,8 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #pragma warning(push,3)
 #endif
 
-#include <QtGui>
-
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -37,10 +35,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _WIN32_IE 0x0700
 #include <windows.h>
 #include <shlobj.h>
+#include <Shobjidl.h>
 #include <shlwapi.h>
 #include <shellapi.h>
 #include <cpl.h>
 #endif
 
+#include <QtGui>
 
 #endif // PRECOMPILED_H

@@ -3,6 +3,7 @@
 #ifndef FHOICON_H
 #define FHOICON_H
 
+#include <Shlobj.h>
 
 // implement icon/image cache?
 // extracts / generates icons (images, as pixmap objects) from file resources, image files, files and handles

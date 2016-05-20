@@ -20,7 +20,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef CHARLINEEDIT_H
 #define CHARLINEEDIT_H
 
-#include <QtGui>
+#if QT_VERSION >= 0x050000
+#   include <QtWidgets/QLineEdit>
+#else
+#   include <QtGui>
+#endif
+
 class CharLineEdit : public QLineEdit
 {
 	Q_OBJECT

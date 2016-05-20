@@ -225,4 +225,6 @@ int RunnerPlugin::msg(int msgId, void* wParam, void* lParam)
 	return handled;
 }
 
-Q_EXPORT_PLUGIN2(runner, RunnerPlugin) 
+#if QT_VERSION < 0x050000
+    Q_EXPORT_PLUGIN2(runner, RunnerPlugin)
+#endif

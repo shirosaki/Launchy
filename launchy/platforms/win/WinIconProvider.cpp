@@ -22,6 +22,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "platform_win_util.h"
 #include "WinIconProvider.h"
 
+#if QT_VERSION >= 0x050000
+#   include <QtWinExtras/QtWinExtras>
+#endif
+
 // Temporary work around to avoid having to install the latest Windows SDK
 #ifndef __IShellItemImageFactory_INTERFACE_DEFINED__
 #define __IShellItemImageFactory_INTERFACE_DEFINED__
@@ -119,8 +123,13 @@ QIcon WinIconProvider::icon(const QFileInfo& info) const
 	{
 		HICON hIcon;
 		QString filePath = QDir::toNativeSeparators(info.filePath());
-		ExtractIconEx(filePath.utf16(), 0, &hIcon, NULL, 1);
+        ExtractIconEx(reinterpret_cast<const wchar_t*>(filePath.utf16()), 0, &hIcon, NULL, 1);
+
+#if QT_VERSION >= 0x050000
+        retIcon = QIcon(QtWin::fromHICON(hIcon));
+#else
         retIcon = QIcon(QPixmap::fromWinHICON(hIcon));
+#endif
 		DestroyIcon(hIcon);
 	}
 	else
@@ -145,7 +154,7 @@ QIcon WinIconProvider::icon(const QFileInfo& info) const
 		}
 		if (sfi.iIcon == 0)
 		{
-			SHGetFileInfo(filePath.utf16(), 0, &sfi, sizeof(sfi), SHGFI_SYSICONINDEX);
+            SHGetFileInfo(reinterpret_cast<const wchar_t*>(filePath.utf16()), 0, &sfi, sizeof(sfi), SHGFI_SYSICONINDEX);
 		}
 
 		// An icon index of 3 is the generic file icon
@@ -204,7 +213,12 @@ bool WinIconProvider::addIconFromImageList(int imageListIndex, int iconIndex, QI
 	}
 	if (hResult == S_OK && hIcon)
 	{
-		icon.addPixmap(QPixmap::fromWinHICON(hIcon));
+#if QT_VERSION >= 0x050000
+        icon.addPixmap(QtWin::fromHICON(hIcon));
+#else
+        icon.addPixmap(QPixmap::fromWinHICON(hIcon));
+#endif
+
 		DestroyIcon(hIcon);
 	}
 
@@ -222,7 +236,7 @@ bool WinIconProvider::addIconFromShellFactory(QString filePath, QIcon& icon) con
 	if (fnSHCreateItemFromParsingName)
 	{
 		IShellItem* psi = NULL;
-		hr = fnSHCreateItemFromParsingName(filePath.utf16(), 0, IID_IShellItem, (void**)&psi);
+        hr = fnSHCreateItemFromParsingName(reinterpret_cast<const wchar_t*>(filePath.utf16()), 0, IID_IShellItem, (void**)&psi);
 		if (hr == S_OK)
 		{
 			IShellItemImageFactory* psiif = NULL;
@@ -234,7 +248,11 @@ bool WinIconProvider::addIconFromShellFactory(QString filePath, QIcon& icon) con
 				hr = psiif->GetImage(iconSize, SIIGBF_RESIZETOFIT | SIIGBF_ICONONLY, &iconBitmap);
 				if (hr == S_OK)
 				{
-					QPixmap iconPixmap = QPixmap::fromWinHBITMAP(iconBitmap, QPixmap::PremultipliedAlpha);
+#if QT_VERSION >= 0x050000
+                    QPixmap iconPixmap = QtWin::fromHBITMAP(iconBitmap, QtWin::HBitmapPremultipliedAlpha);
+#else
+                    QPixmap iconPixmap = QPixmap::fromWinHBITMAP(iconBitmap, QPixmap::PremultipliedAlpha);
+#endif
 					icon.addPixmap(iconPixmap);
 					DeleteObject(iconBitmap);
 				}

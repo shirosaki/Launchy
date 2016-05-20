@@ -1,7 +1,8 @@
 TEMPLATE = subdirs
-SUBDIRS = plugins/runner \
-          plugins/weby \
-          src
+SUBDIRS = src \
+          #plugins/runner \
+          # plugins/weby
+
 
 win32 {
         SUBDIRS += plugins/controly

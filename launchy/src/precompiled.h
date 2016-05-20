@@ -25,6 +25,29 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
+//#define _WIN32_WINNT 0x0600
+//#define _WIN32_IE 0x0700
+
+//#include <sdkddkver.h>
+//#include <windows.h>
+#include <qt_windows.h>
+#include <tchar.h>
+#include <string.h>
+#include <shlobj.h>
+#include <shlguid.h>
+#include <shobjidl.h>
+#include <shellapi.h>
+#include <commctrl.h>
+#include <commoncontrols.h>
+#include <userenv.h>
+#include <lm.h>
+
+
+
+#if QT_VERSION >= 0x050000
+#   include <QtWidgets>
+#endif
+
 #include <QtGui>
 #include <QtNetwork>
 #include <QFuture>
@@ -37,19 +60,5 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <boost/shared_ptr.hpp>
 
 using namespace boost;
-
-#define _CRT_SECURE_NO_WARNINGS
-#define _WIN32_WINNT 0x0600	
-#define _WIN32_IE 0x0700
-#include <windows.h>
-#include <tchar.h>
-#include <shlobj.h>
-#include <shlguid.h>
-#include <shobjidl.h>
-#include <shellapi.h>
-#include <commctrl.h>
-#include <commoncontrols.h>
-#include <userenv.h>
-#include <lm.h>
 
 #endif // PRECOMPILED_H

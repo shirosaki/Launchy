@@ -4,9 +4,11 @@ win32:TARGET = Launchy
 CONFIG += debug_and_release
 PRECOMPILED_HEADER = precompiled.h
 
-# CONFIG += qt release
-INCLUDEPATH += ../common
 QT += network
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets winextras
+
+INCLUDEPATH += ../common
+
 SOURCES = main.cpp \
     globals.cpp \
     options.cpp \
@@ -28,7 +30,8 @@ SOURCES = main.cpp \
     InputDataList.cpp \
     FileSearch.cpp \
     AnimationLabel.cpp \
-        SettingsManager.cpp
+        SettingsManager.cpp \
+    precompiled.cpp
 HEADERS = platform_base.h \
     globals.h \
     main.h \
@@ -91,8 +94,11 @@ win32 {
         CONFIG(debug, debug|release):DESTDIR = ../debug/
         CONFIG(release, debug|release):DESTDIR = ../release/
     }
-    QMAKE_CXXFLAGS_RELEASE += /Zi
-    QMAKE_LFLAGS_RELEASE += /DEBUG
+
+    #DEFINES += ENABLE_SPD_LOG_FILE
+
+    #QMAKE_CXXFLAGS_RELEASE += /Z7
+    #QMAKE_LFLAGS_RELEASE += /DEBUG
 }
 
 #TRANSLATIONS = ../translations/launchy_fr.ts \
@@ -109,4 +115,4 @@ MOC_DIR = build
 RESOURCES += launchy.qrc
 
 
-if(!debug_and_release|build_pass):CONFIG(debug, debug|release): DEFINES += ENABLE_LOG_FILE
+# if(!debug_and_release|build_pass):CONFIG(debug, debug|release): DEFINES += ENABLE_LOG_FILE

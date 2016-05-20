@@ -7,13 +7,25 @@
 * http://www.gnu.org/licenses/lgpl.html
 */
 
-#include <QtGui/QApplication>
-#include <QtGui/QBitmap>
-#include <QtGui/QCompleter>
-#include <QtGui/QDirModel>
-#include <QtGui/QFileDialog>
-#include <QtGui/QFocusEvent>
-#include <QtGui/QHBoxLayout>
+
+#if QT_VERSION >= 0x050000
+#   include <QtWidgets/QApplication>
+#   include <QtWidgets/QCompleter>
+#   include <QtWidgets/QDirModel>
+#   include <QtWidgets/QFileDialog>
+#   include <QtWidgets/QHBoxLayout>
+#   include <QtGui/QBitmap>
+#   include <QtGui/QFocusEvent>
+#else
+#   include <QtGui/QApplication>
+#   include <QtGui/QBitmap>
+#   include <QtGui/QCompleter>
+#   include <QtGui/QDirModel>
+#   include <QtGui/QFileDialog>
+#   include <QtGui/QFocusEvent>
+#   include <QtGui/QHBoxLayout>
+#endif
+
 #include "FileBrowser.h"
 
 // Browse button

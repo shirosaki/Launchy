@@ -30,6 +30,27 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define CATALOG_PROGRESS_MIN 0
 #define CATALOG_PROGRESS_MAX 100
 
+class CatalogAdder : public QThread
+{
+    Q_OBJECT
+
+public:
+    CatalogAdder(Catalog& cat);
+    void run();
+
+public slots:
+    void push(QList<CatItem> items);
+    void finish();
+    void abort();
+
+private:
+    QMutex m_mutex;
+    QQueue<CatItem> m_queue;
+    Catalog& m_cat;
+    bool m_active;
+    bool m_stop_requested;
+    bool m_abort_requested;
+};
 
 class CatalogBuilder : public QThread, public INotifyProgressStep
 {
@@ -56,6 +77,7 @@ private:
 
 	PluginHandler* plugins;
 	Catalog* catalog;
+    QSharedPointer<CatalogAdder> adder;
 	QSet<QString> indexed;
 	int progress;
 	int currentItem;

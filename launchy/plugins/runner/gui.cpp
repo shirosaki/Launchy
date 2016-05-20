@@ -33,7 +33,11 @@ Gui::Gui(QWidget* parent, QSettings* settings)
 		return;
 
 	// Stretch the centre column of the table
+#if QT_VERSION >= 0x050000
+    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+#else
 	table->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch); //  column 1
+#endif
 
 	// Read in the array of programs from options
 	table->setSortingEnabled(false);

@@ -40,6 +40,7 @@ public:
 	virtual int count() = 0;
 	virtual void clear() = 0;
 	virtual void addItem(const CatItem& item) = 0;
+    virtual void addNewItem(const CatItem& item) = 0;
 	virtual void purgeOldItems() = 0;
 
 	virtual void incrementUsage(const CatItem& item) = 0;
@@ -76,6 +77,7 @@ public:
 		usage = item.usage;
 		data = item.data;
 		id = item.id;
+        hash = item.hash;
 	}
 
 	int timestamp;
@@ -93,6 +95,7 @@ public:
 	virtual int count() { return catalogItems.count(); }
 	virtual void clear() { catalogItems.clear(); }
 	virtual void addItem(const CatItem& item);
+    virtual void addNewItem(const CatItem& item);
 	virtual void purgeOldItems();
 
 	virtual void incrementUsage(const CatItem& item);

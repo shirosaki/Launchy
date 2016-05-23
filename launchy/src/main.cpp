@@ -110,7 +110,10 @@ static void initialize_logger()
     //size_t q_size = 1048576; //queue size must be power of 2
     //spdlog::set_async_mode(q_size);
     auto file_logger = spdlog::rotating_logger_mt("app", LOG_FILE_NAME, MAX_LOG_SIZE, 3);
-    file_logger->flush_on(spdlog::level::info);
+    if ( file_logger != nullptr )
+        file_logger->flush_on(spdlog::level::info);
+    else
+        auto null_logger = spdlog::create<spdlog::sinks::null_sink_st>("app");
 }
 #else
 #include "spdlog/sinks/null_sink.h"

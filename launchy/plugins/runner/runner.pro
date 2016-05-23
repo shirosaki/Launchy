@@ -54,3 +54,8 @@ macx {
     INSTALLS += icons
   INCLUDEPATH += /opt/local/include/
 }
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets gui network
+
+DISTFILES += \
+    runner.json

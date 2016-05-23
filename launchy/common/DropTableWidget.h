@@ -2,7 +2,11 @@
 #define DROPTABLEWIDGET_H
 
 
-#include <QtGui/QTableWidget>
+#if QT_VERSION >= 0x050000
+#   include <QtWidgets/QTableWidget>
+#else
+#   include <QtGui/QTableWidget>
+#endif
 
 
 class DropTableWidget : public QTableWidget

@@ -45,13 +45,15 @@ public:
     void* data;
     /** The plugin id of the creator of this CatItem */
     int id;
+    /** an hash **/
+    int hash;
 
-    CatItem() : usage(0), data(0), id(0) {}
+    CatItem() : usage(0), data(0), id(0), hash(0) {}
 
 
 
     CatItem(QString full, bool isDir = false)
-        : usage(0), data(0), id(0), fullPath(full) {
+        : usage(0), data(0), id(0), fullPath(full), hash(0) {
             int last = fullPath.lastIndexOf("/");
             if (last == -1) {
                 shortName = fullPath;
@@ -66,24 +68,27 @@ public:
             data = NULL;
             usage = 0;
             id = 0;
+            calculateHash();
     }
 
 
     CatItem(QString full, QString shortN)
-        : usage(0), data(0), id(0), fullPath(full), shortName(shortN)
+        : usage(0), data(0), id(0), fullPath(full), shortName(shortN), hash(0)
     {
         lowName = shortName.toLower();
         data = NULL;
         usage = 0;
         id = 0;
+        calculateHash();
     }
 
     CatItem(QString full, QString shortN, uint i_d)
-        : usage(0), data(0), fullPath(full), shortName(shortN), id(i_d)
+        : usage(0), data(0), fullPath(full), shortName(shortN), id(i_d), hash(0)
     {
         lowName = shortName.toLower();
         data = NULL;
         usage = 0;
+        calculateHash();
     }
     /** This is the constructor most used by plugins
     \param full The full path of the file to execute
@@ -94,11 +99,12 @@ public:
     so that there are not multiple items in the index with the same full path.
     */
     CatItem(QString full, QString shortN, uint i_d, QString iconPath)
-        : usage(0), data(0), fullPath(full), shortName(shortN), icon(iconPath), id(i_d)
+        : usage(0), data(0), fullPath(full), shortName(shortN), icon(iconPath), id(i_d), hash(0)
     {
         lowName = shortName.toLower();
         data = NULL;
         usage = 0;
+        calculateHash();
     }
 
     CatItem(const CatItem &s) {
@@ -109,6 +115,7 @@ public:
         usage = s.usage;
         data = s.data;
         id = s.id;
+        calculateHash();
     }
 
     CatItem& operator=( const CatItem &s ) {
@@ -119,12 +126,44 @@ public:
         usage = s.usage;
         data = s.data;
         id = s.id;
+        calculateHash();
         return *this;
     }
 
-    bool operator==(const CatItem& other) const
+    void calculateHash()
     {
-        return fullPath == other.fullPath && shortName == other.shortName;
+        if ( isLink() ) {
+            QFileInfo fime(fullPath);
+            hash = qHash(fime.symLinkTarget());
+        } else {
+            hash = qHash(fullPath);
+        }
+    }
+
+    bool isLink() const
+    {
+        QFileInfo info(fullPath);
+        return info.isSymLink() || info.suffix().toLower() == "lnk";
+    }
+
+    bool operator==(const CatItem& other) const{
+        /*if (fullPath == other.fullPath)
+                    return true;
+
+                // CHECK LINKS
+                QFileInfo fime   (fullPath);
+                QFileInfo fiother(other.fullPath);
+
+
+                if ( isLink() && other.isLink() )
+                    return fime.symLinkTarget() == fiother.symLinkTarget();
+                if ( isLink() && !other.isLink() )
+                    return fime.symLinkTarget() == other.fullPath;
+                if ( !isLink() && other.isLink() )
+                    return fullPath == fiother.symLinkTarget();
+
+        return false;*/
+        return hash == other.hash;
     }
 
     bool operator!=(const CatItem& other) const

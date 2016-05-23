@@ -37,6 +37,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "Fader.h"
 
 
+#if QT_VERSION >= 0x050000
+#   include <QtWidgets/QSystemTrayIcon>
+#   include <QtWidgets/QPushButton>
+#endif
+
 enum CommandFlag
 {
     None = 0,
@@ -91,7 +96,6 @@ public slots:
     void onHotkey();
     void dropTimeout();
     void setOpaqueness(int level);
-    void httpGetFinished(bool result);
     void catalogProgressUpdated(int);
     void catalogBuilt();
     void buildCatalog();
@@ -172,7 +176,6 @@ private:
     IconDelegate* listDelegate;
     QAbstractItemDelegate* defaultListDelegate;
 
-    QHttp *http;
     QBuffer *verBuffer;
     QBuffer *counterBuffer;
 

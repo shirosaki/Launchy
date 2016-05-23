@@ -31,6 +31,7 @@ UninstallDisplayIcon={app}\{#MyAppExeName}
 PrivilegesRequired=none
 WizardSmallImageFile=header.bmp
 AllowNoIcons=yes
+ArchitecturesInstallIn64BitMode=x64
 
 [Languages]
 Name: english; MessagesFile: compiler:Default.isl
@@ -70,22 +71,42 @@ Source: ..\..\translations\launchy_it_IT.qm; DestDir: {app}\tr\; Flags: ignoreve
 
 ; Libs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: ..\..\release\QtCore4.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\release\QtGui4.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\release\QtNetwork4.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\release\imageformats\qmng4.dll; DestDir: {app}\imageformats; Flags: ignoreversion
+Source: ..\..\release\Qt5Core.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\release\Qt5Gui.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\release\Qt5Network.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\release\Qt5Widgets.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\release\Qt5WinExtras.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\release\icudt52.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\release\icuin52.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\release\libEGL.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\release\libGLESv2.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\release\imageformats\qdds.dll; DestDir: {app}\imageformats; Flags: ignoreversion
+Source: ..\..\release\imageformats\qgif.dll; DestDir: {app}\imageformats; Flags: ignoreversion
+Source: ..\..\release\imageformats\qicns.dll; DestDir: {app}\imageformats; Flags: ignoreversion
+Source: ..\..\release\imageformats\qico.dll; DestDir: {app}\imageformats; Flags: ignoreversion
+Source: ..\..\release\imageformats\qjp2.dll; DestDir: {app}\imageformats; Flags: ignoreversion
+Source: ..\..\release\imageformats\qjpeg.dll; DestDir: {app}\imageformats; Flags: ignoreversion
+Source: ..\..\release\imageformats\qmng.dll; DestDir: {app}\imageformats; Flags: ignoreversion
+Source: ..\..\release\imageformats\qsvg.dll; DestDir: {app}\imageformats; Flags: ignoreversion
+Source: ..\..\release\imageformats\qtga.dll; DestDir: {app}\imageformats; Flags: ignoreversion
+Source: ..\..\release\imageformats\qtiff.dll; DestDir: {app}\imageformats; Flags: ignoreversion
+Source: ..\..\release\imageformats\qwbmp.dll; DestDir: {app}\imageformats; Flags: ignoreversion
+Source: ..\..\release\imageformats\qwebp.dll; DestDir: {app}\imageformats; Flags: ignoreversion
+Source: ..\..\release\platforms\qminimal.dll; DestDir: {app}\platforms; Flags: ignoreversion
+Source: ..\..\release\platforms\qoffscreen.dll; DestDir: {app}\platforms; Flags: ignoreversion
+Source: ..\..\release\platforms\qwindows.dll; DestDir: {app}\platforms; Flags: ignoreversion
 
 ; Plugins
 ; plugins may require all 3 runtimes
 Source: ..\..\release\plugins\controly.dll; DestDir: {app}\plugins\; Flags: ignoreversion
-Source: ..\..\release\plugins\weby.dll; DestDir: {app}\plugins\; Flags: ignoreversion
+; Source: ..\..\release\plugins\weby.dll; DestDir: {app}\plugins\; Flags: ignoreversion
 
 ; Plugin icons
 Source: ..\..\plugins\controly\controly.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion
 Source: ..\..\plugins\controly\launchy.exit.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion
 Source: ..\..\plugins\controly\launchy.options.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion
 Source: ..\..\plugins\controly\launchy.rebuild.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion
-Source: ..\..\plugins\weby\weby.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion
+; Source: ..\..\plugins\weby\weby.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion
 
 ; Documentation
 Source: ..\..\license.txt; DestDir: {app}; Flags: ignoreversion
@@ -169,8 +190,7 @@ Name: {userdesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Parameters: /
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Parameters: /show; Filename: {app}\{#MyAppExeName}; WorkingDir: {app}; Tasks: quicklaunchicon
 
 [Run]
-; Filename: {app}\vcredist\vcredist_x86_vc2010.exe; Parameters: "/q:a /c:""VCREDI~3.EXE /q:a /c:""""msiexec /i vcredist.msi /qn"""" """; Check: VCRedistNeedsInstall
-Filename: {app}\vcredist\vcredist_x86_vc2010_sp1.exe; Parameters: "/q:a /c:""VCREDI~3.EXE /q:a /c:""""msiexec /i vcredist.msi /qn"""" """; Check: VCRedistNeedsInstall
+Filename: {app}\vcredist\vcredist_x64_vc2013.exe; Parameters: "/q:a /c:""VCREDI~3.EXE /q:a /c:""""msiexec /i vcredist.msi /qn"""" """; Check: VCRedistNeedsInstall
 Filename: {app}\{#MyAppExeName}; Parameters: /show; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent runasoriginaluser
 
 [UninstallDelete]
@@ -290,6 +310,9 @@ const
   VC_2010_SP1_REDIST_X86 = '{F0C3E5D1-1ADE-321E-8167-68EF0DE699A5}';
   VC_2010_SP1_REDIST_X64 = '{1D8E6291-B0D5-35EC-8441-6616F567A0F7}';
   VC_2010_SP1_REDIST_IA64 = '{88C73C1C-2DE5-3B01-AFB8-B46EF4AB41CD}';
+  
+  VC_2013_REDIST_X86 = '{ce085a78-074e-4823-8dc1-8a721b94b76d}';
+  VC_2013_REDIST_X64 = '{7f51bdb9-ee21-49ee-94d6-90afc321780e}';
 
 function MsiQueryProductState(szProduct: string): INSTALLSTATE; 
   external 'MsiQueryProductState{#AW}@msi.dll stdcall';

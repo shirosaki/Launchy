@@ -30,6 +30,10 @@ const char* iniName = "/launchy.ini";
 const char* dbName = "/launchy.db";
 const char* historyName = "/history.db";
 
+#if QT_VERSION >= 0x050000
+#   include <QtWidgets/QMessageBox>
+#endif
+
 
 SettingsManager::SettingsManager()
 {

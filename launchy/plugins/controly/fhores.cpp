@@ -15,7 +15,7 @@ QString FhoRes::getResourceString(HINSTANCE hLib, int resourceId) {
 
 		int res = LoadString(hLib, abs(resourceId), buffer, maxSize);
 		if (res != 0) {
-			resourceString = QString::fromUtf16(buffer);
+            resourceString = QString::fromUtf16((const ushort*) buffer);
 		}
 	}
 

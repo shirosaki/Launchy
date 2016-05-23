@@ -30,8 +30,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "plugin_interface.h"
 #include "FileSearch.h"
 
+#if QT_VERSION >= 0x050000
+#   include <QtWidgets/QScrollBar>
+#   include <QtWidgets/QMessageBox>
+#   include <QtWidgets/QDesktopWidget>
+#   include <QtWidgets/QMenu>
+#   include <QStandardPaths>
+#endif
 
-#ifdef ENABLE_LOG_FILE
+#include "spdlog/spdlog.h"
+
+#if defined(ENABLE_LOG_FILE)
 #define MAX_LOG_SIZE  1024*1024
 #define LOG_FILE_NAME "Launchy"
 
@@ -53,7 +62,11 @@ QFileInfo rotate_log_file(const char* log_name)
     return log_file;
 }
 
+#if QT_VERSION >= 0x050000
+void messageOutput(QtMsgType type, const QMessageLogContext & ctx, const QString & msg)
+#else
 void messageOutput(QtMsgType type, const char *msg)
+#endif
 {
     static QMap<QtMsgType, QString> categs;
 
@@ -88,6 +101,25 @@ void messageOutput(QtMsgType type, const char *msg)
         log_file.write("\n");
         log_file.close();
     }
+}
+#elif defined(ENABLE_SPD_LOG_FILE)
+#define LOG_FILE_NAME "Launchy"
+#define MAX_LOG_SIZE  3*1024*1024
+static void initialize_logger()
+{
+    //size_t q_size = 1048576; //queue size must be power of 2
+    //spdlog::set_async_mode(q_size);
+    auto file_logger = spdlog::rotating_logger_mt("app", LOG_FILE_NAME, MAX_LOG_SIZE, 3);
+    if ( file_logger != nullptr )
+        file_logger->flush_on(spdlog::level::info);
+    else
+        auto null_logger = spdlog::create<spdlog::sinks::null_sink_st>("app");
+}
+#else
+#include "spdlog/sinks/null_sink.h"
+static void initialize_logger()
+{
+    auto null_logger = spdlog::create<spdlog::sinks::null_sink_st>("app");
 }
 #endif
 
@@ -471,7 +503,11 @@ void LaunchyWidget::showAlternatives()
 
     alternatives->show();
     alternatives->setFocus();
+
+#if QT_VERSION < 0x050000
     qApp->syncX();
+#endif
+
 }
 
 
@@ -1082,46 +1118,7 @@ void LaunchyWidget::catalogBuilt()
 void LaunchyWidget::checkForUpdate()
 {
     // TODO: manage updates
-    /*
-    http = new QHttp(this);
-    verBuffer = new QBuffer(this);
-    counterBuffer = new QBuffer(this);
-    verBuffer->open(QIODevice::ReadWrite);
-    counterBuffer->open(QIODevice::ReadWrite);
-
-    connect(http, SIGNAL(done( bool)), this, SLOT(httpGetFinished(bool)));
-    http->setHost("www.launchy.net");
-    http->get("http://www.launchy.net/version2.html", verBuffer);
-    */
 }
-
-
-void LaunchyWidget::httpGetFinished(bool error)
-{
-    if (!error)
-    {
-        QString str(verBuffer->data());
-        int ver = str.toInt();
-        if (ver > LAUNCHY_VERSION)
-        {
-            QMessageBox box;
-            box.setIcon(QMessageBox::Information);
-            box.setTextFormat(Qt::RichText);
-            box.setWindowTitle(tr("A new version of Launchy is available"));
-            box.setText(tr("A new version of Launchy is available.\n\nYou can download it at \
-                           <qt><a href=\"http://www.launchy.net/\">http://www.launchy.net</a></qt>"));
-            box.exec();
-        }
-        if (http != NULL)
-            delete http;
-        http = NULL;
-    }
-    verBuffer->close();
-    counterBuffer->close();
-    delete verBuffer;
-    delete counterBuffer;
-}
-
 
 void LaunchyWidget::setSkin(const QString& name)
 {
@@ -1543,9 +1540,11 @@ void LaunchyWidget::showOptionsDialog()
 
         // need to use this method in Windows to ensure that keyboard focus is set when
         // being activated via a message from another instance of Launchy
-        SetForegroundWindowEx(options.winId());
+        SetForegroundWindowEx( reinterpret_cast<HWND>(options.winId()) );
 
         options.exec();
+
+        reloadSkin();
 
         input->activateWindow();
         input->setFocus();
@@ -1586,12 +1585,16 @@ void LaunchyWidget::showLaunchy(bool noFade)
 
     // need to use this method in Windows to ensure that keyboard focus is set when
     // being activated via a hook or message from another instance of Launchy
-    SetForegroundWindowEx(winId());
+    SetForegroundWindowEx( reinterpret_cast<HWND>(winId()) );
     input->raise();
     input->activateWindow();
     input->selectAll();
     input->setFocus();
+
+#if QT_VERSION < 0x050000
     qApp->syncX();
+#endif
+
     // Let the plugins know
     plugins.showLaunchy();
 }
@@ -1686,7 +1689,12 @@ void fileLogMsgHandler(QtMsgType type, const char *msg)
     if (file == 0)
     {
         // Create a file for appending in the user's temp directory
+#if QT_VERSION >= 0x050000
+        QString filename = QDir::toNativeSeparators(QStandardPaths::writableLocation(QStandardPaths::TempLocation)+ "/launchylog.txt");
+#else
         QString filename = QDir::toNativeSeparators(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/launchylog.txt");
+#endif
+
         file = fopen(filename.toUtf8(), "a");
     }
 
@@ -1720,9 +1728,17 @@ int main(int argc, char *argv[])
 
     qApp->setQuitOnLastWindowClosed(false);
 
-#ifdef ENABLE_LOG_FILE
-    qInstallMsgHandler(messageOutput);
+#if defined(ENABLE_LOG_FILE)
+#   if QT_VERSION >= 0x050000
+        qInstallMessageHandler(messageOutput);
+#   else
+        qInstallMsgHandler(messageOutput);
+#   endif
+#else
+    initialize_logger();
 #endif
+
+    spdlog::get("app")->info("APPLICATION START");
 
     QStringList args = qApp->arguments();
     CommandFlags command = None;
@@ -1760,7 +1776,13 @@ int main(int argc, char *argv[])
             }
             else if (arg.compare("log", Qt::CaseInsensitive) == 0)
             {
-                qInstallMsgHandler(fileLogMsgHandler);
+            #ifdef ENABLE_LOG_FILE
+            #   if QT_VERSION >= 0x050000
+                    qInstallMessageHandler(messageOutput);
+            #   else
+                    qInstallMsgHandler(messageOutput);
+            #   endif
+            #endif
             }
             else if (arg.compare("profile", Qt::CaseInsensitive) == 0)
             {
@@ -1797,4 +1819,7 @@ int main(int argc, char *argv[])
 
     delete platform;
     platform = NULL;
+
+    spdlog::get("app")->info("APPLICATION END");
+    spdlog::drop_all();
 }

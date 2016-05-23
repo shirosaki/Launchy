@@ -29,7 +29,7 @@ bool GetNetDomain(QString & domain);
 class LimitSingleInstance
 {
 public:
-	LimitSingleInstance(TCHAR *strMutexName)
+    LimitSingleInstance(const TCHAR *strMutexName)
 	{
 		//Make sure that you use a name that is unique for this application otherwise
 		//two apps may think they are the same if they are using same name for

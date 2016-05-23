@@ -4,10 +4,18 @@
 #include "fhoicon.h"
 #include "fhoenv.h"
 
+#if QT_VERSION >= 0x050000
+#   include <QtWinExtras/QtWinExtras>
+#endif
 
 QImage FhoIcon::getIconFromHandle(HICON hIcon) {
 	if (hIcon) {
-		return QPixmap::fromWinHICON(hIcon).toImage();
+
+#if QT_VERSION >= 0x050000
+        return QtWin::fromHICON(hIcon).toImage();
+#else
+        return QPixmap::fromWinHICON(hIcon).toImage();
+#endif
 	} else {
 		return getDefaultIcon();
 	}
@@ -42,11 +50,11 @@ QImage FhoIcon::getIconFromLibrary(HINSTANCE hLib, int iconIdx) {
 	} else if (iconIdx == 0)  {
 		// this works quite well for positive and negative ids, but it fails to load a resource if id is 0!?
 		// does 0 index (first icon) really not work?
-		hIcon = (HICON) LoadImage(hLib, QString::number(abs(iconIdx)).utf16(), IMAGE_ICON, 0, 0, LR_SHARED | LR_DEFAULTSIZE);
+        hIcon = (HICON) LoadImage(hLib, reinterpret_cast<LPCWSTR>(QString::number(abs(iconIdx)).utf16()), IMAGE_ICON, 0, 0, LR_SHARED | LR_DEFAULTSIZE);
 	} else {
 		// represents name of icon, e.g. -3 for icon with id "3"
 		// does -1 have a special meaning also, like it has for ExtractIcon()?
-		hIcon = (HICON) LoadImage(hLib, QString::number(abs(iconIdx)).utf16(), IMAGE_ICON, 0, 0, LR_SHARED | LR_DEFAULTSIZE);
+        hIcon = (HICON) LoadImage(hLib, reinterpret_cast<LPCWSTR>(QString::number(abs(iconIdx)).utf16()), IMAGE_ICON, 0, 0, LR_SHARED | LR_DEFAULTSIZE);
 	}
 	
 	if (hIcon) {
@@ -87,7 +95,7 @@ QImage FhoIcon::getIconFromResource(QString fileName, int iconIdx) {
 
 		fileName = FhoEnv::expand(fileName);
 
-		HICON hIcon = ExtractIcon(0, fileName.utf16(), iconIdx);
+        HICON hIcon = ExtractIcon(0, reinterpret_cast<LPCWSTR>(fileName.utf16()), iconIdx);
 
 		if ((hIcon) && ((int)hIcon != 1)) {
 			QImage image = getIconFromHandle(hIcon);
@@ -158,7 +166,7 @@ QImage FhoIcon::getIconFromImage(QString fileName) {
 		// in case this method fails and returns an empty image, we give QImage(iconFile) a try before potentially returning a default icon finally
 	}
 	
-	if (supportedFormats.contains(type.toAscii())) {
+    if (supportedFormats.contains(qPrintable(type))) {
 		return QImage(fileName);
 	} else {
 		return getDefaultIcon();
@@ -169,12 +177,12 @@ QImage FhoIcon::getIconForExtension(QString fileExtension) {
 	if (!fileExtension.startsWith('.')) {
 		fileExtension = "." + fileExtension;
 	}
-	return getIconForFile(fileExtension.utf16(), SHGFI_USEFILEATTRIBUTES, FILE_ATTRIBUTE_NORMAL);
+    return getIconForFile((LPCTSTR)fileExtension.utf16(), SHGFI_USEFILEATTRIBUTES, FILE_ATTRIBUTE_NORMAL);
 }
 
 QImage FhoIcon::getIconForFile(QString fileName) {
 	fileName = FhoEnv::expand(fileName);
-	return getIconForFile(fileName.utf16(), 0);
+    return getIconForFile((LPCTSTR)fileName.utf16(), 0);
 }
 
 QImage FhoIcon::getIconForFile(LPITEMIDLIST pidl) {
@@ -195,7 +203,7 @@ QImage FhoIcon::getIconForFile(IShellFolder *psfParentItem, LPITEMIDLIST pidlChi
 		hres = pExtractIcon->GetIconLocation(0, str, MAX_PATH, &index, &flags);
 		//hres = pExtractIcon->GetIconLocation(GIL_FORSHELL, str, MAX_PATH, &index, &flags);
 		if (SUCCEEDED(hres)) {
-			QString iconResourceFile = QString::fromUtf16(str);
+            QString iconResourceFile = QString::fromUtf16(reinterpret_cast<const ushort*>(str));
 			
 			// do not use 'general' getIconFromResource() -> ExtractIcon()!
 			// use 'specific' pExtractIcon->Extract() instead!
@@ -237,7 +245,7 @@ QImage FhoIcon::getIconForFile(LPCTSTR file, UINT basicFlags, DWORD basicAttribu
 	memset(&finfo, 0, sizeof(SHFILEINFO));
 	hres = SHGetFileInfo(file, basicAttributes, &finfo, sizeof(SHFILEINFO), basicFlags | SHGFI_ICONLOCATION);
 	if (hres) {
-		QString iconResourceFile = QString::fromUtf16(finfo.szDisplayName);
+        QString iconResourceFile = QString::fromUtf16(reinterpret_cast<const ushort*>(finfo.szDisplayName));
 		if (!iconResourceFile.isEmpty()) {
 			return getIconFromResource(iconResourceFile, finfo.iIcon);
 		} else {
@@ -280,12 +288,12 @@ QString FhoIcon::getImageIdForExtension(QString fileExtension) {
 	if (!fileExtension.startsWith('.')) {
 		fileExtension = "." + fileExtension;
 	}
-	return getImageIdForFile(fileExtension.utf16(), SHGFI_USEFILEATTRIBUTES, FILE_ATTRIBUTE_NORMAL);
+    return getImageIdForFile((LPCTSTR)fileExtension.utf16(), SHGFI_USEFILEATTRIBUTES, FILE_ATTRIBUTE_NORMAL);
 }
 
 QString FhoIcon::getImageIdForFile(QString fileName) {
 	fileName = FhoEnv::expand(fileName);
-	return getImageIdForFile(fileName.utf16(), 0);
+    return getImageIdForFile((LPCTSTR)fileName.utf16(), 0);
 }
 
 QString FhoIcon::getImageIdForFile(LPITEMIDLIST pidl) {
@@ -305,7 +313,7 @@ QString FhoIcon::getImageIdForFile(IShellFolder *psfParentItem, LPITEMIDLIST pid
 		// Get the file location where the icons are stored.
 		hres = pExtractIcon->GetIconLocation(0, str, MAX_PATH, &index, &flags);
 		if (SUCCEEDED(hres)) {
-			QString iconResourceFile = QString::fromUtf16(str);
+            QString iconResourceFile = QString::fromUtf16(reinterpret_cast<const ushort*>(str));
 			// this may return "*" and does not always refer to a real existing file; see above!
 			
 			QString imageId = "@" + iconResourceFile + "," + QString::number(index); // did we already expand the resource file name?
@@ -335,7 +343,7 @@ QString FhoIcon::getImageIdForFile(LPCTSTR file, UINT basicFlags, DWORD basicAtt
 	memset(&finfo, 0, sizeof(SHFILEINFO));
 	hres = SHGetFileInfo(file, basicAttributes, &finfo, sizeof(SHFILEINFO), basicFlags | SHGFI_ICONLOCATION);
 	if (hres) {
-		QString iconResourceFile = QString::fromUtf16(finfo.szDisplayName);
+        QString iconResourceFile = QString::fromUtf16(reinterpret_cast<const ushort*>(finfo.szDisplayName));
 		if (!iconResourceFile.isEmpty()) {
 			imageId = "@" + iconResourceFile + "," + QString::number(finfo.iIcon);
 			return imageId;
@@ -375,7 +383,7 @@ QString FhoIcon::getImageIdForFile(LPCTSTR file, UINT basicFlags, DWORD basicAtt
 					}
 				} while (cb != NULL);
 			} else {
-				fallbackImageId = QString::fromUtf16(file);
+                fallbackImageId = QString::fromUtf16(reinterpret_cast<const ushort*>(file));
 			}
 			imageId = fallbackImageId;
 		}
@@ -428,7 +436,7 @@ void FhoIconCreator::setImageType(QString type, QString fileExtension) {
 		type = fileExtension;
 	}
 
-	if (supportedFormats.contains(type.toAscii())) {
+    if (supportedFormats.contains(qPrintable(type))) {
 		imageType = type;
 		imageFileExtension = fileExtension;
 	}
@@ -436,7 +444,7 @@ void FhoIconCreator::setImageType(QString type, QString fileExtension) {
 
 QString FhoIconCreator::saveImage(QImage &image, QString fileName) {
 	if (!image.isNull()) {
-		image.save(fileName, imageType.isEmpty() ? 0 : imageType.toAscii());
+        image.save(fileName, imageType.isEmpty() ? 0 : qPrintable(imageType));
 		return fileName;
 	} else {
 		return defaultImageFileName;

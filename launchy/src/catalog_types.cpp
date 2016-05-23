@@ -218,6 +218,13 @@ QString Catalog::decorateText(const QString& text, const QString& match, bool ou
 	return decoratedText;
 }
 
+void SlowCatalog::addNewItem(const CatItem& item)
+{
+    CatalogItem vitm(item, timestamp);
+
+    if ( !catalogItems.contains(vitm) )
+        catalogItems.push_back(vitm);
+}
 
 void SlowCatalog::addItem(const CatItem& item)
 {

@@ -42,6 +42,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "platform_base_hotkey.h"
 #include "platform_Base_hottrigger.h"
 
+#if QT_VERSION >= 0x050000
+#   include <QtWidgets/QWidget>
+#endif
+
 
 HHOOK keyboardHook;
 HWND widgetWinId;
@@ -107,7 +111,7 @@ public:
                 , id_(0)
 				, connected(false)
         {
-			widgetWinId = winId();
+            widgetWinId = reinterpret_cast<HWND>(winId());
 
 			if (convertKeySequence(ks, &mod, &key))
 			{
@@ -132,7 +136,7 @@ public:
 						connected = true;
 					break;
 				default:
-					if (RegisterHotKey(winId(), nextId, mod, key))
+                    if (RegisterHotKey(reinterpret_cast<HWND>(winId()), nextId, mod, key))
 					{
 						id_ = nextId++;
 						connected = true;
@@ -155,7 +159,7 @@ public:
 				connected = false;
 			}
 			else if (id_) {
-				UnregisterHotKey(winId(), id_);
+                UnregisterHotKey(reinterpret_cast<HWND>(winId()), id_);
 				connected = false;
 			}
         }
@@ -163,6 +167,18 @@ public:
         /**
          * Triggers activated() signal when the hotkey is activated.
          */
+
+#if QT_VERSION >= 0x050000
+        bool nativeEvent(const QByteArray &eventType, void *message, long *result)
+        {
+            MSG* msg = static_cast<MSG*>(message);
+            if ((msg->message == WM_HOTKEY && msg->wParam == id_) || msg->message == WM_USER) {
+                emit trigger_->activated();
+                return true;
+            }
+            return QWidget::nativeEvent(eventType, message, result);
+        }
+#else
         bool winEvent(MSG* m, long* result)
 		{
 			if ((m->message == WM_HOTKEY && m->wParam == id_) || m->message == WM_USER) {
@@ -171,6 +187,8 @@ public:
 			}
 			return QWidget::winEvent(m, result);
 		}
+#endif
+
 
 private:
         KeyTrigger* trigger_;
@@ -187,8 +205,13 @@ private:
 
         static bool convertKeySequence(const QKeySequence& ks, UINT* mod_, UINT* key_)
         {
-                int code = ks;
-
+            int code = 0;
+#if QT_VERSION >= 0x050000
+            if ( ks.count() > 0 )
+                code = ks[0];
+#else
+            code = ks;
+#endif
 				// JK: I had to put the code -='s here and comment out code &= 0xffff 
 				// to correctly identify the action key
 

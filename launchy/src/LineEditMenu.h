@@ -2,8 +2,11 @@
 #define LINEEDITMENU_H
 
 
-#include <QtGui/QLabel>
-
+#if QT_VERSION >= 0x050000
+#   include <QtWidgets/QLabel>
+#else
+#   include <QtGui/QLabel>
+#endif
 
 class LineEditMenu : public QLabel
 {

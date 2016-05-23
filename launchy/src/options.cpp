@@ -25,6 +25,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "plugin_handler.h"
 #include "FileBrowserDelegate.h"
 
+#if QT_VERSION >= 0x050000
+#   include <QtWidgets/QMessageBox>
+#endif
+
 #define DEF_CONDENSED_VIEW_MODE 2
 
 
@@ -354,13 +358,15 @@ void OptionsDialog::accept()
 
 	// Apply Skin Options
 	QString prevSkinName = gSettings->value("GenOps/skin", "Default").toString();
-	QString skinName = skinList->currentItem()->text();
-	if (skinList->currentRow() >= 0 && skinName != prevSkinName)
-	{
-		gSettings->setValue("GenOps/skin", skinName);
-		gMainWidget->setSkin(skinName);
-		show = false;
-	}
+    if ( skinList->currentItem() != NULL ) {
+        QString skinName = skinList->currentItem()->text();
+        if (skinList->currentRow() >= 0 && skinName != prevSkinName)
+        {
+            gSettings->setValue("GenOps/skin", skinName);
+            gMainWidget->setSkin(skinName);
+            show = false;
+        }
+    }
 
 	if (needRescan)
 		gMainWidget->buildCatalog();

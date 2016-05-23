@@ -182,7 +182,7 @@ int controlyPlugin::launchItem(QList<InputData>* inputData, CatItem* item)
 			// Constant special item ID list (CSIDL)
 
 			// shell instance object (special shell extension folder), e.g. 'csidl:0x0014.controly' ('shellinstance:0x0014')
-			QString folderId = path.mid(strlen("csidl:"), strlen(path.toAscii())-strlen("csidl:")-strlen(".controly")); // e.g. 0x0014 = CSIDL_FONTS;
+            QString folderId = path.mid(strlen("csidl:"), strlen(qPrintable(path))-strlen("csidl:")-strlen(".controly")); // e.g. 0x0014 = CSIDL_FONTS;
 			bool ok;
 			int folderIdx = folderId.toLong(&ok, 16);
 			if (ok) {
@@ -319,5 +319,3 @@ int controlyPlugin::msg(int msgId, void* wParam, void* lParam)
 		
 	return handled;
 }
-
-Q_EXPORT_PLUGIN2(controly, controlyPlugin)

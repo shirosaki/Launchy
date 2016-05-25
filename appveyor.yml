@@ -4,7 +4,8 @@ image:
 build:
   verbosity: minimal+
 install:
-  - set QTDIR=C:\Qt\5.5\msvc2013
+  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
+  - set QTDIR=C:\Qt\5.5\msvc2013_64
   - set PATH=%PATH%;%QTDIR%\bin
 build_script:
   - qmake launchy/Launchy.pro

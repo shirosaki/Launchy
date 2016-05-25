@@ -50,7 +50,7 @@ after_build:
   - ISCC SETUP.iss
   
 artifacts:
-  - path: '%APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\%SETUPOUT%'  
+  - path: $(appveyor_build_folder)\launchy\win\installer\$(configuration)\$(setupout)  
 
 build_script:
   - '%make%'

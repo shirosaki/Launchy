@@ -9,5 +9,7 @@ before_build:
 build:
   project: launchy.sln
   parallel: true
-  verbosity: minimal+
- 
+  verbosity: minimal
+
+# fetch repository as zip archive
+shallow_clone: true

@@ -12,13 +12,12 @@ init:
 
 environment:
   VSVER: 12.0 # Visual Studio 2013
+  BOOST_DIR: C:\Libraries\boost
   matrix:
     - QTDIR: C:\Qt\5.5\msvc2013
     - QTDIR: C:\Qt\5.5\msvc2013_64
 
-configuration:
-  - debug
-  - release
+configuration: release
 
 install:
   - '%QTDIR%\bin\qtenv2.bat'

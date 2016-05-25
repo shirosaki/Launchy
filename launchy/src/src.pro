@@ -7,7 +7,13 @@ PRECOMPILED_HEADER = precompiled.h
 QT += network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets winextras
 
+# Check for requried environment variables
+!exists($$(BOOST_DIR)) {
+ error("The BOOST_DIR environment variable is not defined.")
+}
+
 INCLUDEPATH += ../common
+INCLUDEPATH += $$(BOOST_DIR)
 
 SOURCES = main.cpp \
     globals.cpp \
@@ -72,7 +78,7 @@ win32 {
         ../platforms/win/platform_win_util.h \
         ../platforms/win/minidump.h
     CONFIG += embed_manifest_exe
-    INCLUDEPATH += c:/boost/
+
     RC_FILE = ../win/launchy.rc
         LIBS += shell32.lib \
                 user32.lib \

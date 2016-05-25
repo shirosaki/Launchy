@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <QString>
 #include <QDataStream>
+#include <QFileInfo>
 #include <QSet>
 
 
@@ -147,22 +148,6 @@ public:
     }
 
     bool operator==(const CatItem& other) const{
-        /*if (fullPath == other.fullPath)
-                    return true;
-
-                // CHECK LINKS
-                QFileInfo fime   (fullPath);
-                QFileInfo fiother(other.fullPath);
-
-
-                if ( isLink() && other.isLink() )
-                    return fime.symLinkTarget() == fiother.symLinkTarget();
-                if ( isLink() && !other.isLink() )
-                    return fime.symLinkTarget() == other.fullPath;
-                if ( !isLink() && other.isLink() )
-                    return fullPath == fiother.symLinkTarget();
-
-        return false;*/
         return hash == other.hash;
     }
 

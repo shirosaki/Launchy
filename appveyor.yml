@@ -1,0 +1,11 @@
+version: 2.8.{build}
+image:
+- Visual Studio 2013
+build:
+  verbosity: minimal+
+install:
+  - set QTDIR=C:\Qt\5.5\msvc2013
+  - set PATH=%PATH%;%QTDIR%\bin
+build_script:
+  - qmake launchy/Launchy.pro
+  - nmake  

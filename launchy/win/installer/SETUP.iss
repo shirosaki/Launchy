@@ -2,11 +2,15 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName      "Launchy"
-#define MyAppVerName   "Launchy 2.8.0"
+#define MyAppVerName   "Launchy 2.8.10"
 #define MyAppPublisher "OpenNingia"
 #define MyAppURL       "http://openningia.github.com/Launchy/"
 #define MyAppExeName   "Launchy.exe"
 #define MyAppUrlName   "Launchy.url"
+
+#if !Defined(PWD)
+#define PWD "..\.."
+#endif
 
 [Setup]
 AppMutex=LaunchyMutex,Global\LaunchyMutex
@@ -52,116 +56,46 @@ Type: filesandordirs; Name: {app}\skins\Spotlight Wide
 Type: filesandordirs; Name: {app}\platform_win.dll
 
 [Files]
-Source: ..\..\release\{#MyAppExeName}; DestDir: {app}; Flags: ignoreversion
+Source: {#PWD}\release\{#MyAppExeName}; DestDir: {app}; Flags: ignoreversion
 Source: LaunchyPortable.ini; DestDir: {app}; DestName: Launchy.ini; Flags: onlyifdoesntexist; Check: IsPortable
 
-; Redist
-; Source: ..\vcredist_x86_vc2010.exe; DestDir: {tmp}; Flags: deleteafterinstall
-Source: ..\vcredist_x86_vc2010_sp1.exe; DestDir: {tmp}; Flags: deleteafterinstall
+Source: "{#PWD}\release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PWD}\release\bearer\*.dll"; DestDir: "{app}\bearer"; Flags: ignoreversion
+Source: "{#PWD}\release\iconengines\*.dll"; DestDir: "{app}\iconengines"; Flags: ignoreversion
+Source: "{#PWD}\release\imageformats\*.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
+Source: "{#PWD}\release\platforms\*.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
+Source: "{#PWD}\release\translations\*.qm"; DestDir: "{app}\tr"; Flags: ignoreversion
+
+; redist
+Source: ..\vcredist_x64_vc2013.exe; DestDir: {app}\vcredist; Flags: ignoreversion
 
 ; Translations
-Source: ..\..\translations\launchy_es.qm; DestDir: {app}\tr\; Flags: ignoreversion
-Source: ..\..\translations\launchy_de.qm; DestDir: {app}\tr\; Flags: ignoreversion
-Source: ..\..\translations\launchy_ja.qm; DestDir: {app}\tr\; Flags: ignoreversion
-Source: ..\..\translations\launchy_zh.qm; DestDir: {app}\tr\; Flags: ignoreversion
-Source: ..\..\translations\launchy_nl.qm; DestDir: {app}\tr\; Flags: ignoreversion
-Source: ..\..\translations\launchy_rus.qm; DestDir: {app}\tr\; Flags: ignoreversion
-Source: ..\..\translations\launchy_zh_TW.qm; DestDir: {app}\tr\; Flags: ignoreversion
-Source: ..\..\translations\launchy_it_IT.qm; DestDir: {app}\tr\; Flags: ignoreversion
-
-; Libs
-; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: ..\..\release\Qt5Core.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\release\Qt5Gui.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\release\Qt5Network.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\release\Qt5Widgets.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\release\Qt5WinExtras.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\release\icudt52.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\release\icuin52.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\release\libEGL.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\release\libGLESv2.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\release\imageformats\qdds.dll; DestDir: {app}\imageformats; Flags: ignoreversion
-Source: ..\..\release\imageformats\qgif.dll; DestDir: {app}\imageformats; Flags: ignoreversion
-Source: ..\..\release\imageformats\qicns.dll; DestDir: {app}\imageformats; Flags: ignoreversion
-Source: ..\..\release\imageformats\qico.dll; DestDir: {app}\imageformats; Flags: ignoreversion
-Source: ..\..\release\imageformats\qjp2.dll; DestDir: {app}\imageformats; Flags: ignoreversion
-Source: ..\..\release\imageformats\qjpeg.dll; DestDir: {app}\imageformats; Flags: ignoreversion
-Source: ..\..\release\imageformats\qmng.dll; DestDir: {app}\imageformats; Flags: ignoreversion
-Source: ..\..\release\imageformats\qsvg.dll; DestDir: {app}\imageformats; Flags: ignoreversion
-Source: ..\..\release\imageformats\qtga.dll; DestDir: {app}\imageformats; Flags: ignoreversion
-Source: ..\..\release\imageformats\qtiff.dll; DestDir: {app}\imageformats; Flags: ignoreversion
-Source: ..\..\release\imageformats\qwbmp.dll; DestDir: {app}\imageformats; Flags: ignoreversion
-Source: ..\..\release\imageformats\qwebp.dll; DestDir: {app}\imageformats; Flags: ignoreversion
-Source: ..\..\release\platforms\qminimal.dll; DestDir: {app}\platforms; Flags: ignoreversion
-Source: ..\..\release\platforms\qoffscreen.dll; DestDir: {app}\platforms; Flags: ignoreversion
-Source: ..\..\release\platforms\qwindows.dll; DestDir: {app}\platforms; Flags: ignoreversion
+Source: {#PWD}\translations\launchy_es.qm; DestDir: {app}\tr\; Flags: ignoreversion
+Source: {#PWD}\translations\launchy_de.qm; DestDir: {app}\tr\; Flags: ignoreversion
+Source: {#PWD}\translations\launchy_ja.qm; DestDir: {app}\tr\; Flags: ignoreversion
+Source: {#PWD}\translations\launchy_zh.qm; DestDir: {app}\tr\; Flags: ignoreversion
+Source: {#PWD}\translations\launchy_nl.qm; DestDir: {app}\tr\; Flags: ignoreversion
+Source: {#PWD}\translations\launchy_rus.qm; DestDir: {app}\tr\; Flags: ignoreversion
+Source: {#PWD}\translations\launchy_zh_TW.qm; DestDir: {app}\tr\; Flags: ignoreversion
+Source: {#PWD}\translations\launchy_it_IT.qm; DestDir: {app}\tr\; Flags: ignoreversion
 
 ; Plugins
 ; plugins may require all 3 runtimes
-Source: ..\..\release\plugins\controly.dll; DestDir: {app}\plugins\; Flags: ignoreversion
-; Source: ..\..\release\plugins\weby.dll; DestDir: {app}\plugins\; Flags: ignoreversion
+Source: "{#PWD}\release\plugins\*.dll"; DestDir: "{app}\plugins"; Flags: ignoreversion
 
 ; Plugin icons
-Source: ..\..\plugins\controly\controly.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion
-Source: ..\..\plugins\controly\launchy.exit.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion
-Source: ..\..\plugins\controly\launchy.options.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion
-Source: ..\..\plugins\controly\launchy.rebuild.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion
-; Source: ..\..\plugins\weby\weby.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion
+Source: {#PWD}\plugins\controly\*.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion
 
 ; Documentation
-Source: ..\..\license.txt; DestDir: {app}; Flags: ignoreversion
+Source: {#PWD}\license.txt; DestDir: {app}; Flags: ignoreversion
 
 ; Skins
-Source: ..\..\skins\Mercury\frame.png; DestDir: {app}\skins\Mercury\; Flags: ignoreversion
-Source: ..\..\skins\Mercury\author.txt; DestDir: {app}\skins\Mercury\; Flags: ignoreversion
-Source: ..\..\skins\Mercury\style.qss; DestDir: {app}\skins\Mercury\; Flags: ignoreversion
-Source: ..\..\skins\Mercury\scrollBack.png; DestDir: {app}\skins\Mercury\; Flags: ignoreversion
-Source: ..\..\skins\Mercury\scrollDown.png; DestDir: {app}\skins\Mercury\; Flags: ignoreversion
-Source: ..\..\skins\Mercury\scrollUp.png; DestDir: {app}\skins\Mercury\; Flags: ignoreversion
-Source: ..\..\skins\Mercury\spinner.mng; DestDir: {app}\skins\Mercury\; Flags: ignoreversion
-
-Source: ..\..\skins\Quicksilver2\frame.png; DestDir: {app}\skins\Quicksilver2\; Flags: ignoreversion
-Source: ..\..\skins\Quicksilver2\author.txt; DestDir: {app}\skins\Quicksilver2\; Flags: ignoreversion
-Source: ..\..\skins\Quicksilver2\style.qss; DestDir: {app}\skins\Quicksilver2\; Flags: ignoreversion
-Source: ..\..\skins\Quicksilver2\background_nc.png; DestDir: {app}\skins\Quicksilver2\; Flags: ignoreversion
-Source: ..\..\skins\Quicksilver2\mask_nc.png; DestDir: {app}\skins\Quicksilver2\; Flags: ignoreversion
-
-Source: ..\..\skins\Note\frame.png; DestDir: {app}\skins\Note\; Flags: ignoreversion
-Source: ..\..\skins\Note\author.txt; DestDir: {app}\skins\Note\; Flags: ignoreversion
-Source: ..\..\skins\Note\style.qss; DestDir: {app}\skins\Note\; Flags: ignoreversion
-Source: ..\..\skins\Note\scrollBack.png; DestDir: {app}\skins\Note\; Flags: ignoreversion
-Source: ..\..\skins\Note\scrollDown.png; DestDir: {app}\skins\Note\; Flags: ignoreversion
-Source: ..\..\skins\Note\scrollUp.png; DestDir: {app}\skins\Note\; Flags: ignoreversion
-
-Source: ..\..\skins\Black_Glass\author.txt; DestDir: {app}\skins\Black Glass\; Flags: ignoreversion
-Source: ..\..\skins\Black_Glass\frame.png; DestDir: {app}\skins\Black Glass\; Flags: ignoreversion
-Source: ..\..\skins\Black_Glass\style.qss; DestDir: {app}\skins\Black Glass\; Flags: ignoreversion
-Source: ..\..\skins\Black_Glass\scrollBack.png; DestDir: {app}\skins\Black Glass\; Flags: ignoreversion
-Source: ..\..\skins\Black_Glass\scrollDown.png; DestDir: {app}\skins\Black Glass\; Flags: ignoreversion
-Source: ..\..\skins\Black_Glass\scrollUp.png; DestDir: {app}\skins\Black Glass\; Flags: ignoreversion
-Source: ..\..\skins\Black_Glass\spinner.mng; DestDir: {app}\skins\Black Glass\; Flags: ignoreversion
-
-Source: ..\..\skins\Default\author.txt; DestDir: {app}\skins\Default\; Flags: ignoreversion
-Source: ..\..\skins\Default\frame.png; DestDir: {app}\skins\Default\; Flags: ignoreversion
-Source: ..\..\skins\Default\style.qss; DestDir: {app}\skins\Default\; Flags: ignoreversion
-Source: ..\..\skins\Default\opsButton.png; DestDir: {app}\skins\Default\; Flags: ignoreversion
-Source: ..\..\skins\Default\opsButtonPressed.png; DestDir: {app}\skins\Default\; Flags: ignoreversion
-Source: ..\..\skins\Default\scrollBack.png; DestDir: {app}\skins\Default\; Flags: ignoreversion
-Source: ..\..\skins\Default\scrollDown.png; DestDir: {app}\skins\Default\; Flags: ignoreversion
-Source: ..\..\skins\Default\scrollUp.png; DestDir: {app}\skins\Default\; Flags: ignoreversion
-Source: ..\..\skins\Default\spinner.mng; DestDir: {app}\skins\Default\; Flags: ignoreversion
-
-Source: ..\..\skins\Spotlight_Wide\author.txt; DestDir: {app}\skins\Spotlight Wide\; Flags: ignoreversion
-Source: ..\..\skins\Spotlight_Wide\frame.png; DestDir: {app}\skins\Spotlight Wide\; Flags: ignoreversion
-Source: ..\..\skins\Spotlight_Wide\style.qss; DestDir: {app}\skins\Spotlight Wide\; Flags: ignoreversion
-Source: ..\..\skins\Spotlight_Wide\opsButton.png; DestDir: {app}\skins\Spotlight Wide\; Flags: ignoreversion
-Source: ..\..\skins\Spotlight_Wide\opsButtonPressed.png; DestDir: {app}\skins\Spotlight Wide\; Flags: ignoreversion
-Source: ..\..\skins\Spotlight_Wide\scrollBack.png; DestDir: {app}\skins\Spotlight Wide\; Flags: ignoreversion
-Source: ..\..\skins\Spotlight_Wide\scrollDown.png; DestDir: {app}\skins\Spotlight Wide\; Flags: ignoreversion
-Source: ..\..\skins\Spotlight_Wide\scrollUp.png; DestDir: {app}\skins\Spotlight Wide\; Flags: ignoreversion
-Source: ..\..\skins\Spotlight_Wide\spinner.mng; DestDir: {app}\skins\Spotlight Wide\; Flags: ignoreversion
-Source: ..\..\skins\Spotlight_Wide\background_nc.png; DestDir: {app}\skins\Spotlight Wide\; Flags: ignoreversion
-Source: ..\..\skins\Spotlight_Wide\mask_nc.png; DestDir: {app}\skins\Spotlight Wide\; Flags: ignoreversion
+Source: {#PWD}\skins\Mercury\*.*; DestDir: {app}\skins\Mercury\; Flags: ignoreversion
+Source: {#PWD}\skins\Quicksilver2\*.*; DestDir: {app}\skins\Quicksilver2\; Flags: ignoreversion
+Source: {#PWD}\skins\Note\*.*; DestDir: {app}\skins\Note\; Flags: ignoreversion
+Source: {#PWD}\skins\Black_Glass\*.*; DestDir: {app}\skins\Black Glass\; Flags: ignoreversion
+Source: {#PWD}\skins\Default\*.*; DestDir: {app}\skins\Default\; Flags: ignoreversion
+Source: {#PWD}\skins\Spotlight_Wide\*.*; DestDir: {app}\skins\Spotlight Wide\; Flags: ignoreversion
 
 Source: ..\Utilities\Special Folders\C Drive.lnk; DestDir: {app}\Utilities\Special Folders\; Flags: ignoreversion
 Source: ..\Utilities\Special Folders\Control Panel.lnk; DestDir: {app}\Utilities\Special Folders\; Flags: ignoreversion

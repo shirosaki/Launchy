@@ -29,6 +29,8 @@ install:
   - if not %QTDIR:msvc=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%
   - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
   - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
+  - if %ARCH%==x86 ( set ISSO=SETUP.iss ) else set ISSO=SETUP_x64.iss
+  - if %ARCH%==x86 ( set SETUPOUT=Launchy_Setup.exe ) else set SETUPOUT=Launchy_Setup_x64.exe 
   - choco install -y InnoSetup
   - set PATH=C:\Program Files (x86)\Inno Setup 5;%PATH%
     
@@ -48,7 +50,7 @@ after_build:
   - ISCC SETUP.iss
   
 artifacts:
-  - path: '%APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\Launchy_Setup.exe'  
+  - path: '%APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\%SETUPOUT%'  
 
 build_script:
   - '%make%'

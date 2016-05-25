@@ -24,7 +24,7 @@ DefaultDirName={code:DefaultInstallDirectory}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 LicenseFile=..\..\license.txt
 OutputDir=Release\
-OutputBaseFilename=Launchy_Setup
+OutputBaseFilename=Launchy_Setup_x64
 SetupIconFile=..\Launchy.ico
 Compression=lzma
 SolidCompression=true
@@ -35,7 +35,7 @@ UninstallDisplayIcon={app}\{#MyAppExeName}
 PrivilegesRequired=none
 WizardSmallImageFile=header.bmp
 AllowNoIcons=yes
-; ArchitecturesInstallIn64BitMode=x64
+ArchitecturesInstallIn64BitMode=x64
 
 [Languages]
 Name: english; MessagesFile: compiler:Default.isl
@@ -124,7 +124,7 @@ Name: {userdesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Parameters: /
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Parameters: /show; Filename: {app}\{#MyAppExeName}; WorkingDir: {app}; Tasks: quicklaunchicon
 
 [Run]
-Filename: {app}\vcredist\vcredist.exe; Parameters: "/q:a /c:""VCREDI~1.EXE /q:a /c:""""msiexec /i vcredist.msi /qn"""" """; Check: VCRedistNeedsInstall
+Filename: {app}\vcredist\vcredist_x64.exe; Parameters: "/q:a /c:""VCREDI~1.EXE /q:a /c:""""msiexec /i vcredist.msi /qn"""" """; Check: VCRedistNeedsInstall
 Filename: {app}\{#MyAppExeName}; Parameters: /show; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent runasoriginaluser
 
 [UninstallDelete]

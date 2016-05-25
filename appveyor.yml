@@ -8,4 +8,7 @@ install:
   - set PATH=%PATH%;%QTDIR%\bin
 before_build:
   - buildWinSln.bat
-  
+build:
+  project: launchy.sln
+  parallel: true
+ 

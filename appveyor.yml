@@ -2,7 +2,6 @@ version: 2.8.{build}
 
 image:
 - Visual Studio 2013
-- Visual Studio 2015
 
 init:
   # Gather some basic build environment details.

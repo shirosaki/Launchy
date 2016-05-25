@@ -1,15 +1,45 @@
 version: 2.8.{build}
+
 image:
 - Visual Studio 2013
+- Visual Studio 2015
+
+init:
+  # Gather some basic build environment details.
+  - rem set
+  - dir "%ProgramFiles(x86)%\Microsoft Visual Studio *" /b /o
+  - dir "%ProgramFiles%\Microsoft SDKs\Windows" /b /o
+  - dir "%SystemDrive%\Qt\5.*" /b /o
+
+environment:
+  VSVER: 12.0 # Visual Studio 2013
+  matrix:
+    - QTDIR: C:\Qt\5.5\msvc2013
+    - QTDIR: C:\Qt\5.5\msvc2013_64
+
+configuration:
+  - debug
+  - release
+
 install:
-  - set QTDIR=C:\Qt\5.5\msvc2013_64
-  - set PATH=%PATH%;%QTDIR%\bin
+  - '%QTDIR%\bin\qtenv2.bat'
+  - qmake -v
+  - if %QTDIR:_64=%==%QTDIR% ( set ARCH=x86 ) else set ARCH=x64
+  - if %QTDIR:msvc=%==%QTDIR% g++ --version
+  - if %QTDIR:msvc=%==%QTDIR% set make=mingw32-make.exe
+  - if %QTDIR:msvc=%==%QTDIR% %make% --version
+  - if not %QTDIR:msvc=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%
+  - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
+  - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
+    
 before_build:
-  - buildWinSln.bat
-build:
-  project: launchy.sln
-  parallel: true
-  verbosity: minimal
+  # Prepare the out-of-source build directory.
+  - mkdir %APPVEYOR_BUILD_FOLDER%-build
+  - cd %APPVEYOR_BUILD_FOLDER%-build
+  - qmake -Wall -Wlogic -Wparser CONFIG+=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%\launchy
+
+build_script:
+  - '%make%'
 
 # fetch repository as zip archive
 shallow_clone: true

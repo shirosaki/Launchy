@@ -48,7 +48,7 @@ after_build:
   - ISCC SETUP.iss
   
 artifacts:
-  - %APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\Launchy_Setup.exe
+  - path: '%APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\Launchy_Setup.exe'
 
 build_script:
   - '%make%'

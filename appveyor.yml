@@ -51,7 +51,7 @@ after_build:
   - dir %APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\
   
 artifacts:
-  - path: $(appveyor_build_folder)/launchy/win/installer/$(configuration)/$(setupout)  
+  - path: launchy/win/installer/release/*.exe
 
 build_script:
   - '%make%'

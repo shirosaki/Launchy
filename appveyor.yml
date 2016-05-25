@@ -1,8 +1,6 @@
 version: 2.8.{build}
 image:
 - Visual Studio 2013
-build:
-  verbosity: minimal+
 install:
   - set QTDIR=C:\Qt\5.5\msvc2013_64
   - set PATH=%PATH%;%QTDIR%\bin
@@ -11,4 +9,5 @@ before_build:
 build:
   project: launchy.sln
   parallel: true
+  verbosity: minimal+
  

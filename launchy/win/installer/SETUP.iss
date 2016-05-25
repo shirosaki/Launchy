@@ -2,7 +2,6 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName      "Launchy"
-#define MyAppVerName   "Launchy 2.8.10"
 #define MyAppPublisher "OpenNingia"
 #define MyAppURL       "http://openningia.github.com/Launchy/"
 #define MyAppExeName   "Launchy.exe"
@@ -15,7 +14,7 @@
 [Setup]
 AppMutex=LaunchyMutex,Global\LaunchyMutex
 AppName={#MyAppName}
-AppVerName={#MyAppVerName}
+AppVerName={#MyAppName} {%APPVEYOR_BUILD_VERSION|2.8.10}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}

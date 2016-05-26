@@ -47,10 +47,11 @@ after_build:
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
   - windeployqt .
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\win\installer
-  - ISCC SETUP.iss
+  - ISCC %ISSO%
+  - dir %APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\
   
 artifacts:
-  - path: $(appveyor_build_folder)\launchy\win\installer\$(configuration)\$(setupout)  
+  - path: launchy/win/installer/release/*.exe
 
 build_script:
   - '%make%'

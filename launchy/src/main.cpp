@@ -38,8 +38,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #   include <QStandardPaths>
 #endif
 
-#include "spdlog/spdlog.h"
-
 #if defined(ENABLE_LOG_FILE)
 #define MAX_LOG_SIZE  1024*1024
 #define LOG_FILE_NAME "Launchy"
@@ -101,25 +99,6 @@ void messageOutput(QtMsgType type, const char *msg)
         log_file.write("\n");
         log_file.close();
     }
-}
-#elif defined(ENABLE_SPD_LOG_FILE)
-#define LOG_FILE_NAME "Launchy"
-#define MAX_LOG_SIZE  3*1024*1024
-static void initialize_logger()
-{
-    //size_t q_size = 1048576; //queue size must be power of 2
-    //spdlog::set_async_mode(q_size);
-    auto file_logger = spdlog::rotating_logger_mt("app", LOG_FILE_NAME, MAX_LOG_SIZE, 3);
-    if ( file_logger != nullptr )
-        file_logger->flush_on(spdlog::level::info);
-    else
-        auto null_logger = spdlog::create<spdlog::sinks::null_sink_st>("app");
-}
-#else
-#include "spdlog/sinks/null_sink.h"
-static void initialize_logger()
-{
-    auto null_logger = spdlog::create<spdlog::sinks::null_sink_st>("app");
 }
 #endif
 
@@ -215,6 +194,9 @@ LaunchyWidget::LaunchyWidget(CommandFlags command) :
         updateVersion(gSettings->value("version", 0).toInt());
         command |= ShowLaunchy;
     }
+
+    // set gSettings parent
+    gSettings->setParent(this);
 
     alternatives = new CharListWidget(this);
     alternatives->setObjectName("alternatives");
@@ -1177,11 +1159,14 @@ void LaunchyWidget::loadPosition(QPoint pt)
 
 void LaunchyWidget::saveSettings()
 {
-    qDebug() << "Save settings";
     savePosition();
+    qDebug() << "Saved position";
     gSettings->sync();
+    qDebug() << "Settings sync";
     catalog->save(settings.catalogFilename());
+    qDebug() << "Saved catalog";
     history.save(settings.historyFilename());
+    qDebug() << "Saved history";
 }
 
 
@@ -1214,14 +1199,18 @@ void LaunchyWidget::onHotkey()
 
 
 void LaunchyWidget::closeEvent(QCloseEvent* event)
-{
+{    
+    qDebug() << "Stopping builder thread";
     gBuilder->stop();
+    qDebug() << "Stopping fader timer";
     fader->stop();
+    qDebug() << "Saving settings";
     saveSettings();
+    qDebug() << "Accepting events";
     event->accept();
-
-    // join builder thread
+    qDebug() << "Joining builder thread";
     gBuilder->wait();
+    qDebug() << "Quitting QApplication";
     qApp->quit();
 }
 
@@ -1734,11 +1723,9 @@ int main(int argc, char *argv[])
 #   else
         qInstallMsgHandler(messageOutput);
 #   endif
-#else
-    initialize_logger();
 #endif
 
-    spdlog::get("app")->info("APPLICATION START");
+    qDebug() << "APPLICATION START";
 
     QStringList args = qApp->arguments();
     CommandFlags command = None;
@@ -1814,12 +1801,17 @@ int main(int argc, char *argv[])
 
     qApp->exec();
 
+#if defined(ENABLE_LOG_FILE)
+#   if QT_VERSION >= 0x050000
+        qInstallMessageHandler(0);
+#   else
+        qInstallMsgHandler(0);
+#   endif
+#endif
+
     delete widget;
     widget = NULL;
 
     delete platform;
-    platform = NULL;
-
-    spdlog::get("app")->info("APPLICATION END");
-    spdlog::drop_all();
+    platform = NULL;    
 }

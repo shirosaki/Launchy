@@ -26,7 +26,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "Directory.h"
 
 #include <QDebug>
-#include "spdlog/spdlog.h"
 
 CatalogAdder::CatalogAdder(Catalog& cat)
     : m_cat(cat), m_active(false), m_stop_requested(false), m_abort_requested(false) {
@@ -35,7 +34,7 @@ CatalogAdder::CatalogAdder(Catalog& cat)
 
 void CatalogAdder::run() {
 
-    spdlog::get("app")->info("Catalog adder started");
+    qDebug() << "Catalog adder started";
     m_active = true;
 
     int log_block = 0;
@@ -54,7 +53,7 @@ void CatalogAdder::run() {
             m_queue.pop_front();
 
             if ( (log_block++ % 100) == 0 )
-                spdlog::get("app")->info("catalog size: {}, items left: {}", m_cat.count(), m_queue.count());
+                qDebug() << "catalog size: " << m_cat.count() <<  " items left: " << m_queue.count();
         } else if ( m_stop_requested ) {
             break;
         }
@@ -62,7 +61,7 @@ void CatalogAdder::run() {
         msleep(1);
     }
 
-    spdlog::get("app")->info("Catalog adder ended");
+    qDebug() << "Catalog adder ended";
 }
 
 void CatalogAdder::push(QList<CatItem> items) {
@@ -72,12 +71,9 @@ void CatalogAdder::push(QList<CatItem> items) {
     if ( m_stop_requested || m_abort_requested )
         return;
 
-    spdlog::get("app")->info("Adding {} items to the catalog.", items.count());
     foreach(const CatItem & itm, items) {
         m_queue.push_back(itm);
     }
-
-    spdlog::get("app")->info("items pushed");
 }
 
 void CatalogAdder::finish() {
@@ -111,7 +107,7 @@ void CatalogBuilder::stop()
 
 void CatalogBuilder::buildCatalog()
 {
-    spdlog::get("app")->info("BUILD CATALOG STARTED");
+    qDebug() << "BUILD CATALOG STARTED";
 
     stop_request = false;
 
@@ -131,16 +127,11 @@ void CatalogBuilder::buildCatalog()
     while (currentItem < memDirs.count())
     {
         if ( stop_request ) {
-            spdlog::get("app")->warn("Aborting catalog builder");
+            qWarning() << "Aborting catalog builder";
             break;
         }
 
         QString cur = platform->expandEnvironmentVars(memDirs[currentItem].name);
-
-        qDebug() << "Indexing directory " << cur << "with filters: " << memDirs[currentItem].types.join(",");
-        qDebug() << "Index folders: " << memDirs[currentItem].indexDirs << " Index binaries: " << memDirs[currentItem].indexExe;
-        qDebug() << "Indexing depth: " << memDirs[currentItem].depth;
-
         indexDirectory(cur, memDirs[currentItem].types, memDirs[currentItem].indexDirs, memDirs[currentItem].indexExe, memDirs[currentItem].depth);
         progressStep(currentItem);
     }
@@ -151,9 +142,9 @@ void CatalogBuilder::buildCatalog()
         adder->finish();
     }
 
-    spdlog::get("app")->warn("wait catalog adder");
+    qDebug() << "wait catalog adder";
     adder->wait();
-    spdlog::get("app")->warn("catalog adder finished");
+    qDebug() << "catalog adder joined";
 
     if ( !stop_request ) {
         // Don't call the pluginhandler to request catalog because we need to track progress
@@ -165,7 +156,7 @@ void CatalogBuilder::buildCatalog()
     progress = CATALOG_PROGRESS_MAX;
     emit catalogFinished();
 
-    spdlog::get("app")->info("BUILD CATALOG COMPLETED");
+    qDebug() << "BUILD CATALOG COMPLETED";
 }
 
 void CatalogBuilder::indexDirectory(const QString& directory, const QStringList& filters, bool fdirs, bool fbin, int depth)
@@ -175,9 +166,9 @@ void CatalogBuilder::indexDirectory(const QString& directory, const QStringList&
 
     QList<CatItem> partial_catalog;
 
-    spdlog::get("app")->info() << "Indexing directory \"" << directory.toStdString() << "\" with filters: " << filters.join(",").toStdString();
-    spdlog::get("app")->info() << "Index folders: " << fdirs << " Index binaries: " << fbin << " Indexing depth: " << depth;
-    spdlog::get("app")->info() << "Item indexed: " << indexed.count();
+    qDebug() << "Indexing directory \"" << directory << "\" with filters: " << filters.join(",");
+    qDebug() << "Index folders: " << fdirs << " Index binaries: " << fbin << " Indexing depth: " << depth;
+    qDebug() << "Item indexed: " << indexed.count();
 
     QString dir = QDir::toNativeSeparators(directory);
     QDir qd(dir);
@@ -186,7 +177,7 @@ void CatalogBuilder::indexDirectory(const QString& directory, const QStringList&
 
     if (depth > 0)
     {
-        spdlog::get("app")->info("Indexing {} subdirectories", dirs.count());
+        qDebug() << "Indexing " << dirs.count() << " subdirectories";
         for (int i = 0; i < dirs.count(); ++i)
         {
             if ( stop_request )
@@ -200,14 +191,12 @@ void CatalogBuilder::indexDirectory(const QString& directory, const QStringList&
                     indexDirectory(dir + "/" + dirs[i], filters, fdirs, fbin, depth-1);
                 }
             }
-
-            //msleep(15);
         }
     }
 
     if (fdirs)
     {
-        spdlog::get("app")->info("Processing {} subdirectories", dirs.count());
+        qDebug() << "Processing " << dirs.count() << " subdirectories";
         for (int i = 0; i < dirs.count(); ++i)
         {
             if ( stop_request )
@@ -222,13 +211,11 @@ void CatalogBuilder::indexDirectory(const QString& directory, const QStringList&
                 partial_catalog.append(item);
                 indexed.insert(dir + "/" + dirs[i]);
             }
-
-            //msleep(15);
         }
     }
     else
     {
-        spdlog::get("app")->info("Processing {} subdirectories ( shortcuts only )", dirs.count());
+        qDebug() << "Processing " << dirs.count() << " subdirectories ( shortcuts only )";
 
         // Grab any shortcut directories
         // This is to work around a QT weirdness that treats shortcuts to directories as actual directories
@@ -247,8 +234,6 @@ void CatalogBuilder::indexDirectory(const QString& directory, const QStringList&
                     indexed.insert(dir + "/" + dirs[i]);
                 }
             }
-
-            //msleep(15);
         }
     }
 
@@ -256,7 +241,7 @@ void CatalogBuilder::indexDirectory(const QString& directory, const QStringList&
     {
         QStringList bins = qd.entryList(QDir::Files | QDir::Executable);
 
-        spdlog::get("app")->info("Processing {} executables", bins.count());
+        qDebug() << "Indexing " << bins.count() << " executables";
 
         for (int i = 0; i < bins.count(); ++i)
         {
@@ -270,8 +255,6 @@ void CatalogBuilder::indexDirectory(const QString& directory, const QStringList&
                 partial_catalog.append(item);
                 indexed.insert(dir + "/" + bins[i]);
             }
-
-            // msleep(5);
         }
     }
 
@@ -280,7 +263,7 @@ void CatalogBuilder::indexDirectory(const QString& directory, const QStringList&
 
         QStringList files = qd.entryList(filters, QDir::Files | QDir::System, QDir::Unsorted );
 
-        spdlog::get("app")->info("Processing {} files", files.count());
+        qDebug() << "Indexing " << files.count() << " files";
         for (int i = 0; i < files.count(); ++i)
         {
             if ( stop_request )
@@ -294,8 +277,6 @@ void CatalogBuilder::indexDirectory(const QString& directory, const QStringList&
                 partial_catalog.append(item);
                 indexed.insert(dir + "/" + files[i]);
             }
-
-            // msleep(5);
         }
     }
 

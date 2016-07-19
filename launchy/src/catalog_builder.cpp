@@ -49,7 +49,7 @@ void CatalogAdder::run() {
         }
 
         if ( !m_queue.empty() ) {
-            m_cat.addNewItem(m_queue.front());
+            m_cat.addItem(m_queue.front());
             m_queue.pop_front();
 
             if ( (log_block++ % 100) == 0 )

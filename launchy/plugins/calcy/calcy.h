@@ -32,6 +32,9 @@ using namespace boost;
 class calcyPlugin : public QObject, public PluginInterface
 {
 	Q_OBJECT
+#if QT_VERSION >= 0x050000
+	Q_PLUGIN_METADATA(IID "net.launchy.PluginInterface.CalcyPlugin" FILE "calcy.json")
+#endif
 	Q_INTERFACES(PluginInterface)
 
 public:

@@ -20,38 +20,38 @@
 <context>
     <name>LaunchyWidget</name>
     <message>
-        <location filename="../src/main.cpp" line="180"/>
+        <location filename="../src/main.cpp" line="159"/>
         <source>Launchy Options</source>
         <translation>Options de Launchy</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="186"/>
+        <location filename="../src/main.cpp" line="165"/>
         <source>Close Launchy</source>
         <translation>Quitter Launchy</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="260"/>
+        <location filename="../src/main.cpp" line="242"/>
         <source>The hotkey %1 is already in use, please select another.</source>
         <translation>Le raccourcis clavier %1 est déjà utilisé, veuillez en choisir un autre.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="399"/>
+        <location filename="../src/main.cpp" line="381"/>
         <source>Launchy (press %1 to activate)</source>
         <translation>Launchy (appuyer sur %1 pour activer)</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="1663"/>
+        <location filename="../src/main.cpp" line="1652"/>
         <source>Show Launchy</source>
         <translation>Afficher Launchy</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="1666"/>
+        <location filename="../src/main.cpp" line="1655"/>
         <source>Rebuild catalog</source>
         <translation>Reconstruire le catalogue</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="151"/>
-        <location filename="../src/main.cpp" line="260"/>
+        <location filename="../src/main.cpp" line="130"/>
+        <location filename="../src/main.cpp" line="242"/>
         <source>Launchy</source>
         <translation>Launchy</translation>
     </message>
@@ -68,17 +68,17 @@ You can download it at 						   &lt;qt&gt;&lt;a href=&quot;http://www.launchy.ne
 Vous pouvez la charger depuis 						   &lt;qt&gt;&lt;a href=&quot;http://www.launchy.net/&quot;&gt;http://www.launchy.net&lt;/a&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="1671"/>
+        <location filename="../src/main.cpp" line="1660"/>
         <source>Reload skin</source>
         <translation>Recharger le skin</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="1676"/>
+        <location filename="../src/main.cpp" line="1665"/>
         <source>Options</source>
         <translation>Options</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="1681"/>
+        <location filename="../src/main.cpp" line="1670"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>

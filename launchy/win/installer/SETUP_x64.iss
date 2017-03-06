@@ -84,6 +84,7 @@ Source: "{#PWD}\release\plugins\*.dll"; DestDir: "{app}\plugins"; Flags: ignorev
 
 ; Plugin icons
 Source: {#PWD}\plugins\controly\*.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion
+Source: {#PWD}\plugins\calcy\*.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion
 
 ; Documentation
 Source: {#PWD}\license.txt; DestDir: {app}; Flags: ignoreversion

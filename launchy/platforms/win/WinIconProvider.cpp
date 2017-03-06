@@ -253,6 +253,13 @@ bool WinIconProvider::addIconFromShellFactory(QString filePath, QIcon& icon) con
 #else
                     QPixmap iconPixmap = QPixmap::fromWinHBITMAP(iconBitmap, QPixmap::PremultipliedAlpha);
 #endif
+					// Compose proper image with icon alpha channel
+					QImage iconImage = QImage(iconPixmap.size(), QImage::Format_ARGB32);
+					QPainter painter(&iconImage);
+					painter.setCompositionMode(QPainter::CompositionMode_Source);
+					painter.drawPixmap(0, 0, iconPixmap);
+					iconPixmap = QPixmap::fromImage(iconImage);
+
 					icon.addPixmap(iconPixmap);
 					DeleteObject(iconBitmap);
 				}

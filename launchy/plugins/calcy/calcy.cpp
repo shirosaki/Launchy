@@ -104,8 +104,8 @@ bool DoCalculation(QString str, double& result)
 	delete wstr;
 
 	//FOR SOME REASON IN LINUX info.full is false
-	//if (!info.full)
-	//	return false;
+	if (!info.hit)
+		return false;
 	result = n;
 	return true;
 }

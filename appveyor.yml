@@ -30,16 +30,16 @@ install:
   - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
   - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
   - if %ARCH%==x86 ( set ISSO=SETUP.iss ) else set ISSO=SETUP_x64.iss
-  - if %ARCH%==x86 ( set SETUPOUT=Launchy_Setup.exe ) else set SETUPOUT=Launchy_Setup_x64.exe 
+  - if %ARCH%==x86 ( set SETUPOUT=Launchy_Setup.exe ) else set SETUPOUT=Launchy_Setup_x64.exe
   - choco install -y InnoSetup
   - set PATH=C:\Program Files (x86)\Inno Setup 5;%PATH%
-    
+
 before_build:
   # Prepare the out-of-source build directory.
   - mkdir %APPVEYOR_BUILD_FOLDER%-build
   - cd %APPVEYOR_BUILD_FOLDER%-build
   - qmake -Wall -Wlogic -Wparser CONFIG+=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%\launchy
-  
+
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\win
   - buildTranslations.bat
@@ -49,12 +49,26 @@ after_build:
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\win\installer
   - ISCC %ISSO%
   - dir %APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\
-  
+
 artifacts:
   - path: launchy/win/installer/release/*.exe
 
 build_script:
   - '%make%'
+
+# deploy on bintray
+deploy:
+- provider: BinTray
+  username: openningia
+  api_key:
+    secure: +5ZaU/ubYVQCdXHgtbnmczUoLuDG0KYxZ/yPzi0oblV3DSMfhVhdx0Mb03ZqKKZf
+  subject: openningia
+  repo: Launchy
+  package: LaunchyInstaller
+#  version: version
+  publish: true
+  override: true
+#  explode: true
 
 # fetch repository as zip archive
 shallow_clone: true

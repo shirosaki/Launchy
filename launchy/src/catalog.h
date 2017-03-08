@@ -135,7 +135,21 @@ public:
     {
         if ( isLink() ) {
             QFileInfo fime(fullPath);
-            hash = qHash(fime.symLinkTarget());
+            QString linkTarget = fime.symLinkTarget();
+            if (linkTarget != "") {
+                hash = qHash(linkTarget);
+            } else {
+                // Shortcut that points to virtual objects doesn't have target on Windows.
+                // Instead use file content for hash.
+                QFile file(fullPath);
+                if (file.open(QFile::ReadOnly)) {
+                    hash = qHash(file.readAll());
+                    file.close();
+                } else {
+                    // fallback to fullPath
+                    hash = qHash(fullPath);
+                }
+            }
         } else {
             hash = qHash(fullPath);
         }

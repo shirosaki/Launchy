@@ -224,7 +224,7 @@ void calcyPlugin::setPath(QString * path)
 
 void calcyPlugin::doDialog(QWidget* parent, QWidget** newDlg)
 {
-	if (gui != NULL)
+	if (gui)
 		return;
 	gui.reset(new Gui(parent));
 	*newDlg = gui.get();

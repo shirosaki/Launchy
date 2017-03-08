@@ -135,7 +135,12 @@ public:
     {
         if ( isLink() ) {
             QFileInfo fime(fullPath);
-            hash = qHash(fime.symLinkTarget());
+            QString linkTarget = fime.symLinkTarget();
+            if (linkTarget != "") {
+                hash = qHash(linkTarget);
+            } else {
+                hash = qHash(fullPath);
+            }
         } else {
             hash = qHash(fullPath);
         }

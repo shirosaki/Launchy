@@ -536,10 +536,15 @@ void OptionsDialog::pluginItemChanged(QListWidgetItem* iz)
 		return;
 
 	// Close any current plugin dialogs
+	boolean reload = false;
 	if (curPlugin >= 0)
 	{
 		QListWidgetItem* item = plugList->item(curPlugin);
-		gMainWidget->plugins.endDialog(item->data(Qt::UserRole).toUInt(), true);
+		if (iz == item) {
+			// Close if changed item is current
+			gMainWidget->plugins.endDialog(item->data(Qt::UserRole).toUInt(), true);
+			reload = true;
+		}
 	}
 
 	// Write out the new config
@@ -564,7 +569,7 @@ void OptionsDialog::pluginItemChanged(QListWidgetItem* iz)
 	gMainWidget->plugins.loadPlugins();
 
 	// If enabled, reload the dialog
-	if (iz->checkState() == Qt::Checked)
+	if (reload && iz->checkState() == Qt::Checked)
 	{
 		loadPluginDialog(iz);
 	}

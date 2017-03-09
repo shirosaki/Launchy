@@ -1,7 +1,7 @@
-version: 2.8.{build}
+version: 2.9.{build}
 
 image:
-- Visual Studio 2013
+- Visual Studio 2015
 
 init:
   # Gather some basic build environment details.
@@ -11,26 +11,27 @@ init:
   - dir "%SystemDrive%\Qt\5.*" /b /o
 
 environment:
-  VSVER: 12.0 # Visual Studio 2013
+  VSVER: 14.0 # Visual Studio 2015
   BOOST_DIR: C:\Libraries\boost
   matrix:
-    - QTDIR: C:\Qt\5.5\msvc2013
-    - QTDIR: C:\Qt\5.5\msvc2013_64
+    - QTDIR: C:\Qt\5.8\msvc2015
+    - QTDIR: C:\Qt\5.8\msvc2015_64
 
 configuration: release
 
 install:
   - '%QTDIR%\bin\qtenv2.bat'
   - qmake -v
-  - if %QTDIR:_64=%==%QTDIR% ( set ARCH=x86 ) else set ARCH=x64
-  - if %QTDIR:msvc=%==%QTDIR% g++ --version
-  - if %QTDIR:msvc=%==%QTDIR% set make=mingw32-make.exe
+  - set ARCH=x64
+  - set SETUPOUT=Launchy_Setup
+  - set ISSO=SETUP.iss
+  - if %QTDIR:_64=%==%QTDIR% set ARCH=x86
   - if %QTDIR:msvc=%==%QTDIR% %make% --version
   - if not %QTDIR:msvc=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%
   - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
   - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
-  - if %ARCH%==x86 ( set ISSO=SETUP.iss ) else set ISSO=SETUP_x64.iss
-  - if %ARCH%==x86 ( set SETUPOUT=Launchy_Setup.exe ) else set SETUPOUT=Launchy_Setup_x64.exe
+  - if %ARCH%==x64 set ISSO=SETUP_x64.iss
+  - if %ARCH%==x64 set SETUPOUT=Launchy_Setup_x64
   - choco install -y InnoSetup
   - set PATH=C:\Program Files (x86)\Inno Setup 5;%PATH%
 
@@ -44,10 +45,15 @@ after_build:
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\win
   - buildTranslations.bat
   - xcopy /E /F /I /Y %APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
+  - echo copy "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\redist\1033\vcredist_%ARCH%*" %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
+  - copy "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\redist\1033\vcredist_%ARCH%*" %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
   - windeployqt .
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\win\installer
   - ISCC %ISSO%
+  - cd %APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\
+  - echo ren %SETUPOUT%.exe %SETUPOUT%-%APPVEYOR_BUILD_VERSION%.exe
+  - ren %SETUPOUT%.exe %SETUPOUT%-%APPVEYOR_BUILD_VERSION%.exe
   - dir %APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\
 
 artifacts:

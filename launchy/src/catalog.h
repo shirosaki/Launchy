@@ -116,7 +116,7 @@ public:
         usage = s.usage;
         data = s.data;
         id = s.id;
-        calculateHash();
+        hash = s.hash;
     }
 
     CatItem& operator=( const CatItem &s ) {
@@ -127,7 +127,7 @@ public:
         usage = s.usage;
         data = s.data;
         id = s.id;
-        calculateHash();
+        hash = s.hash;
         return *this;
     }
 
@@ -135,7 +135,21 @@ public:
     {
         if ( isLink() ) {
             QFileInfo fime(fullPath);
-            hash = qHash(fime.symLinkTarget());
+            QString linkTarget = fime.symLinkTarget();
+            if (linkTarget != "") {
+                hash = qHash(linkTarget);
+            } else {
+                // Shortcut that points to virtual objects doesn't have target on Windows.
+                // Instead use file content for hash.
+                QFile file(fullPath);
+                if (file.open(QFile::ReadOnly)) {
+                    hash = qHash(file.readAll());
+                    file.close();
+                } else {
+                    // fallback to fullPath
+                    hash = qHash(fullPath);
+                }
+            }
         } else {
             hash = qHash(fullPath);
         }
@@ -241,6 +255,7 @@ inline QDataStream &operator>>(QDataStream &in, CatItem &item) {
     in >> item.icon;
     in >> item.usage;
     in >> item.id;
+    item.calculateHash();
     return in;
 }
 

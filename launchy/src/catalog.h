@@ -116,7 +116,7 @@ public:
         usage = s.usage;
         data = s.data;
         id = s.id;
-        calculateHash();
+        hash = s.hash;
     }
 
     CatItem& operator=( const CatItem &s ) {
@@ -127,7 +127,7 @@ public:
         usage = s.usage;
         data = s.data;
         id = s.id;
-        calculateHash();
+        hash = s.hash;
         return *this;
     }
 
@@ -255,6 +255,7 @@ inline QDataStream &operator>>(QDataStream &in, CatItem &item) {
     in >> item.icon;
     in >> item.usage;
     in >> item.id;
+    item.calculateHash();
     return in;
 }
 

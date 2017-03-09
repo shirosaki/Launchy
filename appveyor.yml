@@ -22,7 +22,7 @@ configuration: release
 install:
   - '%QTDIR%\bin\qtenv2.bat'
   - qmake -v
-  - if %QTDIR:_64=%==%QTDIR% ( set ARCH=x86 ) else set ARCH=x64
+  - if %QTDIR:_64=%==%QTDIR% set ARCH=x86 else set ARCH=x64
   - if %QTDIR:msvc=%==%QTDIR% g++ --version
   - if %QTDIR:msvc=%==%QTDIR% set make=mingw32-make.exe
   - if %QTDIR:msvc=%==%QTDIR% %make% --version
@@ -45,8 +45,8 @@ after_build:
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\win
   - buildTranslations.bat
   - xcopy /E /F /I /Y %APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
-  - echo copy "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\redist\1033\vcredist_%ARCH%.exe" %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
-  - copy "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\redist\1033\vcredist_%ARCH%.exe" %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
+  - echo copy "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\redist\1033\vcredist_%ARCH%*" %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
+  - copy "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\redist\1033\vcredist_%ARCH%*" %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
   - windeployqt .
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\win\installer

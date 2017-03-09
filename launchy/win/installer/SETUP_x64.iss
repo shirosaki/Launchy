@@ -66,7 +66,7 @@ Source: "{#PWD}\release\platforms\*.dll"; DestDir: "{app}\platforms"; Flags: ign
 Source: "{#PWD}\release\translations\*.qm"; DestDir: "{app}\tr"; Flags: ignoreversion
 
 ; redist
-Source: {#PWD}\release\vcredist*.exe; DestDir: {app}\vcredist; Flags: ignoreversion
+Source: {#PWD}\release\vcredist*.exe; DestDir: {tmp}; Flags: deleteafterinstall
 
 ; Translations
 Source: {#PWD}\translations\launchy_es.qm; DestDir: {app}\tr\; Flags: ignoreversion
@@ -124,7 +124,7 @@ Name: {userdesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Parameters: /
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Parameters: /show; Filename: {app}\{#MyAppExeName}; WorkingDir: {app}; Tasks: quicklaunchicon
 
 [Run]
-Filename: {app}\vcredist\vcredist_x64.exe; Parameters: "/q:a /c:""VCREDI~1.EXE /q:a /c:""""msiexec /i vcredist.msi /qn"""" """
+Filename: {tmp}\vcredist_x64.exe; Parameters: "/q /passive /norestart /Q:a /c:""msiexec /q /i vcredist.msi"" "; StatusMsg: Installing VC++ Redistributables...
 Filename: {app}\{#MyAppExeName}; Parameters: /show; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent runasoriginaluser
 
 [UninstallDelete]

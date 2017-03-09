@@ -51,6 +51,8 @@ after_build:
   - windeployqt .
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\win\installer
   - ISCC %ISSO%
+  - cd %APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\
+  - echo ren %SETUPOUT%.exe %SETUPOUT%-%APPVEYOR_BUILD_VERSION%.exe
   - ren %SETUPOUT%.exe %SETUPOUT%-%APPVEYOR_BUILD_VERSION%.exe
   - dir %APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\
 

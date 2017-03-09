@@ -23,18 +23,17 @@ install:
   - '%QTDIR%\bin\qtenv2.bat'
   - qmake -v
   - set ARCH=x64
+  - set SETUPOUT=Launchy_Setup
+  - set ISSO=SETUP.iss
   - if %QTDIR:_64=%==%QTDIR% set ARCH=x86
-  - if %QTDIR:msvc=%==%QTDIR% g++ --version
-  - if %QTDIR:msvc=%==%QTDIR% set make=mingw32-make.exe
   - if %QTDIR:msvc=%==%QTDIR% %make% --version
   - if not %QTDIR:msvc=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%
   - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
   - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
-  - if %ARCH%==x86 ( set ISSO=SETUP.iss ) else set ISSO=SETUP_x64.iss
-  - if %ARCH%==x86 ( set SETUPOUT=Launchy_Setup.exe ) else set SETUPOUT=Launchy_Setup_x64.exe
+  - if %ARCH%==x64 set ISSO=SETUP_x64.iss
+  - if %ARCH%==x64 set SETUPOUT=Launchy_Setup_x64
   - choco install -y InnoSetup
   - set PATH=C:\Program Files (x86)\Inno Setup 5;%PATH%
-  - dir "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\redist\1033" /b /o
 
 before_build:
   # Prepare the out-of-source build directory.
@@ -52,6 +51,7 @@ after_build:
   - windeployqt .
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\win\installer
   - ISCC %ISSO%
+  - ren %SETUPOUT%.exe %SETUPOUT%-%APPVEYOR_BUILD_VERSION%.exe
   - dir %APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\
 
 artifacts:

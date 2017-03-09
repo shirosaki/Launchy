@@ -33,6 +33,7 @@ install:
   - if %ARCH%==x86 ( set SETUPOUT=Launchy_Setup.exe ) else set SETUPOUT=Launchy_Setup_x64.exe
   - choco install -y InnoSetup
   - set PATH=C:\Program Files (x86)\Inno Setup 5;%PATH%
+  - dir "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\redist\1033" /b /o
   - set VCREDIST="%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\redist\1033\vcredist_%ARCH%.exe"
 
 before_build:

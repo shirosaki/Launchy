@@ -22,7 +22,8 @@ configuration: release
 install:
   - '%QTDIR%\bin\qtenv2.bat'
   - qmake -v
-  - if %QTDIR:_64=%==%QTDIR% set ARCH=x86 else set ARCH=x64
+  - set ARCH=x64
+  - if %QTDIR:_64=%==%QTDIR% set ARCH=x86
   - if %QTDIR:msvc=%==%QTDIR% g++ --version
   - if %QTDIR:msvc=%==%QTDIR% set make=mingw32-make.exe
   - if %QTDIR:msvc=%==%QTDIR% %make% --version

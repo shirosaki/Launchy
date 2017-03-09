@@ -1,7 +1,7 @@
-version: 2.8.{build}
+version: 2.9.{build}
 
 image:
-- Visual Studio 2013
+- Visual Studio 2015
 
 init:
   # Gather some basic build environment details.
@@ -11,11 +11,11 @@ init:
   - dir "%SystemDrive%\Qt\5.*" /b /o
 
 environment:
-  VSVER: 12.0 # Visual Studio 2013
+  VSVER: 14.0 # Visual Studio 2015
   BOOST_DIR: C:\Libraries\boost
   matrix:
-    - QTDIR: C:\Qt\5.5\msvc2013
-    - QTDIR: C:\Qt\5.5\msvc2013_64
+    - QTDIR: C:\Qt\5.8\msvc2015
+    - QTDIR: C:\Qt\5.8\msvc2015_64
 
 configuration: release
 
@@ -33,6 +33,7 @@ install:
   - if %ARCH%==x86 ( set SETUPOUT=Launchy_Setup.exe ) else set SETUPOUT=Launchy_Setup_x64.exe
   - choco install -y InnoSetup
   - set PATH=C:\Program Files (x86)\Inno Setup 5;%PATH%
+  - set VCREDIST="%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\redist\1033\vcredist_%ARCH%.exe"
 
 before_build:
   # Prepare the out-of-source build directory.
@@ -44,6 +45,7 @@ after_build:
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\win
   - buildTranslations.bat
   - xcopy /E /F /I /Y %APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
+  - copy %VCREDIST% %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
   - windeployqt .
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\win\installer

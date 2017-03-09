@@ -1,0 +1,80 @@
+version: 2.9.{build}
+
+image:
+- Visual Studio 2015
+
+init:
+  # Gather some basic build environment details.
+  - rem set
+  - dir "%ProgramFiles(x86)%\Microsoft Visual Studio *" /b /o
+  - dir "%ProgramFiles%\Microsoft SDKs\Windows" /b /o
+  - dir "%SystemDrive%\Qt\5.*" /b /o
+
+environment:
+  VSVER: 14.0 # Visual Studio 2015
+  BOOST_DIR: C:\Libraries\boost
+  matrix:
+    - QTDIR: C:\Qt\5.8\msvc2015
+    - QTDIR: C:\Qt\5.8\msvc2015_64
+
+configuration: release
+
+install:
+  - '%QTDIR%\bin\qtenv2.bat'
+  - qmake -v
+  - set ARCH=x64
+  - set SETUPOUT=Launchy_Setup
+  - set ISSO=SETUP.iss
+  - if %QTDIR:_64=%==%QTDIR% set ARCH=x86
+  - if %QTDIR:msvc=%==%QTDIR% %make% --version
+  - if not %QTDIR:msvc=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%
+  - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
+  - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
+  - if %ARCH%==x64 set ISSO=SETUP_x64.iss
+  - if %ARCH%==x64 set SETUPOUT=Launchy_Setup_x64
+  - choco install -y InnoSetup
+  - set PATH=C:\Program Files (x86)\Inno Setup 5;%PATH%
+
+before_build:
+  # Prepare the out-of-source build directory.
+  - mkdir %APPVEYOR_BUILD_FOLDER%-build
+  - cd %APPVEYOR_BUILD_FOLDER%-build
+  - qmake -Wall -Wlogic -Wparser CONFIG+=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%\launchy
+
+after_build:
+  - cd %APPVEYOR_BUILD_FOLDER%\launchy\win
+  - buildTranslations.bat
+  - xcopy /E /F /I /Y %APPVEYOR_BUILD_FOLDER%-build\%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
+  - echo copy "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\redist\1033\vcredist_%ARCH%*" %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
+  - copy "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\redist\1033\vcredist_%ARCH%*" %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
+  - cd %APPVEYOR_BUILD_FOLDER%\launchy\%CONFIGURATION%
+  - windeployqt .
+  - cd %APPVEYOR_BUILD_FOLDER%\launchy\win\installer
+  - ISCC %ISSO%
+  - cd %APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\
+  - echo ren %SETUPOUT%.exe %SETUPOUT%-%APPVEYOR_BUILD_VERSION%.exe
+  - ren %SETUPOUT%.exe %SETUPOUT%-%APPVEYOR_BUILD_VERSION%.exe
+  - dir %APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\
+
+artifacts:
+  - path: launchy/win/installer/release/*.exe
+
+build_script:
+  - '%make%'
+
+# deploy on bintray
+deploy:
+- provider: BinTray
+  username: openningia
+  api_key:
+    secure: +5ZaU/ubYVQCdXHgtbnmczUoLuDG0KYxZ/yPzi0oblV3DSMfhVhdx0Mb03ZqKKZf
+  subject: openningia
+  repo: Launchy
+  package: LaunchyInstaller
+#  version: version
+  publish: true
+  override: true
+#  explode: true
+
+# fetch repository as zip archive
+shallow_clone: true

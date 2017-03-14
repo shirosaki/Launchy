@@ -133,9 +133,9 @@ public:
 
     void calculateHash()
     {
-        if ( isLink() ) {
-            QFileInfo fime(fullPath);
-            QString linkTarget = fime.symLinkTarget();
+        QFileInfo info(fullPath);
+        if (info.isSymLink() || info.suffix().toLower() == "lnk") {
+            QString linkTarget = info.symLinkTarget();
             if (linkTarget != "") {
                 hash = qHash(linkTarget);
             } else {

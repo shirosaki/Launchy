@@ -465,7 +465,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */   
 #define MSG_UNLOAD_PLUGIN 101
 
-   
+/**
+\brief This message asks the plugin to extract icon image of the catalog item.
+
+\param wParam (CatItem*): The catalog item
+\param lParam (QIcon*): The icon object. The extracted icon image is set to it
+*/
+#define MSG_EXTRACT_ICON 102
 
 
 #define MSG_CONTROL_OPTIONS 500

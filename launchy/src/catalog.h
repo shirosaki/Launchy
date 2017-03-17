@@ -46,6 +46,8 @@ public:
     void* data;
     /** The plugin id of the creator of this CatItem */
     int id;
+    /** The index for extracting icon **/
+    int index;
     /** an hash **/
     int hash;
 
@@ -116,6 +118,7 @@ public:
         usage = s.usage;
         data = s.data;
         id = s.id;
+        index = s.index;
         hash = s.hash;
     }
 
@@ -127,6 +130,7 @@ public:
         usage = s.usage;
         data = s.data;
         id = s.id;
+        index = s.index;
         hash = s.hash;
         return *this;
     }

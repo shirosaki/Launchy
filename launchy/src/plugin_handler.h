@@ -84,6 +84,7 @@ public:
 	int execute(QList<InputData>*, CatItem*);
 	QWidget* doDialog(QWidget* parent, uint id);
 	void endDialog(uint id, bool accept);
+	int extractIcon(CatItem* item, QIcon* icon);
 	QHash<uint, PluginInfo> & getPlugins() { return plugins; }
 
 private:

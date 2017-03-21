@@ -619,7 +619,12 @@ void LaunchyWidget::alternativesRowChanged(int index)
             outputIcon->setPixmap(alternatives->item(index)->icon().pixmap(outputIcon->size()));
             outputItem = item;
             gSearchText = "";
-        }
+		}
+		else
+		{
+			// Select search result
+			updateOutputWidgets(false);
+		}
     }
 }
 
@@ -986,18 +991,23 @@ void LaunchyWidget::updateOutputWidgets(bool resetAlternativesSelection)
 {
     if (searchResults.count() > 0 && (inputData.count() > 1 || input->text().length() > 0))
     {
-        qDebug() << "Setting output text to" << searchResults[0].shortName;
+		int currentRow = alternatives->currentRow();
+		if (currentRow == -1 || currentRow >= searchResults.count())
+		{
+			currentRow = 0;
+		}
+        qDebug() << "Setting output text to" << searchResults[currentRow].shortName;
 
-        QString outputText = Catalog::decorateText(searchResults[0].shortName, gSearchText, true);
+        QString outputText = Catalog::decorateText(searchResults[currentRow].shortName, gSearchText, true);
 #ifdef _DEBUG
-        outputText += QString(" (%1 launches)").arg(searchResults[0].usage);
+        outputText += QString(" (%1 launches)").arg(searchResults[currentRow].usage);
 #endif
         output->setText(outputText);
-        if (outputItem != searchResults[0])
+        if (outputItem != searchResults[currentRow])
         {
-            outputItem = searchResults[0];
+            outputItem = searchResults[currentRow];
             outputIcon->clear();
-            iconExtractor.processIcon(searchResults[0]);
+            iconExtractor.processIcon(searchResults[currentRow]);
         }
 
         if (outputItem.id != HASH_HISTORY)
@@ -1005,7 +1015,7 @@ void LaunchyWidget::updateOutputWidgets(bool resetAlternativesSelection)
             // Did the plugin take control of the input?
             if (inputData.last().getID() != 0)
                 outputItem.id = inputData.last().getID();
-            inputData.last().setTopResult(searchResults[0]);
+            inputData.last().setTopResult(searchResults[currentRow]);
         }
 
         // Only update the alternatives list if it is visible

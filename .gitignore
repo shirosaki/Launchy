@@ -74,6 +74,7 @@ local.properties
 ipch/
 *.aps
 *.ncb
+*.opendb
 *.opensdf
 *.sdf
 

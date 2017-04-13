@@ -28,8 +28,6 @@ install:
   - if %QTDIR:_64=%==%QTDIR% set ARCH=x86
   - if %QTDIR:msvc=%==%QTDIR% %make% --version
   - if not %QTDIR:msvc=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%
-  - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
-  - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
   - if %ARCH%==x64 set ISSO=SETUP_x64.iss
   - if %ARCH%==x64 set SETUPOUT=Launchy_Setup_x64
   - choco install -y InnoSetup
@@ -39,7 +37,10 @@ before_build:
   # Prepare the out-of-source build directory.
   - mkdir %APPVEYOR_BUILD_FOLDER%-build
   - cd %APPVEYOR_BUILD_FOLDER%-build
-  - qmake -Wall -Wlogic -Wparser CONFIG+=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%\launchy
+  - qmake -tp vc -r -Wall -Wlogic -Wparser CONFIG+=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%\launchy
+
+build_script:
+  - msbuild launchy.sln /p:configuration=Release
 
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\win
@@ -58,9 +59,6 @@ after_build:
 
 artifacts:
   - path: launchy/win/installer/release/*.exe
-
-build_script:
-  - '%make%'
 
 # deploy on bintray
 deploy:

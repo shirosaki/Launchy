@@ -1,4 +1,4 @@
-version: 2.9.{build}
+version: 3.0.{build}
 
 image:
 - Visual Studio 2015
@@ -61,17 +61,17 @@ artifacts:
   - path: launchy/win/installer/release/*.exe
 
 # deploy on bintray
-deploy:
-- provider: BinTray
-  username: openningia
-  api_key:
-    secure: +5ZaU/ubYVQCdXHgtbnmczUoLuDG0KYxZ/yPzi0oblV3DSMfhVhdx0Mb03ZqKKZf
-  subject: openningia
-  repo: Launchy
-  package: LaunchyInstaller
+#deploy:
+#- provider: BinTray
+#  username: openningia
+#  api_key:
+#    secure: +5ZaU/ubYVQCdXHgtbnmczUoLuDG0KYxZ/yPzi0oblV3DSMfhVhdx0Mb03ZqKKZf
+#  subject: openningia
+#  repo: Launchy
+#  package: LaunchyInstaller
 #  version: version
-  publish: true
-  override: true
+#  publish: true
+#  override: true
 #  explode: true
 
 # fetch repository as zip archive

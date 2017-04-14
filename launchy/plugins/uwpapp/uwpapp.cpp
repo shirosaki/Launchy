@@ -121,17 +121,14 @@ void uwpappPlugin::extractIcon(CatItem* item, QIcon* icon)
 	{
 		// Get theme color for background.
 		DWORD colorizationColor;
-		DWORD colorizationColorBalance;
 		DWORD size = sizeof(DWORD);
 
 		RegGetValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\DWM", L"ColorizationColor", RRF_RT_REG_DWORD, 0, &colorizationColor, &size);
-		RegGetValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\DWM", L"ColorizationColorBalance", RRF_RT_REG_DWORD, 0, &colorizationColorBalance, &size);
 
-		BYTE a = 255 * colorizationColorBalance / 100; // Convert from 0-100 to 0-255
 		BYTE r = (colorizationColor >> 16) & 0xFF;
 		BYTE g = (colorizationColor >> 8) & 0xFF;
 		BYTE b = colorizationColor & 0xFF;
-		background.setRgb(r, g, b, a);
+		background.setRgb(r, g, b);
 	}
 	else if (backgroundColor.startsWith("#"))
 	{

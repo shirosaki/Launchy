@@ -1,7 +1,11 @@
 #include "precompiled.h"
 #include "Package.h"
+#include <codecvt>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
 
 using namespace Windows::Management::Deployment;
+using namespace boost::property_tree;
 
 //
 // Workaround to fix build errors.
@@ -29,16 +33,6 @@ Package::Package(uint pluginId, QList<CatItem>* items, QString defaultIconPath)
 	this->pluginId = pluginId;
 	this->items = items;
 	this->defaultIconPath = defaultIconPath;
-}
-
-void Package::setImagePath(QString path)
-{
-	imagePath = path;
-
-	if (!QFile::exists(imagePath))
-	{
-		QDir().mkpath(imagePath);
-	}
 }
 
 int Package::findPackages()
@@ -175,6 +169,8 @@ HRESULT Package::readManifest(LPCWSTR manifestFilePath)
 	IAppxManifestReader* manifestReader = NULL;
 	hr = getManifestReader(manifestFilePath, &manifestReader);
 
+	getXmlNamespaces(manifestFilePath);
+
 	if (SUCCEEDED(hr))
 	{
 		hr = readManifestApplications(manifestReader);
@@ -187,6 +183,23 @@ HRESULT Package::readManifest(LPCWSTR manifestFilePath)
 	return hr;
 }
 
+//
+// Get XML namespace attributes.
+//
+void Package::getXmlNamespaces(LPCWSTR path)
+{
+	std::wifstream fsstream(path);
+	fsstream.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
+
+	wptree pt;
+	read_xml(fsstream, pt);
+
+	if (boost::optional<std::wstring> name =
+			pt.get_optional<std::wstring>(L"Package.<xmlattr>.xmlns")) {
+		namespaces = QString::fromWCharArray(name.get().c_str());
+		qDebug() << "XML Namespace: " << namespaces;
+	}
+}
 
 //
 // Creates an app package reader.
@@ -295,13 +308,17 @@ HRESULT Package::readManifestApplications(
 					app.displayName = QString::fromWCharArray(displayName);
 			}
 
-			hr = application->GetStringValue(L"Square44x44Logo", &logo);
-
-			if (SUCCEEDED(hr))
+			std::wstring logoKey = getLogoKey();
+			if (!logoKey.empty())
 			{
-				qDebug() << "Logo file name: " << logo;
-				if (logo)
-					app.logo = QString::fromWCharArray(logo);
+				hr = application->GetStringValue(logoKey.c_str(), &logo);
+
+				if (SUCCEEDED(hr))
+				{
+					qDebug() << "Logo file name: " << logo;
+					if (logo)
+						app.logo = QString::fromWCharArray(logo);
+				}
 			}
 
 			hr = application->GetStringValue(L"BackgroundColor", &backgroundColor);
@@ -344,4 +361,22 @@ HRESULT Package::readManifestApplications(
 	}
 
 	return hr;
+}
+
+std::wstring Package::getLogoKey()
+{
+	LPCWSTR logoKey = NULL;
+	if (namespaces == "http://schemas.microsoft.com/appx/manifest/foundation/windows10")
+	{
+		logoKey = L"Square44x44Logo";
+	}
+	else if (namespaces == "http://schemas.microsoft.com/appx/2013/manifest")
+	{
+		logoKey = L"Square30x30Logo";
+	}
+	else if (namespaces == "http://schemas.microsoft.com/appx/2010/manifest")
+	{
+		logoKey = L"SmallLogo";
+	}
+	return std::wstring(logoKey);
 }

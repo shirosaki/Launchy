@@ -25,16 +25,16 @@ public:
 	QString fullName;
 	QString installedLocation;
 	QString defaultIconPath;
-	QString imagePath;
-	QString savedIconPath;
+	QString namespaces;
 	QVector<Application> apps;
 
-	void Package::setImagePath(QString path);
 	int Package::findPackages();
 	void Package::packageInfo(Windows::ApplicationModel::Package^ package);
 	HRESULT Package::getManifestReader(_In_ LPCWSTR manifestFilePath, _Outptr_ IAppxManifestReader** reader);
 	HRESULT Package::readManifest(LPCWSTR manifestFilePath);
+	void getXmlNamespaces(LPCWSTR path);
 	HRESULT Package::readManifestApplications(_In_ IAppxManifestReader* manifestReader);
+	std::wstring getLogoKey();
 
 private:
 	uint pluginId;

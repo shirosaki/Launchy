@@ -57,6 +57,8 @@ void ControlPanelItemFinder::findItems() {
 
 	addControlPanel();
 
+	CoUninitialize();
+
 	// clear local cache
 	foreach (CachedCplItem *pItem, cplItemNameCache) {
 		delete pItem;

@@ -125,6 +125,8 @@ int Package::findPackages()
 		}
 	});
 
+	CoUninitialize();
+
 	if (packageCount < 1)
 	{
 		qDebug() << "No packages were found.";

@@ -83,10 +83,10 @@ void uwpappPlugin::getCatalog(QList<CatItem>* items)
 void uwpappPlugin::launchItem(QList<InputData>* id, CatItem* item)
 {
 	// Specify the appropriate COM threading model
-	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+	CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
 	IApplicationActivationManager* paam = NULL;
-	hr = CoCreateInstance(CLSID_ApplicationActivationManager, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&paam));
+	HRESULT hr = CoCreateInstance(CLSID_ApplicationActivationManager, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&paam));
 	if (FAILED(hr))
 	{
 		qDebug() << "Error creating CoCreateINstance & HR is" << hr;
@@ -103,6 +103,8 @@ void uwpappPlugin::launchItem(QList<InputData>* id, CatItem* item)
 
 	if (hr == 0)
 		qDebug() << "Activated  " << item->fullPath << " with pid " << pid;
+
+	CoUninitialize();
 }
 
 void uwpappPlugin::extractIcon(CatItem* item, QIcon* icon)

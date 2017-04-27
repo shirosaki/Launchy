@@ -21,13 +21,6 @@ public:
 
 	Package(uint pluginId, QList<CatItem>* items, QString defaultIconPath);
 
-	QString name;
-	QString fullName;
-	QString installedLocation;
-	QString defaultIconPath;
-	QString namespaces;
-	QVector<Application> apps;
-
 	int Package::findPackages();
 	void Package::packageInfo(Windows::ApplicationModel::Package^ package);
 	HRESULT Package::getManifestReader(_In_ LPCWSTR manifestFilePath, _Outptr_ IAppxManifestReader** reader);
@@ -39,5 +32,12 @@ public:
 private:
 	uint pluginId;
 	QList<CatItem>* items;
+
+	QString name;
+	QString fullName;
+	QString installedLocation;
+	QString defaultIconPath;
+	QString namespaces;
+	QVector<Application> apps;
 };
 

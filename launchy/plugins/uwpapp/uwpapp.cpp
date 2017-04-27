@@ -71,11 +71,6 @@ void uwpappPlugin::getCatalog(QList<CatItem>* items)
 		return;
 	}
 
-	// get config / settings directory (base for 'temporary' icon cache dir)
-	QString iniFilename = (*settings)->fileName();
-	QFileInfo info(iniFilename);
-	QString userDataPath = info.absolutePath();
-
 	Package package(HASH_uwpapp, items, getIcon());
 	package.findPackages();
 }

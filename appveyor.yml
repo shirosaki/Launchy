@@ -40,7 +40,7 @@ before_build:
   - qmake -tp vc -r -Wall -Wlogic -Wparser CONFIG+=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%\launchy
 
 build_script:
-  - msbuild launchy.sln /p:configuration=Release
+  - msbuild launchy.sln /p:configuration=%CONFIGURATION%
 
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%\launchy\win

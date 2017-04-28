@@ -58,7 +58,7 @@ after_build:
   - dir %APPVEYOR_BUILD_FOLDER%\launchy\win\installer\%CONFIGURATION%\
 
 artifacts:
-  - path: launchy/win/installer/release/*.exe
+  - path: launchy/win/installer/%CONFIGURATION%/*.exe
 
 # deploy on bintray
 #deploy:

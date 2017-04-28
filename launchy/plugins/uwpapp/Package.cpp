@@ -89,7 +89,8 @@ int Package::findPackages()
 				{
 					app.displayName = QString::fromWCharArray(outBuffer);
 				}
-				else {
+				else
+				{
 					app.displayName = QString::fromWCharArray(package->Id->Name->Data());
 				}
 			}
@@ -108,7 +109,8 @@ int Package::findPackages()
 				qDebug() << "Query: " << query;
 				wchar_t outBuffer[256];
 				HRESULT hr = SHLoadIndirectString(query.toStdWString().c_str(), outBuffer, _countof(outBuffer), NULL);
-				if (SUCCEEDED(hr)) {
+				if (SUCCEEDED(hr))
+				{
 					app.iconPath = QString::fromWCharArray(outBuffer);
 					qDebug() << QString("Icon Path: ") << app.iconPath;
 				}
@@ -123,6 +125,7 @@ int Package::findPackages()
 			items->prepend(CatItem(app.userModelId, app.displayName, pluginId, path));
 			packageCount += 1;
 		}
+		apps.clear();
 	});
 
 	CoUninitialize();
@@ -153,7 +156,6 @@ void Package::packageInfo(Windows::ApplicationModel::Package^ package)
 	std::wstring path = installedLocation.toStdWString();
 	path += L"\\AppxManifest.xml";
 
-	apps.clear();
 	readManifest(path.c_str());
 }
 

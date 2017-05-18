@@ -1,11 +1,9 @@
 #include "precompiled.h"
 #include "Package.h"
 #include <codecvt>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/xml_parser.hpp>
+#include <xmllite.h>
 
 using namespace Windows::Management::Deployment;
-using namespace boost::property_tree;
 
 //
 // Workaround to fix build errors.
@@ -192,16 +190,102 @@ HRESULT Package::readManifest(LPCWSTR manifestFilePath)
 //
 void Package::getXmlNamespaces(LPCWSTR path)
 {
-	std::wifstream fsstream(path);
-	fsstream.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
+	HRESULT hr = S_OK;
+	IStream *pFileStream = NULL;
+	IXmlReader *pReader = NULL;
+	XmlNodeType nodeType;
+	const WCHAR* pwszPrefix;
+	const WCHAR* pwszLocalName;
+	const WCHAR* pwszValue;
+	UINT cwchPrefix;
+	bool found = false;
 
-	wptree pt;
-	read_xml(fsstream, pt);
+	namespaces = QString();
 
-	if (boost::optional<std::wstring> name =
-			pt.get_optional<std::wstring>(L"Package.<xmlattr>.xmlns")) {
-		namespaces = QString::fromWCharArray(name.get().c_str());
-		qDebug() << "XML Namespace: " << namespaces;
+	// Open read-only input stream
+	if (FAILED(hr = SHCreateStreamOnFile(path, STGM_READ, &pFileStream)))
+	{
+		qDebug() << "Error creating file reader, error is " << hr;
+		goto cleanup;
+	}
+	if (FAILED(hr = CreateXmlReader(__uuidof(IXmlReader), (void**)&pReader, NULL)))
+	{
+		qDebug() << "Error creating xml reader, error is " << hr;
+		goto cleanup;
+	}
+	if (FAILED(hr = pReader->SetInput(pFileStream)))
+	{
+		qDebug() << "Error setting input for reader, error is " << hr;
+		goto cleanup;
+	}
+
+	while (!found && S_OK == (hr = pReader->Read(&nodeType)))
+	{
+		switch (nodeType)
+		{
+			case XmlNodeType_Element:
+				if (FAILED(hr = pReader->GetPrefix(&pwszPrefix, &cwchPrefix)))
+				{
+					qDebug() << "Error getting prefix, error is " << hr;
+					goto cleanup;
+				}
+				if (FAILED(hr = pReader->GetLocalName(&pwszLocalName, NULL)))
+				{
+					qDebug() << "Error getting local name, error is " << hr;
+					goto cleanup;
+				}
+				if (cwchPrefix == 0 && wcscmp(pwszLocalName, L"Package") == 0)
+				{
+					found = true;
+					hr = pReader->MoveToFirstAttribute();
+					if (FAILED(hr))
+						break;
+
+					while (true)
+					{
+						if (!pReader->IsDefault())
+						{
+							UINT cwchPrefix;
+							if (FAILED(hr = pReader->GetPrefix(&pwszPrefix, &cwchPrefix)))
+							{
+								qDebug() << "Error getting prefix, error is " << hr;
+								goto cleanup;
+							}
+							if (FAILED(hr = pReader->GetLocalName(&pwszLocalName, NULL)))
+							{
+								qDebug() << "Error getting local name, error is " << hr;
+								goto cleanup;
+							}
+							if (cwchPrefix == 0 && wcscmp(pwszLocalName, L"xmlns") == 0)
+							{
+								if (FAILED(hr = pReader->GetValue(&pwszValue, NULL)))
+								{
+									qDebug() << "Error getting value, error is " << hr;
+									goto cleanup;
+								}
+								namespaces = QString::fromWCharArray(pwszValue);
+								break;
+							}
+						}
+						if (S_OK != pReader->MoveToNextAttribute())
+							break;
+					}
+					break;
+				}
+				break;
+		}
+	}
+
+	qDebug() << "XML Namespace: " << namespaces;
+
+cleanup:
+	if (pFileStream != NULL)
+	{
+		pFileStream->Release();
+	}
+	if (pReader != NULL)
+	{
+		pReader->Release();
 	}
 }
 
@@ -381,6 +465,9 @@ std::wstring Package::getLogoKey()
 	else if (namespaces == "http://schemas.microsoft.com/appx/2010/manifest")
 	{
 		logoKey = L"SmallLogo";
+	}
+	else {
+		logoKey = L"Square44x44Logo";
 	}
 	return std::wstring(logoKey);
 }

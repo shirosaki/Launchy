@@ -29,6 +29,7 @@ win32 {
 	LIBS += comctl32.lib
 	LIBS += shlwapi.lib
 	LIBS += dwmapi.lib
+	LIBS += xmllite.lib
 	QMAKE_CXXFLAGS += /ZW /AI"$(VCInstallDir)vcpackages;$(UniversalCRTSdkDir)UnionMetadata"
 }
 

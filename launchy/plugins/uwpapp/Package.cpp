@@ -43,8 +43,7 @@ int Package::findPackages()
 	Windows::Foundation::Collections::IIterable<Windows::ApplicationModel::Package^>^ packages = packageManager->FindPackagesForUser(nullptr);
 
 	int packageCount = 0;
-	std::for_each(Windows::Foundation::Collections::begin(packages), Windows::Foundation::Collections::end(packages),
-		[&](Windows::ApplicationModel::Package^ package)
+	for each (Windows::ApplicationModel::Package^ package in packages)
 	{
 		packageInfo(package);
 
@@ -124,7 +123,7 @@ int Package::findPackages()
 			packageCount += 1;
 		}
 		apps.clear();
-	});
+	}
 
 	CoUninitialize();
 

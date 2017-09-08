@@ -146,14 +146,20 @@ void Package::packageInfo(Windows::ApplicationModel::Package^ package)
 	if (package->IsFramework) {
 		return;
 	}
-	name = QString::fromWCharArray(package->Id->Name->Data());
-	fullName = QString::fromWCharArray(package->Id->FullName->Data());
+	try {
+		name = QString::fromWCharArray(package->Id->Name->Data());
+		fullName = QString::fromWCharArray(package->Id->FullName->Data());
+		installedLocation = QString::fromWCharArray(package->InstalledLocation->Path->Data());
+		std::wstring path = installedLocation.toStdWString();
+		path += L"\\AppxManifest.xml";
 
-	installedLocation = QString::fromWCharArray(package->InstalledLocation->Path->Data());
-	std::wstring path = installedLocation.toStdWString();
-	path += L"\\AppxManifest.xml";
-
-	readManifest(path.c_str());
+		readManifest(path.c_str());
+	}
+	catch (Platform::COMException^ ex)
+	{
+		qDebug() << "Getting package Info failed for name:" << name << fullName;
+		qDebug() << "Exception:" << ex->HResult << QString::fromWCharArray(ex->Message->Data());
+	}
 }
 
 //

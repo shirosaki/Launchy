@@ -1,9 +1,7 @@
 # Launchy
 Launchy is a smart search launcher for installed programs or files.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/e2uhgtuarx38ix3f?svg=true)](https://ci.appveyor.com/project/OpenNingia/launchy)
-
-[ ![Download](https://api.bintray.com/packages/openningia/Launchy/LaunchyInstaller/images/download.svg) ](https://bintray.com/openningia/Launchy/LaunchyInstaller/_latestVersion)
+[![Build status](https://ci.appveyor.com/api/projects/status/pct0c3u01cd206ta?svg=true)](https://ci.appveyor.com/project/shirosaki/launchy)
 
 It is the most efficient way to open files, folders, websites,
 and programs on your computer. Instead of having to browse the menus

@@ -26,7 +26,7 @@ gedit ~/textfile.txt
 As there seems to be not many people work on this nice program I've tried to fix
 the bugs and misssing feature request that I need. My main focus is on Launchy for Windows 10 64bit.
 
-I've added [uwpapp](https://github.com/shirosaki/Launchy/tree/master/launchy/plugins/uwpap) plugin to search UWP applications.
+I've added [uwpapp](https://github.com/shirosaki/Launchy/tree/master/launchy/plugins/uwpapp) plugin to search UWP applications.
 
 Installer binary is available on [AppVeyor artifacts](https://ci.appveyor.com/project/shirosaki/launchy/build/artifacts).
 

@@ -228,3 +228,10 @@ void PluginHandler::loadPlugins()
 		}
 	}
 }
+
+ int PluginHandler::extractIcon(CatItem* item, QIcon* icon)
+{
+	if (!plugins.contains(item->id) || !plugins[item->id].loaded)
+		return 0;
+	return plugins[item->id].sendMessage(MSG_EXTRACT_ICON, (void*) item, (void*) icon);
+}

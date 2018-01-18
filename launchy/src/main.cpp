@@ -619,7 +619,12 @@ void LaunchyWidget::alternativesRowChanged(int index)
             outputIcon->setPixmap(alternatives->item(index)->icon().pixmap(outputIcon->size()));
             outputItem = item;
             gSearchText = "";
-        }
+		}
+		else
+		{
+			// Select search result
+			updateOutputWidgets(false);
+		}
     }
 }
 
@@ -986,18 +991,23 @@ void LaunchyWidget::updateOutputWidgets(bool resetAlternativesSelection)
 {
     if (searchResults.count() > 0 && (inputData.count() > 1 || input->text().length() > 0))
     {
-        qDebug() << "Setting output text to" << searchResults[0].shortName;
+		int currentRow = alternatives->currentRow();
+		if (currentRow == -1 || currentRow >= searchResults.count())
+		{
+			currentRow = 0;
+		}
+        qDebug() << "Setting output text to" << searchResults[currentRow].shortName;
 
-        QString outputText = Catalog::decorateText(searchResults[0].shortName, gSearchText, true);
+        QString outputText = Catalog::decorateText(searchResults[currentRow].shortName, gSearchText, true);
 #ifdef _DEBUG
-        outputText += QString(" (%1 launches)").arg(searchResults[0].usage);
+        outputText += QString(" (%1 launches)").arg(searchResults[currentRow].usage);
 #endif
         output->setText(outputText);
-        if (outputItem != searchResults[0])
+        if (outputItem != searchResults[currentRow])
         {
-            outputItem = searchResults[0];
+            outputItem = searchResults[currentRow];
             outputIcon->clear();
-            iconExtractor.processIcon(searchResults[0]);
+            iconExtractor.processIcon(searchResults[currentRow]);
         }
 
         if (outputItem.id != HASH_HISTORY)
@@ -1005,7 +1015,7 @@ void LaunchyWidget::updateOutputWidgets(bool resetAlternativesSelection)
             // Did the plugin take control of the input?
             if (inputData.last().getID() != 0)
                 outputItem.id = inputData.last().getID();
-            inputData.last().setTopResult(searchResults[0]);
+            inputData.last().setTopResult(searchResults[currentRow]);
         }
 
         // Only update the alternatives list if it is visible
@@ -1048,10 +1058,15 @@ void LaunchyWidget::dropTimeout()
 
 void LaunchyWidget::iconExtracted(CatItem item, QIcon icon)
 {
-    if ( icon.isNull() )
-        icon = iconExtractor.getIcon( item );
+	if (icon.isNull())
+	{
+		if (plugins.extractIcon(&item, &icon) == 0)
+		{
+			icon = iconExtractor.getIcon(item);
+		}
+	}
 
-    if (item.id == -1)
+    if (item.index == -1)
     {
         // An index of -1 means update the output icon, check that it is also
         // the same item as was originally requested
@@ -1060,12 +1075,12 @@ void LaunchyWidget::iconExtracted(CatItem item, QIcon icon)
             outputIcon->setPixmap(icon.pixmap(outputIcon->size()));
         }
     }
-    else if (item.id < alternatives->count())
+    else if (item.index < alternatives->count())
     {
         // >=0 is an item in the alternatives list
-        if (item.id < searchResults.count() && item.fullPath == searchResults[item.id].fullPath)
+        if (item.index < searchResults.count() && item.fullPath == searchResults[item.index].fullPath)
         {
-            QListWidgetItem* listItem = alternatives->item(item.id);
+            QListWidgetItem* listItem = alternatives->item(item.index);
             listItem->setIcon(icon);
             listItem->setData(ROLE_ICON, icon);
 

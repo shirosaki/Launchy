@@ -15,7 +15,8 @@
 // define common buffer size
 const DWORD DEFAULT_BUFFER_SIZE = 512;
 
-QHash<QString, CachedCplItem*> ControlPanelItemFinder::cplItemCache; 
+QHash<QString, CachedCplItem*> ControlPanelItemFinder::cplItemCache;
+QHash<QString, CachedCplItem*> ControlPanelItemFinder::shellInfoCplItemCache;
 
 ControlPanelItemFinder::ControlPanelItemFinder(uint pluginId, FhoIconCreator *pIconGen, QList<CatItem> *pResultList) {
 	controlyPluginId = pluginId;
@@ -57,10 +58,9 @@ void ControlPanelItemFinder::findItems() {
 
 	addControlPanel();
 
+	CoUninitialize();
+
 	// clear local cache
-	foreach (CachedCplItem *pItem, cplItemNameCache) {
-		delete pItem;
-	}
 	cplItemNameCache.clear();
 
 }
@@ -300,6 +300,7 @@ void ControlPanelItemFinder::addCplControlPanelItem(QFileInfo *pCplFileInfo) {
 	if (!itemAdded) {
 		// mark the item as invalid in the cache (getting the info failed, do not retry to get the information - it will probably fail in the future, also)
 		if (!cplItemCache.contains(cplFileName)) {
+			delete cplItemCache[cplFileName];
 			cplItemCache[cplFileName] = NULL;
 		}
 	}
@@ -458,6 +459,7 @@ void ControlPanelItemFinder::addRegistryExpNsControlPanelItems() {
 		if (!itemAdded) {
 			// mark the item as invalid in the cache (getting the info failed, do not retry to get the information - it will probably fail in the future, also)
 			if (!cplItemCache.contains(guid)) {
+				delete cplItemCache[guid];
 				cplItemCache[guid] = NULL;
 			}
 		}
@@ -473,6 +475,13 @@ void ControlPanelItemFinder::addRegistryExpNsControlPanelItems() {
 	(there seem to be some exceptions / small gaps, but this approach alone should *theoretically* find all items!)
 */
 void ControlPanelItemFinder::addShellInfoControlPanelItems() {
+
+	if (!shellInfoCplItemCache.isEmpty()) {
+		foreach(QString cacheId, shellInfoCplItemCache.keys()) {
+			addControlPanelItem(cacheId);
+		}
+		return;
+	}
 
 	LPITEMIDLIST pidlCplAbs;
 
@@ -570,7 +579,7 @@ void ControlPanelItemFinder::addShellInfoItem(LPITEMIDLIST pidlItems, IShellFold
 
 							// local cache is checked in this method, but this does not avoid the unnecessary call to the iconCreator!?
 							// can we use the global cache here?
-							addControlPanelItem(cplPath, cplDesc, 0 /*HASH_controly*/, iconPath, cacheId);
+							addControlPanelItem(cplPath, cplDesc, 0 /*HASH_controly*/, iconPath, cacheId, true);
 							itemAdded = true;
 
 							CoTaskMemFree(pidlItem);
@@ -612,7 +621,7 @@ void ControlPanelItemFinder::addShellInfoItem(LPITEMIDLIST pidlItems, IShellFold
 												iconPath = pIconCreator->getImageFileName(psfParentItem, pidlItems);
 											}
 
-											addControlPanelItem(cplPath, cplDesc, 0 /*HASH_controly*/, iconPath, cacheId);
+											addControlPanelItem(cplPath, cplDesc, 0 /*HASH_controly*/, iconPath, cacheId, true);
 											itemAdded = true;
 
 											CoTaskMemFree(pidlItem);
@@ -723,6 +732,7 @@ void ControlPanelItemFinder::addControlPanel() {
 			if (!itemAdded) {
 				// mark the item as invalid in the cache (getting the info failed, do not retry to get the information - it will probably fail in the future, also)
 				if (!cplItemCache.contains(cplPath)) {
+					delete cplItemCache[cplPath];
 					cplItemCache[cplPath] = NULL;
 				}
 			}
@@ -741,7 +751,7 @@ void ControlPanelItemFinder::addControlPanelItem(QString &cacheId) {
 	}
 }
 
-void ControlPanelItemFinder::addControlPanelItem(QString &path, QString &name, int pluginId, QString &iconPath, QString &cacheId) {
+void ControlPanelItemFinder::addControlPanelItem(QString &path, QString &name, int pluginId, QString &iconPath, QString &cacheId, boolean isShellInfo) {
 	// path: the 'full path' or the 'launch command' (used to launch the item)
 	// name: the 'short name' or 'description' (displayed to identify the icon)
 	// cacheId: the file name or any other id identifying the item in the cache (cache not used if string is empty)
@@ -749,6 +759,9 @@ void ControlPanelItemFinder::addControlPanelItem(QString &path, QString &name, i
 	if (!cacheId.isEmpty()) {
 		if (!cplItemCache.contains(cacheId)) {
 			cplItemCache[cacheId] = new CachedCplItem(path, name, iconPath, pluginId);
+			if (isShellInfo) {
+				shellInfoCplItemCache[cacheId] = cplItemCache[cacheId];
+			}
 		}
 	}
 

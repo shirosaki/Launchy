@@ -7,6 +7,7 @@ SUBDIRS = src \
 win32 {
         SUBDIRS += plugins/controly
         SUBDIRS += plugins/calcy
+        SUBDIRS += plugins/uwpapp
 }
 
 TRANSLATIONS = translations/launchy_fr.ts \

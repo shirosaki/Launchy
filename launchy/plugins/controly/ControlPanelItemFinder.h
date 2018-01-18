@@ -28,12 +28,15 @@ class ControlPanelItemFinder {
 
 		// "local cache" (for single scan, temporary): avoid adding same control panel item / element (that are found by different search / browse methods) multiple times
 		// maps display name to boolean indicating if such an item has already been found
-		QHash<QString, CachedCplItem*> cplItemNameCache; 
+		QHash<QString, bool> cplItemNameCache;
 		bool avoidDuplicates; // avoid adding same item multiple times if found by different search strategies?
 
 		// "global cache" (shared between all scans, performance optimization): avoid repeating expensive analysis (loading, icon extraction, etc.) of cpl dlls - do it only for the very first scan after program startup and stick to the information for repeated scans; 
 		// maps file name to cached item information belonging to this file name!
-		static QHash<QString, CachedCplItem*> cplItemCache; 
+		static QHash<QString, CachedCplItem*> cplItemCache;
+
+		// cache shell info control panel items because enumeration of virtual folder causes memory leaks.
+		static QHash<QString, CachedCplItem*> shellInfoCplItemCache;
 
 		FhoIconCreator *pIconCreator;
 
@@ -48,7 +51,7 @@ class ControlPanelItemFinder {
 
 	private:
 		void addControlPanelItem(QString &cacheId);
-		void addControlPanelItem(QString &path, QString &name, int pluginId, QString &iconPath, QString &cacheId);
+		void addControlPanelItem(QString &path, QString &name, int pluginId, QString &iconPath, QString &cacheId, boolean isShellInfo = false);
 
 		void addCplControlPanelItem(QFileInfo *pCplFileInfo);
 		void addSystem32CplControlPanelItems();

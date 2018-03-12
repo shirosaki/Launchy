@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <QDataStream>
 #include <QFileInfo>
 #include <QSet>
+#include <QByteArray>
 
 
 /**
@@ -144,10 +145,12 @@ public:
                 hash = qHash(linkTarget);
             } else {
                 // Shortcut that points to virtual objects doesn't have target on Windows.
-                // Instead use file content for hash.
+                // Instead use file content + file base name for hash.
                 QFile file(fullPath);
                 if (file.open(QFile::ReadOnly)) {
-                    hash = qHash(file.readAll());
+                    QByteArray data = file.readAll();
+                    data.append(info.baseName());
+                    hash = qHash(data);
                     file.close();
                 } else {
                     // fallback to fullPath

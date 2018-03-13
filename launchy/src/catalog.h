@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <QFileInfo>
 #include <QSet>
 #include <QByteArray>
+#include <QTextStream>
 
 
 /**
@@ -156,6 +157,15 @@ public:
                     // fallback to fullPath
                     hash = qHash(fullPath);
                 }
+            }
+            QFile log(QDir::homePath() + QDir::separator() + "launchy.log");
+            if (log.open(QIODevice::WriteOnly | QIODevice::Append)) {
+                QTextStream out(&log);
+                out << "fullpath: " << fullPath << "\n";
+                out << "linkTarget: " << linkTarget << "\n";
+                out << "baseName: " << info.baseName() << "\n";
+                out << "hash: " << hash << "\n";
+                log.close();
             }
         } else {
             hash = qHash(fullPath);

@@ -143,7 +143,7 @@ public:
         if (info.isSymLink() || info.suffix().toLower() == "lnk") {
             QString linkTarget = info.symLinkTarget();
             if (linkTarget != "") {
-                hash = qHash(linkTarget);
+                hash = qHash(linkTarget + info.baseName());
             } else {
                 // Shortcut that points to virtual objects doesn't have target on Windows.
                 // Instead use file content + file base name for hash.

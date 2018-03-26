@@ -155,15 +155,10 @@ public:
                     hash = qHash(fullPath);
                 }
             }
-            QFile log(QDir::homePath() + QDir::separator() + "launchy.log");
-            if (log.open(QIODevice::WriteOnly | QIODevice::Append)) {
-                QTextStream out(&log);
-                out << "fullpath: " << fullPath << "\n";
-                out << "linkTarget: " << linkTarget << "\n";
-                out << "baseName: " << info.baseName() << "\n";
-                out << "hash: " << hash << "\n";
-                log.close();
-            }
+            qDebug() << "Item hash: " << hash;
+            qDebug() << "Item fullpath: " << fullPath;
+            qDebug() << "Item linkTarget: " << linkTarget;
+            qDebug() << "Item baseName: " << info.baseName();
         } else {
             hash = qHash(fullPath);
         }

@@ -42,7 +42,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define MAX_LOG_SIZE  1024*1024
 #define LOG_FILE_NAME "Launchy"
 
-QFileInfo rotate_log_file(const char* log_name)
+QFileInfo rotate_log_file(const QString& log_name)
 {
     QString file_path = QString("%1.log").arg(log_name);
     QFileInfo log_file(file_path);
@@ -68,6 +68,10 @@ void messageOutput(QtMsgType type, const char *msg)
 {
     static QMap<QtMsgType, QString> categs;
 
+    if (!gSettings || !gSettings->value("GenOps/enableDebugLog", false).toBool()) {
+        return;
+    }
+
     // FILL CATEGS IF EMPTY
     if ( categs.empty() ) {
         categs[QtDebugMsg]      = "DEBUG   ";
@@ -77,7 +81,7 @@ void messageOutput(QtMsgType type, const char *msg)
     }
 
     // LOG FILE
-    QFileInfo log_info = rotate_log_file(LOG_FILE_NAME);
+    QFileInfo log_info = rotate_log_file(QDir::homePath() + QDir::separator() + LOG_FILE_NAME);
     QFile log_file(log_info.filePath());
     if ( log_file.exists() )
         log_file.open(QFile::WriteOnly | QFile::Text | QFile::Append);
@@ -1732,14 +1736,6 @@ int main(int argc, char *argv[])
 
     qApp->setQuitOnLastWindowClosed(false);
 
-#if defined(ENABLE_LOG_FILE)
-#   if QT_VERSION >= 0x050000
-        qInstallMessageHandler(messageOutput);
-#   else
-        qInstallMsgHandler(messageOutput);
-#   endif
-#endif
-
     qDebug() << "APPLICATION START";
 
     QStringList args = qApp->arguments();
@@ -1776,16 +1772,6 @@ int main(int argc, char *argv[])
             {
                 command |= Exit;
             }
-            else if (arg.compare("log", Qt::CaseInsensitive) == 0)
-            {
-            #ifdef ENABLE_LOG_FILE
-            #   if QT_VERSION >= 0x050000
-                    qInstallMessageHandler(messageOutput);
-            #   else
-                    qInstallMsgHandler(messageOutput);
-            #   endif
-            #endif
-            }
             else if (arg.compare("profile", Qt::CaseInsensitive) == 0)
             {
                 if (++i < args.length())
@@ -1813,6 +1799,14 @@ int main(int argc, char *argv[])
     qApp->setStyleSheet("file:///:/resources/basicskin.qss");
 
     LaunchyWidget* widget = createLaunchyWidget(command);
+
+#if defined(ENABLE_LOG_FILE)
+#   if QT_VERSION >= 0x050000
+        qInstallMessageHandler(messageOutput);
+#   else
+        qInstallMsgHandler(messageOutput);
+#   endif
+#endif
 
     qApp->exec();
 

@@ -103,7 +103,7 @@ win32 {
         CONFIG(release, debug|release):DESTDIR = ../release/
     }
 
-    #DEFINES += ENABLE_LOG_FILE
+    DEFINES += ENABLE_LOG_FILE
     #QMAKE_CXXFLAGS_RELEASE += /Z7
     #QMAKE_LFLAGS_RELEASE += /DEBUG
 }

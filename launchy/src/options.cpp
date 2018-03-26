@@ -68,6 +68,7 @@ OptionsDialog::OptionsDialog(QWidget * parent) :
 	genUpdateCheck->setChecked(gSettings->value("GenOps/updatecheck", true).toBool());
 	genShowHidden->setChecked(gSettings->value("GenOps/showHiddenFiles", false).toBool());
 	genShowNetwork->setChecked(gSettings->value("GenOps/showNetwork", true).toBool());
+	genEnableDebugLog->setChecked(gSettings->value("GenOps/enableDebugLog", false).toBool());
 	int updateInterval = gSettings->value("GenOps/updatetimer", 10).toInt();
 	connect(genUpdateCatalog, SIGNAL(stateChanged(int)), this, SLOT(autoUpdateCheckChanged(int)));
 	genUpdateMinutes->setValue(updateInterval);
@@ -317,6 +318,7 @@ void OptionsDialog::accept()
 	gSettings->setValue("GenOps/dragmode", genShiftDrag->isChecked() ? 1 : 0);
 	gSettings->setValue("GenOps/showHiddenFiles", genShowHidden->isChecked());
 	gSettings->setValue("GenOps/showNetwork", genShowNetwork->isChecked());
+	gSettings->setValue("GenOps/enableDebugLog", genEnableDebugLog->isChecked());
 	gSettings->setValue("GenOps/updatetimer", genUpdateCatalog->isChecked() ? genUpdateMinutes->value() : 0);
 	gSettings->setValue("GenOps/numviewable", genMaxViewable->value());
 	gSettings->setValue("GenOps/numresults", genNumResults->value());

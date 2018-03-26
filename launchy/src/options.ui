@@ -990,6 +990,13 @@
                </property>
               </widget>
              </item>
+             <item>
+              <widget class="QCheckBox" name="genEnableDebugLog">
+               <property name="text">
+                <string>Enable debug log (Launchy.log in User Home directory)</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
           </item>

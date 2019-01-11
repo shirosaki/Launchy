@@ -17,7 +17,12 @@ environment:
     # - QTDIR: C:\Qt\5.11.2\msvc2017
     - QTDIR: C:\Qt\5.11.2\msvc2017_64
 
-configuration: release
+configuration:
+  - Debug
+  - Release
+
+matrix:
+  fast_finish: true
 
 install:
   - '%QTDIR%\bin\qtenv2.bat'

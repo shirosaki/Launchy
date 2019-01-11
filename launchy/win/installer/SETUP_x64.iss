@@ -13,7 +13,7 @@
 
 #define Configuration GetEnv('CONFIGURATION')
 #if Configuration == ""
-#define Configuration "release"
+#define Configuration "Release"
 #endif
 
 [Setup]
@@ -27,7 +27,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={code:DefaultInstallDirectory}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 LicenseFile=..\..\license.txt
-OutputDir=Release\
+OutputDir={#Configuration}\
 OutputBaseFilename=Launchy_Setup_x64
 SetupIconFile=..\Launchy.ico
 Compression=lzma
@@ -71,7 +71,7 @@ Source: "{#PWD}\{#Configuration}\platforms\*.dll"; DestDir: "{app}\platforms"; F
 Source: "{#PWD}\{#Configuration}\translations\*.qm"; DestDir: "{app}\tr"; Flags: ignoreversion
 
 ; redist
-Source: {#PWD}\release\vcredist*.exe; DestDir: {tmp}; Flags: deleteafterinstall
+Source: {#PWD}\{#Configuration}\vcredist*.exe; DestDir: {tmp}; Flags: deleteafterinstall
 
 ; Translations
 Source: {#PWD}\translations\launchy_es.qm; DestDir: {app}\tr\; Flags: ignoreversion

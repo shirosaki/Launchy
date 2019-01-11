@@ -11,6 +11,11 @@
 #define PWD "..\.."
 #endif
 
+#define Configuration GetEnv('CONFIGURATION')
+#if Configuration == ""
+#define Configuration "release"
+#endif
+
 [Setup]
 AppMutex=LaunchyMutex,Global\LaunchyMutex
 AppName={#MyAppName}
@@ -55,15 +60,15 @@ Type: filesandordirs; Name: {app}\skins\Spotlight Wide
 Type: filesandordirs; Name: {app}\platform_win.dll
 
 [Files]
-Source: {#PWD}\{%CONFIGURATION|release}\{#MyAppExeName}; DestDir: {app}; Flags: ignoreversion
+Source: {#PWD}\{#Configuration}\{#MyAppExeName}; DestDir: {app}; Flags: ignoreversion
 Source: LaunchyPortable.ini; DestDir: {app}; DestName: Launchy.ini; Flags: onlyifdoesntexist; Check: IsPortable
 
-Source: "{#PWD}\{%CONFIGURATION|release}\*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#PWD}\{%CONFIGURATION|release}\bearer\*.dll"; DestDir: "{app}\bearer"; Flags: ignoreversion
-Source: "{#PWD}\{%CONFIGURATION|release}\iconengines\*.dll"; DestDir: "{app}\iconengines"; Flags: ignoreversion
-Source: "{#PWD}\{%CONFIGURATION|release}\imageformats\*.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
-Source: "{#PWD}\{%CONFIGURATION|release}\platforms\*.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
-Source: "{#PWD}\{%CONFIGURATION|release}\translations\*.qm"; DestDir: "{app}\tr"; Flags: ignoreversion
+Source: "{#PWD}\{#Configuration}\*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PWD}\{#Configuration}\bearer\*.dll"; DestDir: "{app}\bearer"; Flags: ignoreversion
+Source: "{#PWD}\{#Configuration}\iconengines\*.dll"; DestDir: "{app}\iconengines"; Flags: ignoreversion
+Source: "{#PWD}\{#Configuration}\imageformats\*.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
+Source: "{#PWD}\{#Configuration}\platforms\*.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
+Source: "{#PWD}\{#Configuration}\translations\*.qm"; DestDir: "{app}\tr"; Flags: ignoreversion
 
 ; redist
 Source: {#PWD}\release\vcredist*.exe; DestDir: {tmp}; Flags: deleteafterinstall
@@ -80,7 +85,7 @@ Source: {#PWD}\translations\launchy_it_IT.qm; DestDir: {app}\tr\; Flags: ignorev
 
 ; Plugins
 ; plugins may require all 3 runtimes
-Source: "{#PWD}\{%CONFIGURATION|release}\plugins\*.dll"; DestDir: "{app}\plugins"; Flags: ignoreversion
+Source: "{#PWD}\{#Configuration}\plugins\*.dll"; DestDir: "{app}\plugins"; Flags: ignoreversion
 
 ; Plugin icons
 Source: {#PWD}\plugins\controly\*.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion

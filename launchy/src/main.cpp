@@ -1225,6 +1225,10 @@ void LaunchyWidget::closeEvent(QCloseEvent* event)
     gBuilder->stop();
     qDebug() << "Stopping fader timer";
     fader->stop();
+    qDebug() << "Stopping drop timer";
+    dropTimer->stop();
+    qDebug() << "Stopping update timer";
+    updateTimer->stop();
     qDebug() << "Saving settings";
     saveSettings();
     qDebug() << "Accepting events";

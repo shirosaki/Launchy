@@ -286,6 +286,7 @@ LaunchyWidget::LaunchyWidget(CommandFlags command) :
 
 LaunchyWidget::~LaunchyWidget()
 {
+    gMainWidget = NULL;
     delete gBuilder;
     if (condensedTempIcon)
     {

@@ -59,6 +59,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(CommandFlags)
 class LaunchyWidget : public QWidget
 {
     Q_OBJECT  // Enable signals and slots
+    QThread catalogBuilderThread;
 
 public:
     LaunchyWidget(CommandFlags command);

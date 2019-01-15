@@ -95,6 +95,11 @@ CatalogBuilder::CatalogBuilder(PluginHandler* plugs) :
     catalog = new SlowCatalog();
 }
 
+bool CatalogBuilder::isRunning()
+{
+    return catalogBuilderThread->isRunning();
+}
+
 void CatalogBuilder::run()
 {
     buildCatalog();

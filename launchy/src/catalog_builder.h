@@ -52,7 +52,7 @@ private:
     bool m_abort_requested;
 };
 
-class CatalogBuilder : public QThread, public INotifyProgressStep
+class CatalogBuilder : public QObject, public INotifyProgressStep
 {
 	Q_OBJECT
 
@@ -61,6 +61,8 @@ public:
 	Catalog* getCatalog() const { return catalog; }
 	int getProgress() const { return progress; }
 	bool progressStep(int newStep);
+    QThread* catalogBuilderThread;
+    bool isRunning();
     void run();
 
 public slots:

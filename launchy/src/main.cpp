@@ -260,7 +260,8 @@ LaunchyWidget::LaunchyWidget(CommandFlags command) :
     // Load the catalog
     gBuilder = new CatalogBuilder(&plugins);
     gBuilder->setObjectName("CatalogBuilder");
-    gBuilder->moveToThread(gBuilder);
+    gBuilder->moveToThread(&catalogBuilderThread);
+    gBuilder->catalogBuilderThread = &catalogBuilderThread;
     connect(gBuilder, SIGNAL(catalogIncrement(int)), this, SLOT(catalogProgressUpdated(int)));
     connect(gBuilder, SIGNAL(catalogFinished()), this, SLOT(catalogBuilt()));
 
@@ -1235,7 +1236,7 @@ void LaunchyWidget::closeEvent(QCloseEvent* event)
     qDebug() << "Accepting events";
     event->accept();
     qDebug() << "Joining builder thread";
-    gBuilder->wait();
+    catalogBuilderThread.wait();
     qDebug() << "Quitting QApplication";
     qApp->quit();
 }
@@ -1538,7 +1539,7 @@ void LaunchyWidget::buildCatalog()
 
     // Use the catalog builder to refresh the catalog in a worker thread
     //QMetaObject::invokeMethod(gBuilder, "buildCatalog", Qt::AutoConnection);
-    gBuilder->start( QThread::IdlePriority );
+    catalogBuilderThread.start( QThread::IdlePriority );
 
     startUpdateTimer();
 }

@@ -286,32 +286,7 @@ LaunchyWidget::LaunchyWidget(CommandFlags command) :
 
 LaunchyWidget::~LaunchyWidget()
 {
-    delete updateTimer;
-    delete dropTimer;
-    delete alternatives;
-    delete fader;
-    delete optionsButton;
-    delete closeButton;
-    delete output;
-    delete input;
-    delete outputIcon;
-    delete workingAnimation;
-    delete listDelegate;
-    delete alternativesPath;
     delete gBuilder;
-    delete actShow;
-    delete actRebuild;
-    delete actReloadSkin;
-    delete actOptions;
-    if (frameGraphic)
-    {
-	    delete frameGraphic;
-    }
-    if (trayIcon)
-    {
-	    delete trayIcon;
-
-    }
     if (condensedTempIcon)
     {
 	    delete condensedTempIcon;

@@ -11,6 +11,11 @@
 #define PWD "..\.."
 #endif
 
+#define BuildVersion GetEnv('APPVEYOR_BUILD_VERSION')
+#if BuildVersion == ""
+#define BuildVersion "3.0.0"
+#endif
+
 #define Configuration GetEnv('CONFIGURATION')
 #if Configuration == ""
 #define Configuration "Release"
@@ -19,7 +24,7 @@
 [Setup]
 AppMutex=LaunchyMutex,Global\LaunchyMutex
 AppName={#MyAppName}
-AppVerName={#MyAppName} {%APPVEYOR_BUILD_VERSION|3.0.0}
+AppVerName={#MyAppName} {#BuildVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}

@@ -76,10 +76,6 @@ Source: "{#PWD}\{#Configuration}\platforms\*.dll"; DestDir: "{app}\platforms"; F
 Source: "{#PWD}\{#Configuration}\translations\*.qm"; DestDir: "{app}\tr"; Flags: ignoreversion
 
 Source: "{#PWD}\{#Configuration}\*.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#PWD}\{#Configuration}\bearer\*.pdb"; DestDir: "{app}\bearer"; Flags: ignoreversion
-Source: "{#PWD}\{#Configuration}\iconengines\*.pdb"; DestDir: "{app}\iconengines"; Flags: ignoreversion
-Source: "{#PWD}\{#Configuration}\imageformats\*.pdb"; DestDir: "{app}\imageformats"; Flags: ignoreversion
-Source: "{#PWD}\{#Configuration}\platforms\*.pdb"; DestDir: "{app}\platforms"; Flags: ignoreversion
 
 ; redist
 Source: {#PWD}\{#Configuration}\vcredist*.exe; DestDir: {tmp}; Flags: deleteafterinstall

@@ -75,6 +75,12 @@ Source: "{#PWD}\{#Configuration}\imageformats\*.dll"; DestDir: "{app}\imageforma
 Source: "{#PWD}\{#Configuration}\platforms\*.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#PWD}\{#Configuration}\translations\*.qm"; DestDir: "{app}\tr"; Flags: ignoreversion
 
+Source: "{#PWD}\{#Configuration}\*.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PWD}\{#Configuration}\bearer\*.pdb"; DestDir: "{app}\bearer"; Flags: ignoreversion
+Source: "{#PWD}\{#Configuration}\iconengines\*.pdb"; DestDir: "{app}\iconengines"; Flags: ignoreversion
+Source: "{#PWD}\{#Configuration}\imageformats\*.pdb"; DestDir: "{app}\imageformats"; Flags: ignoreversion
+Source: "{#PWD}\{#Configuration}\platforms\*.pdb"; DestDir: "{app}\platforms"; Flags: ignoreversion
+
 ; redist
 Source: {#PWD}\{#Configuration}\vcredist*.exe; DestDir: {tmp}; Flags: deleteafterinstall
 
@@ -91,6 +97,7 @@ Source: {#PWD}\translations\launchy_it_IT.qm; DestDir: {app}\tr\; Flags: ignorev
 ; Plugins
 ; plugins may require all 3 runtimes
 Source: "{#PWD}\{#Configuration}\plugins\*.dll"; DestDir: "{app}\plugins"; Flags: ignoreversion
+Source: "{#PWD}\{#Configuration}\plugins\*.pdb"; DestDir: "{app}\plugins"; Flags: ignoreversion
 
 ; Plugin icons
 Source: {#PWD}\plugins\controly\*.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion

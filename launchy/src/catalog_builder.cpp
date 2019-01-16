@@ -100,11 +100,6 @@ bool CatalogBuilder::isRunning()
     return catalogBuilderThread->isRunning();
 }
 
-void CatalogBuilder::run()
-{
-    buildCatalog();
-}
-
 void CatalogBuilder::stop()
 {
     stop_request = true;

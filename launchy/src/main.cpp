@@ -1110,6 +1110,7 @@ void LaunchyWidget::catalogProgressUpdated(int value)
 
 void LaunchyWidget::catalogBuilt()
 {
+    catalogBuilderThread.quit();
     // Save settings and updated catalog, stop the "working" animation
     saveSettings();
     workingAnimation->Stop();
@@ -1538,8 +1539,8 @@ void LaunchyWidget::buildCatalog()
     saveSettings();
 
     // Use the catalog builder to refresh the catalog in a worker thread
-    //QMetaObject::invokeMethod(gBuilder, "buildCatalog", Qt::AutoConnection);
     catalogBuilderThread.start( QThread::IdlePriority );
+    QMetaObject::invokeMethod(gBuilder, "buildCatalog", Qt::AutoConnection);
 
     startUpdateTimer();
 }

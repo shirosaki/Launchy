@@ -75,7 +75,9 @@ Source: "{#PWD}\{#Configuration}\imageformats\*.dll"; DestDir: "{app}\imageforma
 Source: "{#PWD}\{#Configuration}\platforms\*.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#PWD}\{#Configuration}\translations\*.qm"; DestDir: "{app}\tr"; Flags: ignoreversion
 
+#if Configuration == "Debug"
 Source: "{#PWD}\{#Configuration}\*.pdb"; DestDir: "{app}"; Flags: ignoreversion
+#endif
 
 ; redist
 Source: {#PWD}\{#Configuration}\vcredist*.exe; DestDir: {tmp}; Flags: deleteafterinstall
@@ -93,7 +95,9 @@ Source: {#PWD}\translations\launchy_it_IT.qm; DestDir: {app}\tr\; Flags: ignorev
 ; Plugins
 ; plugins may require all 3 runtimes
 Source: "{#PWD}\{#Configuration}\plugins\*.dll"; DestDir: "{app}\plugins"; Flags: ignoreversion
+#if Configuration == "Debug"
 Source: "{#PWD}\{#Configuration}\plugins\*.pdb"; DestDir: "{app}\plugins"; Flags: ignoreversion
+#endif
 
 ; Plugin icons
 Source: {#PWD}\plugins\controly\*.png; DestDir: {app}\plugins\icons\; Flags: ignoreversion

@@ -151,17 +151,17 @@ public:
          */
         ~Impl()
         {
-			widgetWinId = NULL;
-			if (keyboardHook)
-			{
-				UnhookWindowsHookEx(keyboardHook);
-				keyboardHook = NULL;
-				connected = false;
-			}
-			else if (id_) {
-                UnregisterHotKey(reinterpret_cast<HWND>(winId()), id_);
-				connected = false;
-			}
+            if (keyboardHook)
+            {
+                UnhookWindowsHookEx(keyboardHook);
+                keyboardHook = NULL;
+                connected = false;
+            }
+            else if (id_) {
+                UnregisterHotKey(widgetWinId, id_);
+                connected = false;
+            }
+            widgetWinId = NULL;
         }
 
         /**
